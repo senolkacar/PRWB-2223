@@ -12,6 +12,8 @@ class Repartitions extends Model {
 
     //delete
 
+    //get weight by opearion and user
+
 
 
 }
