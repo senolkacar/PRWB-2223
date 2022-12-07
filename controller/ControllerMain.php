@@ -7,7 +7,7 @@ class ControllerMain extends Controller{
 
     public function index(): void{
         if($this->user_logged()){
-            $this->redirect("user","tricounts");
+            $this->redirect("tricount","index");
         }else{
             $mail ='';
             $password = '';
