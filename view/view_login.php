@@ -22,7 +22,7 @@
                         <span class="fa fa-user"></span>
                     </span>                    
                 </div>
-                <input type="text" class="form-control" placeholder="Username" required="required">
+                <input type="email" class="form-control" id="mail" placeholder="Username" required="required">
             </div>
         </div>
         <div class="form-group">
@@ -32,7 +32,7 @@
                         <i class="fa fa-lock"></i>
                     </span>                    
                 </div>
-                <input type="password" class="form-control" placeholder="Password" required="required">
+                <input type="password" class="form-control" id="password" placeholder="Password" required="required">
             </div>
         </div>        
         <div class="form-group">
