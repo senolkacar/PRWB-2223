@@ -21,7 +21,11 @@
                     <?php endif; ?>
 
                     <br>
+                    <?php if(!$tricount->description): ?>
+                        No description
+                    <?php else: ?>
                      <?=$tricount->description ?>
+                     <?php endif; ?>
             <?php endforeach; ?>
             
             </ul>       
