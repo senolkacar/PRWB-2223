@@ -1,0 +1,30 @@
+.login-form {
+  width: 340px;
+  margin: 50px auto;
+}
+.login-form form {        
+  margin-bottom: 15px;
+  background: #ffffff;
+  border: solid 1px #cccdce;
+  padding: 30px;
+  border-radius: 20px;
+}
+.login-form h2 {
+  margin: 0 0 15px;
+  padding-bottom: 15px;
+  border-bottom: solid 1px #cccdce;
+}
+.form-control, .btn {
+  min-height: 38px;
+  border-radius: 2px;
+}
+.input-group-addon .fa {
+  font-size: 18px;
+}
+.btn {        
+  font-size: 15px;
+  font-weight: bold;
+}
+.bottom-action {
+  font-size: 14px;
+}
