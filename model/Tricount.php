@@ -1,6 +1,9 @@
 <?php
+require_once "framework/Model.php";
+require_once "Subscriptions.php";
+
 Class Tricount extends Model{
-    public function __construct(public string $title,public ?string $description,public String $created_at,public int $creator)
+    public function __construct(public string $title,public ?string $description,public String $created_at,public int $creator,public ?int $id = NULL)
     {
         
     }
@@ -49,6 +52,12 @@ Class Tricount extends Model{
             $errors[] = "Description must be at least 3 characters long";
         }
         return $errors;
+    }
+
+    public function nb_subscriptions_by_tricount() : int {
+        
+        return Subscriptions::nb_subscriptions_by_tricount($this);
+        
     }
 }
 

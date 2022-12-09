@@ -14,17 +14,16 @@
             <ul>
             <?php foreach ($tricounts as $tricount):  ?>
                 <li><?=$tricount->title ?>
-                    <?php if($nbParticipation == 0): ?>
+                    <?php if($nb_subscrptions == 0): ?>
                         --&#32 you are alone
                     <?php else: ?>
-                        <?php echo " with".$nbParticipation."friends" ?>
+                        <?php echo " with".$nb_subscrptions."friends" ?>
                     <?php endif; ?>
-
                     <br>
                     <?php if(!$tricount->description): ?>
                         No description
                     <?php else: ?>
-                     <?=$tricount->description ?>
+                        <?=$tricount->description ?>
                      <?php endif; ?>
             <?php endforeach; ?>
             
