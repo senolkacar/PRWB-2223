@@ -8,9 +8,26 @@
       
     </head>
     <body>
-        <div class="title">your tricounts</div>
+        <div class="title">your tricounts </div>
         <?php include('menu.html'); ?>
+        <div class="main">
+            <ul>
+            <?php foreach ($tricounts as $tricount):  //?>
+                <li><?=$tricount['title'] ?>
+                    <?php if($nbParticipation == 0): ?>
+                        &Tab you are alone
+                    <?php else: ?>
+                        <?php echo " with".$nbParticipation."friends" ?>
+                    <?php endif; ?>
+
+                    <br>
+                     <?=$tricount['description'] ?>
+            <?php endforeach; ?>
+            
+            </ul>       
         
+        
+        </div>        
 
 
         

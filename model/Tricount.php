@@ -5,7 +5,7 @@ Class Tricount extends Model{
         
     }
 
-    public function get_tricounts(): array{
+    public static function get_tricounts(): array{
         $query = self::execute("SELECT * FROM tricounts",[]);
         $data = $query->fetchAll();
         $tricounts = [];
