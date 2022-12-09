@@ -1,6 +1,6 @@
 <?php
 Class Tricount extends Model{
-    public function __construct(public string $title,public ?string $description,public DateTime $created_at,public int $creator)
+    public function __construct(public string $title,public ?string $description,public String $created_at,public int $creator)
     {
         
     }
@@ -15,7 +15,7 @@ Class Tricount extends Model{
         return $tricounts;
     }
 
-    public function get_tricount_by_id(int $id): Tricount|false{
+    public static function get_tricount_by_id(int $id): Tricount|false{
         $query = self::execute("SELECT * FROM tricounts WHERE id = :id",[":id" => $id]);
         $data = $query->fetch();
         if($query->rowCount()==0){
@@ -25,7 +25,7 @@ Class Tricount extends Model{
         }
     }
 
-    public function get_tricount_by_creator(int $creator): Tricount|false{
+    public static function get_tricount_by_creator(int $creator): Tricount|false{
         $query = self::execute("SELECT * FROM tricounts WHERE creator = :creator",[":creator" => $creator]);
         $data = $query->fetch();
         if($query->rowCount()==0){
