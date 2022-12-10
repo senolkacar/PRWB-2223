@@ -4,7 +4,7 @@ require_once 'framework/Model.php';
 
 
 Class User extends Model{
-    public function __construct(public ?int $id = NULL, public string $mail,public string $hashed_password, public string $full_name, public string $role, public ?string $iban = null){}
+    public function __construct( public string $mail,public string $hashed_password, public string $full_name, public string $role, public ?string $iban = null,public ?int $id = NULL){}
     
     public static function get_user_by_mail(string $mail): User|false{
         $query = self::execute("SELECT * FROM users WHERE mail = :mail",[":mail" => $mail]);
@@ -12,7 +12,7 @@ Class User extends Model{
         if($query->rowCount()==0){
             return false;
         }else{
-            return new User($data["mail"],$data["hashed_password"],$data["full_name"],$data["role"],$data["iban"]);
+            return new User($data["mail"],$data["hashed_password"],$data["full_name"],$data["role"],$data["iban"],$data["id"]);
         }
     }
 
@@ -22,7 +22,7 @@ Class User extends Model{
         $data = $query->fetchAll();
         $users = [];
         foreach($data as $row){
-            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"]);
+            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
         }
         return $users;
     }
@@ -32,7 +32,7 @@ Class User extends Model{
         $data = $query->fetchAll();
         $users = [];
         foreach($data as $row){
-            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"]);
+            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
         }
         return $users;
     

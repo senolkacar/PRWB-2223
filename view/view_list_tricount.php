@@ -13,14 +13,14 @@
         <div class="main">
             <ul>
             <?php foreach ($tricounts as $tricount):  ?>
-                <li><?=$tricount->title ?>
+                <li><a href='tricount/view_tricount/<?=$tricount->title ?>'><?=$tricount->title ?> </a>
                     <?php if($nb_subscrptions == 0): ?>
                         --&#32 you are alone
                     <?php else: ?>
                         <?php echo " with".$nb_subscrptions."friends" ?>
                     <?php endif; ?>
                     <br>
-                    <?php if(!$tricount->description): ?>
+                    <?php if(!$tricount->description || $tricount->description == "NULL" ): ?>
                         No description
                     <?php else: ?>
                         <?=$tricount->description ?>
