@@ -28,7 +28,8 @@
             <?php endforeach; ?>
             
             </ul>       
-        
+        <a href="logout">Log Out</a>
+        <a href="user/settings">Settings</a>
         </div>        
 
 
