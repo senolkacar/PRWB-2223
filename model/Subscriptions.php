@@ -10,7 +10,7 @@ class Subscriptions extends Model {
     public function __construct(public Tricount $tricount, public User  $user)  {   
     }
 
-    public static function nb_subscriptions_by_tricount(Tricount $tricount) : int {
+    public static function nb_subscriptions_by_tricount_1(Tricount $tricount) : int {
         $query = self::execute("SELECT count(*) count FROM subscriptions  GROUP by subscriptions.tricount     having tricount = :tricount",["tricount" =>$tricount->id]);
         $data = $query->fetch();
        // $result =$data["count"];
@@ -22,6 +22,12 @@ class Subscriptions extends Model {
         $query = self::execute("SELECT * FROM subscriptions  where tricount = :tricount",["tricount" =>$tricount->id]);
         $data = $query->fetchAll();
         return $query->rowCount() ;
+        
+    }
+    public static function nb_subscriptions_by_tricount(Tricount $tricount) : int {
+        $query = self::execute("SELECT count(*) FROM subscriptions where tricount = :tricount",["tricount" =>$tricount->id]);
+        $data = $query->fetch();
+        return (int)$data[0] ;//(int)$data[0]
         
     }
 

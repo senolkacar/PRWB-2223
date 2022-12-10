@@ -59,6 +59,19 @@ Class Tricount extends Model{
         return Subscriptions::nb_subscriptions_by_tricount($this);
         
     }
+
+    public static function get_tricounts_involved(User $user): array{
+        $query = self::execute("SELECT * FROM tricountS WHERE creator =:user 
+        or id IN (SELECT tricount FROM subscriptions WHERE user = :user)",[":user" =>$user->id]);
+        $data = $query->fetchAll();
+        $tricounts = [];
+        foreach($data as $row){
+            $tricounts[] = new Tricount($row["title"],$row["description"],$row["created_at"],$row["creator"]);
+        }
+        return $tricounts;
+
+    }
+
 }
 
 

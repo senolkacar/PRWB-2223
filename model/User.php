@@ -4,7 +4,7 @@ require_once 'framework/Model.php';
 
 
 Class User extends Model{
-    public function __construct(public string $mail,public string $hashed_password, public string $full_name, public string $role, public ?string $iban = null){}
+    public function __construct(public ?int $id = NULL, public string $mail,public string $hashed_password, public string $full_name, public string $role, public ?string $iban = null){}
     
     public static function get_user_by_mail(string $mail): User|false{
         $query = self::execute("SELECT * FROM users WHERE mail = :mail",[":mail" => $mail]);
@@ -118,6 +118,11 @@ Class User extends Model{
             $errors[] = "Invalid IBAN";
         }
         return $errors;
+    }
+
+    public function get_tricounts_involved(): array{
+        return Tricount::get_tricounts_involved($this);
+
     }
 
 
