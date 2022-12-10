@@ -9,7 +9,8 @@
     </head>
     <body>
         <div class="title">your tricounts </div>
-        <?php include('menu.html'); ?>
+        <a href="tricount/add_tricount"><button type="button" class="btn btn-primary btn-block">Add</button></a>
+       
         <div class="main">
             <ul>
             <?php foreach ($tricounts as $tricount):  ?>

@@ -31,4 +31,9 @@ class ControllerTricount extends Controller {
 
     } 
 
+    public function add_tricount():void {
+
+        echo "add tricount";
+    }
+
 }
