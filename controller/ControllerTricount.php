@@ -10,21 +10,18 @@ class ControllerTricount extends Controller {
     public function index() : void {
     
         $member=$this->get_user_or_redirect();
-       // $nb_subscrptions = 0;
         $tricounts =[];
 
         if(isset($_GET["param1"]) && $_GET["parame1"] !=="") { 
             $member = User::get_user_by_mail($_GET["param1"]);
             }
 
-        $tricounts =$member->get_tricounts_involved();
-        foreach($tricounts as $trcount) {
-            $nb_subscrptions = $trcount->nb_subscriptions_by_tricount();
-        }
+        $tricounts =$member->get_tricounts_with_nb_participants();
+        
         
         (new View("list_tricount"))->show([
             "tricounts" => $tricounts,
-            "nb_subscrptions" => $nb_subscrptions
+            "user" => $member
             ]);
 
 

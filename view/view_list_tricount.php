@@ -14,17 +14,17 @@
         <div class="main">
             <ul>
             <?php foreach ($tricounts as $tricount):  ?>
-                <li><a href='tricount/view_tricount/<?=$tricount->title ?>'><?=$tricount->title ?> </a>
-                    <?php if($nb_subscrptions == 0): ?>
+                <li><a href='tricount/view_tricount/<?=$tricount["title"] ?>'><?=$tricount["title"] ?> </a>
+                    <?php if($tricount["subscription_count"] == 0): ?>
                         --&#32 you are alone
                     <?php else: ?>
-                        <?php echo " with".$nb_subscrptions."friends" ?>
+                        <?php echo " with".$tricount["subscription_count"]."friends" ?>
                     <?php endif; ?>
                     <br>
-                    <?php if(!$tricount->description || $tricount->description == "NULL" ): ?>
+                    <?php if(!$tricount["description"] || $tricount["description"] == "NULL" ): ?>
                         No description
                     <?php else: ?>
-                        <?=$tricount->description ?>
+                        <?=$tricount["description"] ?>
                      <?php endif; ?>
             <?php endforeach; ?>
             

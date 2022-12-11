@@ -125,6 +125,10 @@ Class User extends Model{
 
     }
 
+    public function get_tricounts_with_nb_participants(): array{
+       return Tricount::nb_subscriptions_by_tricount($this);
+    }
+
 
 }
 ?>

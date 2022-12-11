@@ -54,9 +54,9 @@ Class Tricount extends Model{
         return $errors;
     }
 
-    public function nb_subscriptions_by_tricount() : int {
+    public static function nb_subscriptions_by_tricount(User $user) : array {
         
-        return Subscriptions::nb_subscriptions_by_tricount($this);
+        return Subscriptions::nb_subscriptions_by_tricount($user);
         
     }
 
