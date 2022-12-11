@@ -54,13 +54,13 @@ Class Tricount extends Model{
         return $errors;
     }
 
-    public function nb_subscriptions_by_tricount() : int {
+    public static function nb_subscriptions_by_tricount(Tricount $tricount) : int {
         
-        return Subscriptions::nb_subscriptions_by_tricount($this);
+        return Subscriptions::nb_subscriptions_by_tricount($tricount);
         
     }
 
-    public static function get_tricounts_involved(User $user): array{
+    public static function get_tricounts_involved_0(User $user): array{
         $query = self::execute("SELECT * FROM tricountS WHERE creator =:user 
         or id IN (SELECT tricount FROM subscriptions WHERE user = :user)",[":user" =>$user->id]);
         $data = $query->fetchAll();
@@ -69,6 +69,15 @@ Class Tricount extends Model{
             $tricounts[] = new Tricount($row["title"],$row["description"],$row["created_at"],$row["creator"]);
         }
         return $tricounts;
+
+    }
+
+    public static function get_tricounts_involved(User $user): array{    
+        $query = self::execute("SELECT DISTINCT tricounts.*, (SELECT count(*) FROM subscriptions WHERE subscriptions.tricount = tricounts.id)
+         as subscription_count  FROM tricounts LEFT JOIN subscriptions ON subscriptions.tricount = tricounts.id 
+         where tricounts.creator = :user or subscriptions.user = :user ",["user"=>$user->id]);
+         
+        return $query->fetchAll();
 
     }
 
