@@ -12,7 +12,6 @@ class ControllerTricount extends Controller {
     public function index() : void {
  
         $member=$this->get_user_or_redirect();
-     
         $tricounts =[];
 
         if(isset($_GET["param1"]) && $_GET["parame1"] !=="") { 
@@ -24,6 +23,7 @@ class ControllerTricount extends Controller {
         
         (new View("list_tricount"))->show([
             "tricounts" => $tricounts
+
             ]);
 
 

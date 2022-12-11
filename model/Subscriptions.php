@@ -24,10 +24,9 @@ class Subscriptions extends Model {
         return $query->rowCount() ;
         
     }
-    public static function nb_subscriptions_by_tricount(Tricount $tricount) : int {
-        $query = self::execute("SELECT count(*) FROM subscriptions where tricount = :tricount",["tricount" =>$tricount->id]);
-        $data = $query->fetch();
-        return (int)$data[0] ;//(int)$data[0]
+    public static function nb_subscriptions_by_tricount(User $user) : array {
+        $query = self::execute("SELECT DISTINCT tricounts.*, (SELECT count(*) FROM subscriptions WHERE subscriptions.tricount = tricounts.id and subscriptions.user<>:user) as subscription_count FROM tricounts LEFT JOIN subscriptions ON subscriptions.tricount = tricounts.id",["user"=>$user->id]);
+        return $query->fetchAll() ;//(int)$data[0]
         
     }
 
