@@ -17,10 +17,12 @@
         <div class="main">
             <form method='post' action='user/edit_profile' enctype='multipart/form-data'>
                 <p>Edit your profile</p>
-
-                <textarea name='mail' cols='30' rows='1'><?= $user->mail ?></textarea>
-                <textarea name='full_name' cols='30' rows='1'><?= $user->full_name ?></textarea>
-                <textarea name='iban' cols='30' rows='1'><?= $user->iban?></textarea>
+                Mail: <br>
+                <textarea name='mail' cols='30' rows='1'><?= $user->mail ?></textarea> <br>
+                Full name: <br>
+                <textarea name='full_name' cols='30' rows='1'><?= $user->full_name ?></textarea> <br>
+                Iban: <br>
+                <textarea name='iban' cols='30' rows='1'><?= $user->iban?></textarea> <br>
                 <input type='submit' value='Save Profile'>
             </form>
 

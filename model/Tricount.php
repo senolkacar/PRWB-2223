@@ -66,7 +66,7 @@ Class Tricount extends Model{
         $data = $query->fetchAll();
         $tricounts = [];
         foreach($data as $row){
-            $tricounts[] = new Tricount($row["title"],$row["description"],$row["created_at"],$row["creator"]);
+            $tricounts[] = new Tricount($row["title"],$row["description"],$row["created_at"],$row["creator"],$row["id"]);
         }
         return $tricounts;
 

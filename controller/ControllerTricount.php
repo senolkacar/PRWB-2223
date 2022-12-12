@@ -11,7 +11,11 @@ class ControllerTricount extends Controller {
     
         $member=$this->get_user_or_redirect();
        // $nb_subscrptions = 0;
+       $nb_subscriptions = [];
+       $tricounts_id = [];
         $tricounts =[];
+        $n = 0;
+
 
         if(isset($_GET["param1"]) && $_GET["parame1"] !=="") { 
             $member = User::get_user_by_mail($_GET["param1"]);
@@ -19,12 +23,17 @@ class ControllerTricount extends Controller {
 
         $tricounts =$member->get_tricounts_involved();
         foreach($tricounts as $trcount) {
-            $nb_subscrptions = $trcount->nb_subscriptions_by_tricount();
+            $tricounts_id[] = $trcount->id;
+            $nb_subscriptions[] = $trcount->nb_subscriptions_by_tricount();
         }
-        
+       // var_dump($tricounts_id);//null
+        var_dump($nb_subscriptions);
+        echo "<br>";
+
         (new View("list_tricount"))->show([
             "tricounts" => $tricounts,
-            "nb_subscrptions" => $nb_subscrptions
+            "n" =>$n,
+            "nb_subscriptions" => $nb_subscriptions
             ]);
 
 
