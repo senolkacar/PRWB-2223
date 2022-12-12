@@ -3,7 +3,11 @@ require_once "framework/Model.php";
 require_once "Subscriptions.php";
 
 Class Tricount extends Model{
-    public function __construct(public string $title,public ?string $description,public String $created_at,public int $creator,public ?int $id = NULL)
+    public function __construct(public string $title,
+        public User $creator,
+        public ?string $description = '',
+        public ?String $created_at = NULL,
+        public ?int $id = NULL)
     {
         
     }
@@ -24,7 +28,7 @@ Class Tricount extends Model{
         if($query->rowCount()==0){
             return false;
         }else{
-            return new Tricount($data["title"],$data["description"],$data["created_at"],$data["creator"]);
+            return new Tricount($data["title"],User::get_user_by_id($data["creator"]),$data["description"],$data["created_at"],);
         }
     }
 
@@ -54,16 +58,26 @@ Class Tricount extends Model{
         return $errors;
     }
 
-    public static function get_tricounts_involved_0(User $user): array{
-        $query = self::execute("SELECT * FROM tricountS WHERE creator =:user 
-        or id IN (SELECT tricount FROM subscriptions WHERE user = :user)",[":user" =>$user->id]);
-        $data = $query->fetchAll();
-        $tricounts = [];
-        foreach($data as $row){
-            $tricounts[] = new Tricount($row["title"],$row["description"],$row["created_at"],$row["creator"]);
+    public function persist():Tricount {
+        if($this->id == NULL) {
+           // $errors = $this->validate();
+            //if(empty($errors)){
+                self::execute('INSERT INTO Tricounts (title, description, creator) VALUES (:title,:description,:creator)', 
+                               ['title' => $this->title,
+                                'description' => $this->description,
+                                'creator' => $this->creator->id// user ? int?
+                               ]);
+                $tricount = self::get_tricount_by_id(self::lastInsertId());
+                $this->id = $tricount->id;
+               $this->created_at = $tricount->created_at;
+                return $this;
+            //} else {
+           //     return $errors; 
+           // }
+        } else {
+            //on ne modifie jamais les messages : pas de "UPDATE" SQL.
+            throw new Exception("Not Implemented.");
         }
-        return $tricounts;
-
     }
 
     public static function get_tricounts_involved(User $user): array{    
@@ -74,6 +88,8 @@ Class Tricount extends Model{
         return $query->fetchAll();
 
     }
+
+    
 
 }
 

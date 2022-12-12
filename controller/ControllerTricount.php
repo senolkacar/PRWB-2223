@@ -25,14 +25,31 @@ class ControllerTricount extends Controller {
             "tricounts" => $tricounts
 
             ]);
-
-
-
     } 
 
     public function add_tricount():void {
+        $user=$this->get_user_or_redirect();
+        var_dump($user);
+        $errors = [];
+        if(isset($_POST["title"])&&isset($_POST["description"])){
+         
+           
+            $title = $_POST["title"];
+            $description = $_POST["description"];  
+            $tricount = new Tricount($title,$user,$description);
+            // $errors = $message->validate();
+            //$errors = array_merge($errors,$title->validate_title($_POST["title"]));
+           // $errors = array_merge($errors,$description->validate_description($_POST["description"]));
+            if(count($errors)==0){
+                $tricount -> persist();
+                $this->redirect("tricount","index");     
+            }
+        }
 
-        echo "add tricount";
+        (new View("add_tricount")) ->show(["errors"=>$errors]);
+
     }
+
+
 
 }

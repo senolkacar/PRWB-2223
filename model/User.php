@@ -142,6 +142,9 @@ Class User extends Model{
         return Tricount::get_tricounts_involved($this);
 
     }
+    public function add_tricount(Tricount $tricount) : Tricount {
+        return $tricount -> persist();
+    }
 
    
 
