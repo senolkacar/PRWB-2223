@@ -16,11 +16,11 @@
            
             <?php foreach ($tricounts as $tricount):  ?>
                 <li><a href='tricount/view_tricount/<?=$tricount->title ?>'><?=$tricount->title ?> </a>
-                    <?php if($nb_subscriptions[$n] == 0): ?>
+                    <?php if($tricount->nb_subscriptions_by_tricount() == 0): ?>
                         --&#32 you are alone
                     <?php else: ?>
-                        <?php echo " with ".$nb_subscriptions[$n]." friends" ?>
-                        <?php $n=$n +1; ?>
+                        <?php echo " with ".$tricount->nb_subscriptions_by_tricount()." friends" ?>
+                     
                     <?php endif; ?>
                     <br>
                     <?php if(!$tricount->description || $tricount->description == "NULL" ): ?>
