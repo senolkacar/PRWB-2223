@@ -89,6 +89,28 @@ Class Tricount extends Model{
 
     }
 
+    public function get_depenses() : array {
+        $query = self::execute("SELECT * FROM operations WHERE tricount = :tricount",["tricount" =>$this->id]);
+        return $query->fetchAll();
+    }
+
+    public static function get_tricount_by_name(string $name): Tricount|false{
+        $query = self::execute("SELECT * FROM tricounts WHERE title = :title",["title" => $name]);
+        $data = $query->fetch();
+        if($query->rowCount()==0){
+            return false;
+        }else{
+            return new Tricount($data["title"],User::get_user_by_id($data["creator"]),$data["description"],$data["created_at"],$data["id"]);
+        }
+    }
+
+    public function get_nb_participants(): int{
+        $query = self::execute("SELECT count(*) FROM subscriptions WHERE tricount = :tricount",["tricount" => $this->id]);
+        $data = $query->fetch();
+        return $data[0];
+    }
+
+
     
 
 }

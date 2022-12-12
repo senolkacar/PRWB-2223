@@ -15,7 +15,7 @@
             <ul>
             <?php foreach ($tricounts as $tricount):  ?>
 
-                <li><a href='tricount/view_tricount/<?=$tricount['title'] ?>'><?=$tricount['title'] ?> </a>
+                <li><a href='tricount/show_tricount/<?=$tricount['title'] ?>'><?=$tricount['title'] ?> </a>
                     <?php if( $tricount['subscription_count'] == 0): ?>
                         --&#32 you are alone
                     <?php else: ?>
