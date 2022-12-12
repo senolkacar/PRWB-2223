@@ -11,7 +11,7 @@
         <header>
         <a href="tricount/index"><button type="button" class="btn btn-primary btn-block">Back</button></a>
         <div class="title"><?=$tricount->title?>&#9654; Expenses </div>
-        <a href="tricount/edit/<?=$tricount->title?>"><button type="button" class="btn btn-primary btn-block">Edit</button></a>
+        <a href="tricount/edit_tricount/<?=$tricount->title?>"><button type="button" class="btn btn-primary btn-block">Edit</button></a>
         </header>
         <div class="main">
             <ul>

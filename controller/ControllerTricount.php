@@ -28,8 +28,7 @@ class ControllerTricount extends Controller {
     } 
 
     public function add_tricount():void {
-        $user=$this->get_user_or_redirect();
-        var_dump($user);
+        $user=$this->get_user_or_redirect();//var_dump($user);
         $errors = [];
         if(isset($_POST["title"])&&isset($_POST["description"])){
          
@@ -63,6 +62,21 @@ class ControllerTricount extends Controller {
             $this->redirect("tricount");
         }
         }
+
+    public function edit_tricount():void {
+        $user=$this->get_user_or_redirect();
+        $errors=[];
+        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+            $title = $_GET["param1"];
+            $tricount = Tricount::get_tricount_by_name($title);
+            (new View("edit_tricount")) -> show(["title"=>$title,"tricount"=>$tricount,"errors"=>$errors]);
+        }
+        else {
+            $this->redirect("tricount","show_tricount");
+        }
+
+       
+    }
         
 
 
