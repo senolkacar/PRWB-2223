@@ -16,6 +16,15 @@ Class User extends Model{
         }
     }
 
+    public static function get_user_by_id(int $id): User|false{
+        $query = self::execute("SELECT * FROM users WHERE id = :id",[":id" => $id]);
+        $data = $query->fetch();
+        if($query->rowCount()==0){
+            return false;
+        }else{
+            return new User($data["mail"],$data["hashed_password"],$data["full_name"],$data["role"],$data["iban"],$data["id"]);
+        }
+    }
 
     public static function get_users(): array{
         $query = self::execute("SELECT * FROM users",[]);
@@ -40,6 +49,15 @@ Class User extends Model{
 
     public function persist() : User{
         if(self::get_user_by_mail($this->mail)){
+            self::execute("UPDATE users SET hashed_password = :hashed_password, full_name = :full_name, role = :role, iban = :iban WHERE mail = :mail",["hashed_password"=>$this->hashed_password,"full_name"=>$this->full_name,"role"=>$this->role,"iban"=>$this->iban,"mail"=>$this->mail]);
+        }else{
+            self::execute("INSERT INTO users (mail,hashed_password,full_name,role,iban) VALUES (:mail,:hashed_password,:full_name,:role,:iban)",["mail"=>$this->mail,"hashed_password"=>$this->hashed_password,"full_name"=>$this->full_name,"role"=>$this->role,"iban"=>$this->iban]);
+        }
+        return $this;
+    }
+
+    public function persist_by_id() : User{
+        if(self::get_user_by_id($this->id)){
             self::execute("UPDATE users SET hashed_password = :hashed_password, full_name = :full_name, role = :role, iban = :iban WHERE mail = :mail",["hashed_password"=>$this->hashed_password,"full_name"=>$this->full_name,"role"=>$this->role,"iban"=>$this->iban,"mail"=>$this->mail]);
         }else{
             self::execute("INSERT INTO users (mail,hashed_password,full_name,role,iban) VALUES (:mail,:hashed_password,:full_name,:role,:iban)",["mail"=>$this->mail,"hashed_password"=>$this->hashed_password,"full_name"=>$this->full_name,"role"=>$this->role,"iban"=>$this->iban]);

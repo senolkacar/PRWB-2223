@@ -33,7 +33,7 @@ class ControllerUser extends Controller {
                 $user->mail = $_POST["mail"];
                 $user->full_name = $_POST["full_name"];
                 $user->iban = $_POST["iban"];
-                $user->persist();
+                $user->persist_by_id();
                 $success = "Profile updated";
             }
         }
