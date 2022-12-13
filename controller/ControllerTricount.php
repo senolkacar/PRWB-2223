@@ -30,15 +30,11 @@ class ControllerTricount extends Controller {
     public function add_tricount():void {
         $user=$this->get_user_or_redirect();//var_dump($user);
         $errors = [];
-        if(isset($_POST["title"])&&isset($_POST["description"])){
-         
-           
+        if(isset($_POST["title"])&&isset($_POST["description"])){  
             $title = $_POST["title"];
             $description = $_POST["description"];  
             $tricount = new Tricount($title,$user,$description);
-            // $errors = $message->validate();
-            //$errors = array_merge($errors,$title->validate_title($_POST["title"]));
-           // $errors = array_merge($errors,$description->validate_description($_POST["description"]));
+            $errors=$tricount->validate();
             if(count($errors)==0){
                 $tricount -> persist();
                 $this->redirect("tricount","index");     
@@ -73,9 +69,9 @@ class ControllerTricount extends Controller {
         $user=$this->get_user_or_redirect();
         $errors=[];
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            $title = $_GET["param1"];
-            $tricount = Tricount::get_tricount_by_name($title);
-            (new View("edit_tricount")) -> show(["title"=>$title,"tricount"=>$tricount,"errors"=>$errors]);
+            $id= $_GET["param1"];
+            $tricount = Tricount::get_tricount_by_id($id);
+            (new View("edit_tricount")) -> show(["id"=>$id,"tricount"=>$tricount,"errors"=>$errors]);
         }
         else {
             $this->redirect("tricount","show_tricount");

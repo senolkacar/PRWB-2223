@@ -44,7 +44,7 @@ Class Tricount extends Model{
 
     public function validate_title(string $title): array{
         $errors=[];
-        if(!strlen($title)>3){
+        if(strlen($title)<3){
             $errors[] = "Title must be at least 3 characters long";
         }
         return $errors;
@@ -58,10 +58,22 @@ Class Tricount extends Model{
         return $errors;
     }
 
+    public function validate(): array{
+        $errors=[];
+        if(strlen($this->title)<3){
+            $errors[] = "Title must be at least 3 characters long";
+        }
+        if(strlen($this->description) >0 && strlen($this->description)<3){
+            $errors[] = "Description must be at least 3 characters long";
+        }
+
+        return $errors;
+    }
+
     public function persist():Tricount {
         if($this->id == NULL) {
-           // $errors = $this->validate();
-            //if(empty($errors)){
+           $errors = $this->validate();
+            if(empty($errors)){
                 self::execute('INSERT INTO Tricounts (title, description, creator) VALUES (:title,:description,:creator)', 
                                ['title' => $this->title,
                                 'description' => $this->description,
@@ -71,9 +83,9 @@ Class Tricount extends Model{
                 $this->id = $tricount->id;
                $this->created_at = $tricount->created_at;
                 return $this;
-            //} else {
-           //     return $errors; 
-           // }
+            } else {
+               return $errors; 
+            }
         } else {
             //on ne modifie jamais les messages : pas de "UPDATE" SQL.
             throw new Exception("Not Implemented.");

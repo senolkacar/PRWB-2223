@@ -12,6 +12,8 @@
     <a class="navbar-brand" href="tricount/index">
         <button type="button" class="btn btn-primary">Cancel</button>
     </a>
+    <div class="title">Tricount  &#32 &#9654; &#32 Add </div>
+    
    
     </nav>
         <div class="main">

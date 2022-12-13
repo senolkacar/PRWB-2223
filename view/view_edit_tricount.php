@@ -12,10 +12,10 @@
     <a class="navbar-brand" href="tricount/index">
         <button type="button" class="btn btn-primary">Back</button>
     </a>
-    <p class="text-right"><?=$tricount->title?>&#9654; Edit</p>
+    <p class="text-right"><?=$tricount->title?> &#32 &#9654; &#32 Edit</p>
     </nav>
         <div class="main">
-            <form method='post' action='tricount/edit_tricount/$title' enctype='multipart/form-data'>
+            <form method='post' action='tricount/edit_tricount/$id' enctype='multipart/form-data'>
                 <p>Settings</p>
                 Title: <br>
                 <textarea name='title'  id='title'  rows='1'><?= $tricount->title; ?></textarea> <br>
