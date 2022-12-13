@@ -71,7 +71,12 @@ class ControllerTricount extends Controller {
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
             $id= $_GET["param1"];
             $tricount = Tricount::get_tricount_by_id($id);
-            (new View("edit_tricount")) -> show(["id"=>$id,"tricount"=>$tricount,"errors"=>$errors]);
+            $subscriptions =$tricount-> get_subscriptions();           
+            //var_dump($subscriptions);//why vide ?
+            (new View("edit_tricount")) -> show(["id"=>$id,
+                "tricount"=>$tricount,
+                "subscriptions"=>$subscriptions,
+                "errors"=>$errors]);
         }
         else {
             $this->redirect("tricount","show_tricount");

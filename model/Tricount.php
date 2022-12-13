@@ -1,6 +1,6 @@
 <?php
 require_once "framework/Model.php";
-require_once "Subscriptions.php";
+require_once "Subscription.php";
 
 Class Tricount extends Model{
     public function __construct(public string $title,
@@ -122,6 +122,10 @@ Class Tricount extends Model{
         return $data[0];
     }
 
+    public function get_subscriptions(): array {
+        return Subscription::get_subscriptions_by_tricount($this);
+    }
+    
 
     
 

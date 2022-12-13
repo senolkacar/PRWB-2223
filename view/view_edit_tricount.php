@@ -20,8 +20,19 @@
                 Title: <br>
                 <textarea name='title'  id='title'  rows='1'><?= $tricount->title; ?></textarea> <br>
                 Description (optional) : <br>
-                <textarea name='description' id='description'  rows='2'><?= $tricount->description; ?></textarea> <br>
+                <textarea name='description' id='description'  rows='2'><?= $tricount->description; ?></textarea> <br>  
+
+                <div class='subscriptions'>
                 <p>Subscriptions</p>
+                <?=$tricount->creator->full_name;?>
+                    <ul>
+                        <?php foreach ($subscriptions as $subscription): ?>
+                            <li><?= $subscription->user->full_name ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+
+
                 <input type='submit' value='Save'>
             </form>
 
