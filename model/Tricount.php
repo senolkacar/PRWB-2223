@@ -28,7 +28,7 @@ Class Tricount extends Model{
         if($query->rowCount()==0){
             return false;
         }else{
-            return new Tricount($data["title"],User::get_user_by_id($data["creator"]),$data["description"],$data["created_at"],);
+            return new Tricount($data["title"],User::get_user_by_id($data["creator"]),$data["description"],$data["created_at"],$data["id"]);
         }
     }
 
