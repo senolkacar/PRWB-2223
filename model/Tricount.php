@@ -102,9 +102,10 @@ Class Tricount extends Model{
     }
 
     public function get_depenses() : array {
-        $query = self::execute("SELECT * FROM operations WHERE tricount = :tricount",["tricount" =>$this->id]);
+        $query = self::execute("SELECT * FROM operations join users on operations.initiator = users.id and tricount =:tricount order by operation_date desc",["tricount" =>$this->id]);
         return $query->fetchAll();
     }
+
 
     public static function get_tricount_by_name(string $name): Tricount|false{
         $query = self::execute("SELECT * FROM tricounts WHERE title = :title",["title" => $name]);

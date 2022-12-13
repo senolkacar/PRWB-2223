@@ -48,7 +48,7 @@ class ControllerTricount extends Controller {
     public function show_tricount():void {
         $user=$this->get_user_or_redirect();
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            $id = Tools::sanitize($_GET["param1"]);
+            $id = $_GET["param1"];
             if(!is_numeric($id)){
                 $this->redirect("tricount");
             }
@@ -58,12 +58,18 @@ class ControllerTricount extends Controller {
             }
             $nb_participants = $tricount->get_nb_participants();
             $depenses = $tricount->get_depenses();
-            (new View("show_tricount"))->show(["tricount"=>$tricount,"nb_participants"=>$nb_participants,"depenses"=>$depenses]);
+            $total = 0;
+            foreach($depenses as $amount){
+                $total += $amount["amount"];
+            }
+            $total = number_format($total, 2, '.', '');
+            (new View("show_tricount"))->show(["tricount"=>$tricount,"nb_participants"=>$nb_participants,"depenses"=>$depenses,"total"=>$total]);
         }
         else {
             $this->redirect("tricount");
         }
         }
+
 
     public function edit_tricount():void {
         $user=$this->get_user_or_redirect();
