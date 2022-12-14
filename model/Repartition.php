@@ -11,13 +11,13 @@ class Repartition extends Model {
         public int $weight)  {}
 
     public static function get_total_weight_by_operation(int $id): int {
-        $query = self::execute("SELECT SUM(weight) FROM repartitions WHERE operation = :operation", [":operation" => $id]);
+        $query = self::execute("SELECT SUM(weight) FROM repartitions WHERE operation = :operation", ["operation" => $id]);
         $data = $query->fetch();
         return (int)$data[0];
     }
 
     public static function get_user_weight(int $user, int $operation): int{
-        $query = self::execute("SELECT weight FROM repartitions WHERE user = :user AND operation = :operation",[":user" => $user, ":operation" => $operation]);
+        $query = self::execute("SELECT weight FROM repartitions WHERE user = :user AND operation = :operation",["user" => $user, "operation" => $operation]);
         $data = $query->fetch();
         return (int)$data[0];
     }

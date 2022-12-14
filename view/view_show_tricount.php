@@ -23,9 +23,11 @@
                     <?php else: ?>
                         <?php echo "List of depenses" ?>
                         <?php foreach ($depenses as $depense):  ?>
-                        <li> <a href='tricount/show_operation/<?=$depense["id"]; ?>'> <?php echo $depense["title"]." ".round($depense["amount"],2) ?></a>
+                        <li>
+                        <?php 
+                        echo $depense["title"]." ".round($depense["amount"],2) ?>
                         <br>
-                        <?php echo "Paid by ".$depense["full_name"]." ".$depense["operation_date"] ?>
+                        <?php echo "Paid by ".User::get_user_by_id($depense["initiator"])->full_name." ".$depense["operation_date"] ?>
                         </li>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -43,3 +45,4 @@
         
     </body>
 </html>
+
