@@ -7,6 +7,7 @@ require_once "Tricount.php";
 
 Class Operation extends Model{
 
+
     public function __construct(public string $title, 
         public Tricount $tricount,
         public float $amount,
@@ -15,16 +16,18 @@ Class Operation extends Model{
          public ?String $created_at = NULL,
          public ?int $id = NULL){}
 
+
     public static function get_operations(): array{
     $query = self::execute("SELECT * FROM operations",[]);
     $data = $query->fetchAll();
     $operations = [];
     foreach($data as $row){
+
         $operations[] = new Operation($row["title"],Tricount::get_tricount_by_id($row["tricount"]),
         $row["amount"],User::get_user_by_id($row["initiator"]) ,$row["operation_date"],$row["created_at"]);
-    }
     return $operations;
     }
+}
 
     public static function get_operation_by_id(int $id): Operation|false{
         $query = self::execute("SELECT * FROM operations WHERE id = :id",[":id" => $id]);
