@@ -24,14 +24,16 @@
                         <?php echo "List of depenses" ?>
                         <?php foreach ($depenses as $depense):  ?>
                         <li>
-                        <?php echo $depense["title"]." ".$depense["amount"] ?>
+                        <?php 
+            
+                        echo $depense["title"]." ".round($depense["amount"],2) ?>
                         <br>
                         <?php echo "Paid by ".$depense["full_name"]." ".$depense["operation_date"] ?>
                         </li>
                         <?php endforeach; ?>
                     <?php endif; ?>
                     <br>
-                    <?php echo "MY TOTAL 0 &euro;"?>
+                    <?php echo "MY TOTAL ".$mytotal." &euro;"?>
                     <a href="operations/add_operation/<?=$tricount->id?>"><button type="button" class="btn btn-primary btn-block">+</button></a>
                     <?php echo "TOTAL EXPENSES ".$total."&euro;"?>
 

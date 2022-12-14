@@ -3,6 +3,8 @@
 
 require_once 'model/User.php';
 require_once 'model/Tricount.php';
+require_once 'model/Repartition.php';
+require_once 'model/Operation.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 
@@ -59,11 +61,16 @@ class ControllerTricount extends Controller {
             $nb_participants = $tricount->get_nb_participants();
             $depenses = $tricount->get_depenses();
             $total = 0;
-            foreach($depenses as $amount){
-                $total += $amount["amount"];
+            $mytotal = 0;
+            foreach($depenses as $operation){
+                $total += $operation["amount"];
+                $total_weight = Repartition::get_total_weight_by_operation($operation["id"]);
+                $weight = Repartition::get_user_weight($user->id, $operation["id"]);
+                $mytotal+= $operation["amount"] * $weight / $total_weight;
             }
             $total = number_format($total, 2, '.', '');
-            (new View("show_tricount"))->show(["tricount"=>$tricount,"nb_participants"=>$nb_participants,"depenses"=>$depenses,"total"=>$total]);
+            $mytotal = number_format($mytotal, 2, '.', '');
+            (new View("show_tricount"))->show(["tricount"=>$tricount,"nb_participants"=>$nb_participants,"depenses"=>$depenses,"total"=>$total,"mytotal"=>$mytotal]);
         }
         else {
             $this->redirect("tricount");

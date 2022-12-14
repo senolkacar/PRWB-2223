@@ -1,14 +1,21 @@
 <?php
 Class Operation extends Model{
 
-    public function __construct(public string $title, public int $tricount,public float $amount,public DateTime $operation_date, public int $initiator,public DateTime $created_at){}
+    public function __construct(
+        public string $title,
+        public Tricount $tricount,
+        public float $amount,
+        public String $operation_date,
+        public User $initiator,
+        public String $created_at,
+        public ?int $id=NULL){}
 
     public static function get_operations(): array{
     $query = self::execute("SELECT * FROM operations",[]);
     $data = $query->fetchAll();
     $operations = [];
     foreach($data as $row){
-        $operations[] = new Operation($row["title"],$row["tricount"],$row["amount"],$row["operation_date"],$row["initiator"],$row["created_at"]);
+        $operations[] = new Operation($row["title"],Tricount::get_tricount_by_id($row["tricount"]),$row["amount"],$row["operation_date"],User::get_user_by_id($row["initiator"]),$row["created_at"]);
     }
     return $operations;
     }
@@ -19,7 +26,7 @@ Class Operation extends Model{
         if($query->rowCount()==0){
             return false;
         }else{
-            return new Operation($data["title"],$data["tricount"],$data["amount"],$data["operation_date"],$data["initiator"],$data["created_at"]);
+            return new Operation($data["title"],Tricount::get_tricount_by_id($data["tricount"]),$data["amount"],$data["operation_date"],User::get_user_by_id($data["initiator"]),$data["created_at"]);
         }
     }
 
