@@ -23,8 +23,7 @@
                     <?php else: ?>
                         <?php echo "List of depenses" ?>
                         <?php foreach ($depenses as $depense):  ?>
-                        <li>
-                        <?php echo $depense["title"]." ".$depense["amount"] ?>
+                        <li><a href='tricount/show_operation/<?=$depense["id"]; ?>'> <?php echo $depense["title"]." ".$depense["amount"]; ?> </a>
                         <br>
                         <?php echo "Paid by ".$depense["full_name"]." ".$depense["operation_date"] ?>
                         </li>

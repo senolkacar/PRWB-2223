@@ -86,9 +86,19 @@ class ControllerTricount extends Controller {
         }
         else {
             $this->redirect("tricount","show_tricount");
-        }
+        }       
+    }
 
-       
+    public function show_operation():void {
+        $user=$this->get_user_or_redirect();
+        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+            $id= $_GET["param1"];
+            $operation = Operation::get_operation_by_id($id);
+           // var_dump($operation);     
+           
+        }
+        (new View("show_operation")) -> show(["operation"=>$operation]);
+
     }
         
 

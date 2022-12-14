@@ -28,7 +28,7 @@
                         <?=$tricount['description'] ?>
                      <?php endif; ?>
             <?php endforeach; ?>
-            
+                </li>
             </ul>       
        
         <a href="user/settings">Settings</a>

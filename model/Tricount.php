@@ -1,6 +1,8 @@
 <?php
 require_once "framework/Model.php";
 require_once "Subscription.php";
+require_once "User.php";
+require_once "Operation.php";
 
 Class Tricount extends Model{
     public function __construct(public string $title,
