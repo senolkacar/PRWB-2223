@@ -17,6 +17,9 @@ Class Operation extends Model{
          public ?int $id = NULL){}
 
 
+    public function get_total_weight():int{
+        return Repartition::get_total_weight_by_operation($this->id);
+    }
     public static function get_operations(): array{
     $query = self::execute("SELECT * FROM operations",[]);
     $data = $query->fetchAll();
@@ -36,7 +39,7 @@ Class Operation extends Model{
             return false;
         }else{
             return new Operation($data["title"],Tricount::get_tricount_by_id($data["tricount"]),$data["amount"],User::get_user_by_id($data["initiator"]),
-            $data["operation_date"],$data["created_at"]);
+            $data["operation_date"],$data["created_at"],$data["id"]);
         }
     }
 
@@ -48,6 +51,7 @@ Class Operation extends Model{
         return $errors;
     }
 
+
     public static function validate_amount(float $amount): array{
         $errors=[];
         if($amount<=0){
@@ -55,6 +59,9 @@ Class Operation extends Model{
         }
         return $errors;
     }
+
+
+   
 
 
 }

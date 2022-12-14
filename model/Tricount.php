@@ -125,6 +125,12 @@ Class Tricount extends Model{
         return $data[0];
     }
 
+    public function get_nb_participants_including_creator(): int{
+        $query = self::execute("SELECT count(*) FROM subscriptions WHERE tricount = :tricount",["tricount" => $this->id]);
+        $data = $query->fetch();
+        return $data[0]+1;
+    }
+
     public function get_subscriptions(): array {
         return Subscription::get_subscriptions_by_tricount($this);
     }

@@ -14,12 +14,22 @@
         <a href="tricount/edit_operation/<?=$operation->id; ?>"><button type="button" class="btn btn-primary btn-block">Edit</button></a>
         </header>
         <div class="main">
+            <p><?php echo $operation->amount." €"; ?></p>
+            <p>Paid by <?=$operation->initiator->full_name; ?></p>
+            <p> <?=$operation->operation_date; ?></p>
+            <?php if(Repartition::include_user($user,$operation)): ?>
+                <?php echo " For ". $operation->tricount->get_nb_participants_including_creator()." participants, including me" ?>
+            <?php else: ?>
+                <?php echo " For ". $operation->tricount->get_nb_participants_including_creator()." participants" ?>
+            <?php endif; ?>
             <ul>
-
-                   
-                   
-
-            </ul>      
+            <?php foreach ($repartitions as $repartition):  ?>
+                <li> <?=$repartition->user->full_name; ?> 
+                <?php echo " -- ".Repartition::get_amount_by_user_and_operation($repartition->user, $repartition->operation)." €"; ?> 
+                    
+            <?php endforeach; ?>
+                </li>
+            </ul>          
         <a href="tricount/show_tricount/<?=$operation->id-1;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
         <a href="tricount/show_tricount/<?=$operation->id+1;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
        
