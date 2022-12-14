@@ -25,6 +25,9 @@
             <ul>
             <?php foreach ($repartitions as $repartition):  ?>
                 <li> <?=$repartition->user->full_name; ?> 
+                <?php if($repartition->user==$user): ?>
+                (me)
+                <?php endif; ?>
                 <?php echo " -- ".Repartition::get_amount_by_user_and_operation($repartition->user, $repartition->operation)." €"; ?> 
                     
             <?php endforeach; ?>
