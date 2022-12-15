@@ -11,7 +11,7 @@
         <header>
         <a href="tricount/index"><button type="button" class="btn btn-primary btn-block">Back</button></a>
         <div class="title"><?=$tricount->title?>&#9654; Expenses </div>
-        <a href="operation/edit_tricount/<?=$tricount->id; ?>"><button type="button" class="btn btn-primary btn-block">Edit</button></a>
+        <a href="tricount/edit_tricount/<?=$tricount->id; ?>"><button type="button" class="btn btn-primary btn-block">Edit</button></a>
         </header>
         <div class="main">
         <a href="tricount/show_balance/<?=$tricount->id; ?>"><button type="button" class="btn btn-primary btn-block">&#8633;View Balance</button></a>
