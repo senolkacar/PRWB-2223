@@ -33,8 +33,8 @@
             <?php endforeach; ?>
                 </li>
             </ul>          
-        <a href="tricount/show_tricount/<?=$operation->id-1;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
-        <a href="tricount/show_tricount/<?=$operation->id+1;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
+        <a href="operation/show_operation/<?=$operation->id-1;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
+        <a href="operation/show_operation/<?=$operation->id+1;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
        
         </div>        
 
