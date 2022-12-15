@@ -117,6 +117,8 @@ class ControllerTricount extends Controller {
             if(!is_numeric($id)){
                 $this->redirect("tricount");
             }
+            $tricount = Tricount::get_tricount_by_id($id);
+            (new View("show_balance"))->show(["tricount"=>$tricount]);
         }else{
             $this->redirect("tricount");
         }

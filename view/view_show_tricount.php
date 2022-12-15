@@ -14,7 +14,7 @@
         <a href="tricount/edit_tricount/<?=$tricount->id; ?>"><button type="button" class="btn btn-primary btn-block">Edit</button></a>
         </header>
         <div class="main">
-        <a href="tricount/view_balance/<?=$tricount->id; ?>"><button type="button" class="btn btn-primary btn-block">&#8633;View Balance</button></a>
+        <a href="tricount/show_balance/<?=$tricount->id; ?>"><button type="button" class="btn btn-primary btn-block">&#8633;View Balance</button></a>
             <ul>
                     <?php if($nb_participants == 0): ?>
                         --&#32 you are alone
