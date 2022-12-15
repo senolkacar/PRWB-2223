@@ -96,19 +96,7 @@ class ControllerTricount extends Controller {
         }       
     }
 
-    public function show_operation():void {
-        $user=$this->get_user_or_redirect();
-        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            $id= $_GET["param1"];
-            $operation = Operation::get_operation_by_id($id);
-           //var_dump(Repartition::include_user($user,$operation));   
-           $repartitions = Repartition::get_repartitions_by_operation($operation);
-           //var_dump($repartitions);
-           
-        }
-        (new View("show_operation")) -> show(["operation"=>$operation,"user"=>$user,"repartitions"=>$repartitions]);
-
-    }
+   
     
     public function show_balance():void{
         $user=$this->get_user_or_redirect();
