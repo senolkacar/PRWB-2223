@@ -117,6 +117,8 @@ class ControllerTricount extends Controller {
             if(!is_numeric($id)){
                 $this->redirect("tricount");
             }
+        }else{
+            $this->redirect("tricount");
         }
             
     }
