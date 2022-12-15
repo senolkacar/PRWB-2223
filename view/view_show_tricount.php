@@ -18,8 +18,13 @@
             <ul>
                     <?php if($nb_participants == 0): ?>
                         --&#32 you are alone
+                        <p>Click below to add your friends!</p>
+                        <a href="tricount/add_friends/<?=$tricount->id; ?>"><button type="button" class="btn btn-primary btn-block">Add Friends</button></a>
                     <?php elseif(!$depenses): ?>
                         <?php echo "Your tricount is empty" ?>
+                        <p>Click below to add your first expense!</p>
+                        <a href="tricount/add_expenses/<?=$tricount->id; ?>"><button type="button" class="btn btn-primary btn-block">Add an expense</button></a>
+                        
                     <?php else: ?>
                         <?php echo "List of depenses" ?>
                         <?php foreach ($depenses as $depense):  ?>
