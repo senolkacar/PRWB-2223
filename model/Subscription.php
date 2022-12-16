@@ -21,10 +21,29 @@ class Subscription extends Model {
 
     }
 
+    public static function get_subscription_by_tricount_and_user(Tricount $tricount, User $user) :Subscription{
+        $query = self::execute("SELECT * FROM subscriptions WHERE tricount =:tricount and user=:user",["tricount"=>$tricount->id, "user"=>$user->id]);
+        $data = $query->fetch() ;
+        $subscription = new Subscription(Tricount::get_tricount_by_id($data["tricount"]),User::get_user_by_id($data["user"]));
+
+        return  $subscription;
+
+    }
+    
+
     public static function nb_subscriptions_by_tricount(User $user) : array {
         $query = self::execute("SELECT DISTINCT tricounts.*, (SELECT count(*) FROM subscriptions WHERE subscriptions.tricount = tricounts.id and subscriptions.user<>:user) as subscription_count FROM tricounts LEFT JOIN subscriptions ON subscriptions.tricount = tricounts.id",["user"=>$user->id]);
         return $query->fetchAll() ;//(int)$data[0]
         
+    }
+
+    public static function persist(User $user, Tricount $tricount) : Subscription|array {
+        self::execute('INSERT INTO Subscriptions (tricount, user) VALUES (:tricount,:user)', 
+                               ['tricount' => $tricount->id,
+                                'user' => $user->id
+                               ]);
+        $subscription= self::get_subscription_by_tricount_and_user($tricount, $user);
+        return $subscription;
     }
 
 

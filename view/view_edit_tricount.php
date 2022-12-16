@@ -15,7 +15,7 @@
     <p class="text-right"><?=$tricount->title?> &#32 &#9654; &#32 Edit</p>
     </nav>
         <div class="main">
-            <form method='post' action='tricount/edit_tricount/$id' enctype='multipart/form-data'>
+            <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data'>
                 <p>Settings</p>
                 Title: <br>
                 <textarea name='title'  id='title'  rows='1'><?= $tricount->title; ?></textarea> <br>
@@ -59,6 +59,8 @@
                         <?php endforeach; ?>
                     </ul>
                 </div>
+                <?php elseif (strlen($success) != 0): ?>
+                <p><span class='success'><?= $success ?></span></p>
             <?php endif; ?>
 
 

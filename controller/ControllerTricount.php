@@ -81,35 +81,59 @@ class ControllerTricount extends Controller {
     public function edit_tricount():void {
         $user=$this->get_user_or_redirect();
         $errors=[];
+        $success="";
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            $id= $_GET["param1"];
+            global $id,$subscriptions,$other_users;
+            $id= (int)$_GET["param1"];
+            var_dump($id);
+            global $tricount;
             $tricount = Tricount::get_tricount_by_id($id);
             $subscriptions =$tricount-> get_subscriptions();  
             $other_users = $tricount->get_users_not_subscriber();        
-            //var_dump($other_users);
-            (new View("edit_tricount")) -> show(["id"=>$id,
-                "tricount"=>$tricount,
-                "subscriptions"=>$subscriptions,
-                "other_users"=>$other_users,
-                "errors"=>$errors]);
-        }
-        else {
-            $this->redirect("tricount","show_tricount");
-        }   
-        if($user == $tricount -> creator) {
+            //var_dump($other_users);  
             if(isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["subscriber"]) ) {
-                $errors = array_merge($errors,Tricount::validate_title($_POST["title"]));//not exste already
-                $tricount->title = $_POST["title"];
-                $tricount->description = $_POST["description"];
-
-
-
-
-            }
-
-        }
+                if($user == $tricount -> creator) {
+                        $errors = Tricount::validate_title($_POST["title"]);//could have the same name with others
+                        if(count($errors) == 0) {
+                        $tricount->title = $_POST["title"];
+                        $tricount->description = $_POST["description"];
+                        $subscriber = User::get_user_by_name($_POST["subscriber"]);//name unique for users
+                        var_dump($_POST["subscriber"]);
+                        var_dump($subscriber);//false
+                        $tricount->update();
+                        if($subscriber != false) {
+                            Subscription::persist($subscriber, $tricount);
+                        }
+                        }
         
-        //if isset --- update and redirect    
+                        if(count($_POST) > 0 && count($errors) == 0){////doesn't work
+                            $this -> redirect("tricount", "edit_tricount");  
+                            $success = "The tricount has been successfully updated.";
+                        }  
+    
+                    }else{
+                        $this -> redirect("tricount", "edit_tricount", "fail");//doesn't work
+                        if (isset($_GET['param1']) && $_GET['param1'] ==="fail")// update and redirect   
+                        $success = "only creator could edit this tricount.";
+                    }
+
+        }    
+    }
+    else{
+        $this -> redirect("tricount", "show_tricount");  
+    }
+    (new View("edit_tricount")) -> show(["id"=>$id,
+    "tricount"=>$tricount,
+    "subscriptions"=>$subscriptions,
+    "other_users"=>$other_users,
+    "success"=>$success,
+    "errors"=>$errors]);       
+
+}
+
+    public function notificaiton():void{
+        
+            
     }
 
    

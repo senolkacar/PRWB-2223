@@ -94,6 +94,19 @@ Class Tricount extends Model{
         }
     }
 
+    public function update():Tricount{
+        $errors = $this ->validate();
+        if(empty($errors)){
+           self:: execute("UPDATE tricounts SET title=:title, description=:description WHERE id=$this->id ", 
+            ["title"=>$this->title, "description"=>$this->description]);
+        }
+
+        return $this;
+
+
+        
+    }
+
     public static function get_tricounts_involved(User $user): array{    
         $query = self::execute("SELECT DISTINCT tricounts.*, (SELECT count(*) FROM subscriptions WHERE subscriptions.tricount = tricounts.id)
          as subscription_count  FROM tricounts LEFT JOIN subscriptions ON subscriptions.tricount = tricounts.id 
