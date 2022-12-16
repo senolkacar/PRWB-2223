@@ -44,7 +44,7 @@ Class Tricount extends Model{
         }
     }
 
-    public function validate_title(string $title): array{
+    public static function validate_title(string $title): array{
         $errors=[];
         if(strlen($title)<3){
             $errors[] = "Title must be at least 3 characters long";

@@ -26,6 +26,17 @@ Class User extends Model{
         }
     }
 
+    public static function get_user_by_name(string $full_name): User|false{
+        $query = self::execute("SELECT * FROM users WHERE full_name = :full_name",[":full_name" => $full_name]);
+        $data = $query->fetch();
+        if($query->rowCount()==0){
+            return false;
+        }else{
+            return new User($data["mail"],$data["hashed_password"],$data["full_name"],$data["role"],$data["iban"],$data["id"]);
+        }
+    }
+
+
     public static function get_users(): array{
         $query = self::execute("SELECT * FROM users",[]);
         $data = $query->fetchAll();
@@ -121,8 +132,12 @@ Class User extends Model{
         return $errors;
     }
 
-    public static function validate_full_name(string $full_name): array{
+    public static function validate_full_name(string $full_name): array{        
         $errors=[];
+        $user= self::get_user_by_name($full_name);
+        //if($user){
+          //  $errors[]="This user name already exists.";
+       // }
         if(!strlen($full_name)>3){
             $errors[] = "Full name must be at least 3 characters long";
         }

@@ -26,6 +26,10 @@ class ControllerUser extends Controller {
         if(isset($_POST["mail"])&&isset($_POST["full_name"])){
             $errors = array_merge($errors,User::validate_email($_POST["mail"]));
             $errors = array_merge($errors,User::validate_full_name($_POST["full_name"]));
+            $user_check_name = User::get_user_by_name($_POST["full_name"]);
+            if($user_check_name != false && $user_check_name->id != $user -> id){
+                $errors[] = "user name exist already.";
+            }
             if(isset($_POST["iban"])&&strlen($_POST["iban"])>0){
                 $errors = array_merge($errors,User::validate_iban($_POST["iban"]));
             }
@@ -34,9 +38,13 @@ class ControllerUser extends Controller {
                 $user->full_name = $_POST["full_name"];
                 $user->iban = $_POST["iban"];
                 $user->persist_by_id();
-                $success = "Profile updated";
+                $success = "Profile updated"; 
             }
         }
+        if(count($_POST) > 0 && count($errors) == 0)
+            $this -> redirect("User", "edit_profile", "ok");
+        if (isset($_GET['param1']) && $_GET['param1'] ==="ok")
+            $success = "Your profile has been successfully updated.";
 
         (new View("edit_profile"))->show(["user"=>$user,"errors"=>$errors,"success"=>$success]);
     }

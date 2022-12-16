@@ -96,6 +96,19 @@ class ControllerTricount extends Controller {
         else {
             $this->redirect("tricount","show_tricount");
         }   
+        if($user == $tricount -> creator) {
+            if(isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["subscriber"]) ) {
+                $errors = array_merge($errors,Tricount::validate_title($_POST["title"]));//not exste already
+                $tricount->title = $_POST["title"];
+                $tricount->description = $_POST["description"];
+
+
+
+
+            }
+
+        }
+        
         //if isset --- update and redirect    
     }
 
