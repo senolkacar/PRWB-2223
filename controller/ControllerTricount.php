@@ -106,17 +106,15 @@ class ControllerTricount extends Controller {
                         }
                         }
         
-                        if(count($_POST) > 0 && count($errors) == 0){////doesn't work
-                            $this -> redirect("tricount", "edit_tricount");  
-                            $success = "The tricount has been successfully updated.";
-                        }  
+                        if(count($_POST) > 0 && count($errors) == 0){
+                            $this -> redirect("tricount", "show_tricount", $tricount->id);  
+                           // $success = "The tricount has been successfully updated.";
+                        } 
     
                     }else{
-                        $this -> redirect("tricount", "edit_tricount", "fail");//doesn't work
-                        if (isset($_GET['param1']) && $_GET['param1'] ==="fail")// update and redirect   
-                        $success = "only creator could edit this tricount.";
+                        $errors[] = "only creator could edit this tricount.";
+                        //redirect ?
                     }
-
         }    
     }
     else{
