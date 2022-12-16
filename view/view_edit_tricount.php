@@ -23,14 +23,28 @@
                 <textarea name='description' id='description'  rows='2'><?= $tricount->description; ?></textarea> <br>  
 
                 <div class='subscriptions'>
-                <p>Subscriptions</p>
-                <?=$tricount->creator->full_name;?>
+                     <p>Subscriptions</p>
+                    <fieldset style="width:150px">
+                    <?=$tricount->creator->full_name;?>
                     <ul>
                         <?php foreach ($subscriptions as $subscription): ?>
                             <li><?= $subscription->user->full_name ?></li>
                         <?php endforeach; ?>
                     </ul>
+                    </fieldset>
                 </div>
+                <br>
+
+                <div class='add-subscriber'>
+                            <select name = "subscriber" id="subscriber" value="add subscriber">
+                            <option value=" ">--Add a new subscriber--</option> 
+                            <?php foreach ($other_users as $other_user): ?>  
+                            <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option>  
+                            <?php endforeach; ?>
+                            </select>                           
+                
+                </div>
+                <br>
 
 
                 <input type='submit' value='Save'>

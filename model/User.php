@@ -146,6 +146,18 @@ Class User extends Model{
         return $tricount -> persist();
     }
 
+    public static function get_users_not_subscriber_by_tricount(Tricount $tricount): array {
+        $query = self::execute("SELECT * FROM users WHERE id <> :user and id not in 
+        (select user from subscriptions where tricount = :tricount)",  ["user" => $tricount->creator->id, "tricount" =>$tricount->id]);
+        $data = $query->fetchAll();
+        $users = [];
+        foreach($data as $row) {
+            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
+        }
+        return $users;
+
+    }
+
    
 
 

@@ -134,6 +134,11 @@ Class Tricount extends Model{
     public function get_subscriptions(): array {
         return Subscription::get_subscriptions_by_tricount($this);
     }
+
+    public function get_users_not_subscriber(): array {
+        return User::get_users_not_subscriber_by_tricount($this);
+
+    }
     
 
     
