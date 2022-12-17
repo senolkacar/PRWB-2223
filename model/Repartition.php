@@ -51,24 +51,18 @@ class Repartition extends Model {
     
     }
 
-    //fonction return for a tricount each user full_name and balance, balance is initialized at 0 calculated by subtracting every operation amount to the user balance and add the amount of the operation to the user balance if he is the initiator of the operation
+    //fonction return for a tricount each user full_name and balance, balance is initialized at 0 
+    //calculated by subtracting every operation amount to the user balance and add the amount of the operation to the user balance if he is the initiator of the operation
     public static function get_balance_by_tricount(Tricount $tricount): array {
         $users = $tricount->get_users_including_creator();
         $operations = Operation::get_operations_by_tricount($tricount);
         $balance = [];
         foreach($users as $user){
-            $balance[$user->full_name] = 0;
+            $balance[$user->full_name] = 0.00;
+            $balance[$user->full_name] -= round(Operation::get_my_total($tricount,$user),2);
         }
         foreach($operations as $operation){
-            foreach($users as $user){
-                $user_weight = Repartition::get_user_weight($user->id,$operation->id);
-                $total_weight = Repartition::get_total_weight_by_operation($operation->id);
-                if($operation->initiator->id == $user->id){
-                    $balance[$user->full_name] += $operation->amount;
-                }else{
-                    $balance[$user->full_name] -= $operation->amount * $user_weight  / $total_weight;
-                }
-            }
+            $balance[$operation->initiator->full_name] += round($operation->amount,2);
         }
         return $balance;
     }
