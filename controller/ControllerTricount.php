@@ -107,7 +107,7 @@ class ControllerTricount extends Controller {
                         }
         
                         if(count($_POST) > 0 && count($errors) == 0){
-                            $this -> redirect("tricount", "show_tricount", $tricount->id);  
+                            $this -> redirect("tricount", "show_tricount", $tricount->id);  //add param2 ?
                            // $success = "The tricount has been successfully updated.";
                         } 
     
@@ -128,13 +128,6 @@ class ControllerTricount extends Controller {
     "errors"=>$errors]);       
 
 }
-
-    public function notificaiton():void{
-        
-            
-    }
-
-   
     
     public function show_balance():void{
         $user=$this->get_user_or_redirect();
@@ -149,6 +142,28 @@ class ControllerTricount extends Controller {
             $this->redirect("tricount");
         }
             
+    }
+
+    public function delete() : void {
+        $user=$this->get_user_or_redirect();//is creator ?
+        $tricount = $this->delete_tricount();
+        if ($tricount) {
+            $this->redirect("tricount", "index");
+        } else {
+            throw new Exception("Wrong/missing ID or action no permited");
+        }
+    }
+    private function delete_tricount() :Tricount|false {
+        $user = $this->get_user_or_redirect();
+
+        if (isset($_POST['id_tricount']) && $_POST['id_tricount'] != "") {
+            $post_id = $_POST['id_tricount'];
+            $tricount = Tricount::get_tricount_by_id($post_id);//:Tricount|false
+            if ($tricount) {
+                return $tricount->delete();//to do  :Tricount|false
+            } 
+        }
+        return false;
     }
 
 

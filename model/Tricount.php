@@ -101,10 +101,7 @@ Class Tricount extends Model{
             ["title"=>$this->title, "description"=>$this->description]);
         }
 
-        return $this;
-
-
-        
+        return $this;        
     }
 
     public static function get_tricounts_involved(User $user): array{    
@@ -150,7 +147,10 @@ Class Tricount extends Model{
 
     public function get_users_not_subscriber(): array {
         return User::get_users_not_subscriber_by_tricount($this);
+    }
 
+    public function delete():Tricount|false{
+        return false;//to do
     }
     
 
