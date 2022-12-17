@@ -129,20 +129,25 @@ class ControllerTricount extends Controller {
 
 }
     
-    public function show_balance():void{
-        $user=$this->get_user_or_redirect();
-        if(isset($_GET["param1"]) && $_GET["param1"] !==""){
-            $id = $_GET["param1"];
-            if(!is_numeric($id)){
-                $this->redirect("tricount");
-            }
-            $tricount = Tricount::get_tricount_by_id($id);
-            (new View("show_balance"))->show(["tricount"=>$tricount]);
-        }else{
+public function show_balance():void{
+    $user=$this->get_user_or_redirect();
+    if(isset($_GET["param1"]) && $_GET["param1"] !==""){
+        $id = $_GET["param1"];
+        if(!is_numeric($id)){
             $this->redirect("tricount");
         }
-            
+        $tricount = Tricount::get_tricount_by_id($id);
+        if($tricount==null){
+            $this->redirect("tricount");
+        }
+        $balance = $tricount->get_balance_by_tricount();
+        
+        (new View("show_balance"))->show(["tricount"=>$tricount,"balance"=>$balance]);
+    }else{
+        $this->redirect("tricount");
     }
+        
+}
 
     public function delete() : void {
         $user=$this->get_user_or_redirect();//is creator ?

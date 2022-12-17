@@ -60,8 +60,38 @@ Class Operation extends Model{
         return $errors;
     }
 
-
-   
+    public static function get_operations_by_tricount(Tricount $tricount): array{
+        $query = self::execute("SELECT * FROM operations WHERE tricount = :tricount",["tricount" => $tricount->id]);
+        $data = $query->fetchAll();
+        $operations = [];
+        foreach($data as $row){
+            $operations[] = new Operation($row["title"],$tricount,$row["amount"],User::get_user_by_id($row["initiator"]),
+            $row["operation_date"],$row["created_at"],$row["id"]);
+        }
+        return $operations;
+    }
+    
+    public static function get_my_total(Tricount $tricount,User $user):float{
+        $depenses = $tricount->get_depenses();
+            $mytotal = 0;
+            foreach($depenses as $operation){
+                $total_weight = Repartition::get_total_weight_by_operation($operation["id"]);
+                $weight = Repartition::get_user_weight($user->id, $operation["id"]);
+                $mytotal+= $operation["amount"] * $weight / $total_weight;
+            }
+           return $mytotal = number_format($mytotal, 2, '.', '');
+        
+    }
+    
+    public static function get_total(Tricount $tricount):float{
+        $depenses = $tricount->get_depenses();
+            $total = 0;
+            foreach($depenses as $operation){
+                $total+= $operation["amount"];
+            }
+           return $total = number_format($total, 2, '.', '');
+        
+    }
 
 
 }

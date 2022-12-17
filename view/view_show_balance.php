@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Depenses</title>
+        <title>Balance</title>
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
@@ -14,7 +14,10 @@
         </header>
         <div class="main">
             <ul>
-                <li>User Balance</li>
+                <li><?php foreach($balance as $full_name => $amount){
+                    echo "$full_name : $amount \n";
+                } ?>
+                </li>    
             </ul>       
        
         <a href="user/settings">Settings</a>

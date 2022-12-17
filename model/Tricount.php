@@ -129,6 +129,7 @@ Class Tricount extends Model{
         }
     }
 
+
     public function get_nb_participants(): int{
         $query = self::execute("SELECT count(*) FROM subscriptions WHERE tricount = :tricount",["tricount" => $this->id]);
         $data = $query->fetch();
@@ -141,6 +142,17 @@ Class Tricount extends Model{
         return $data[0]+1;
     }
 
+    public function get_users_including_creator(): array{
+        $query = self::execute("SELECT * FROM users WHERE id = :creator UNION SELECT users.* FROM users INNER JOIN subscriptions ON subscriptions.user = users.id WHERE subscriptions.tricount = :tricount",["creator" => $this->creator->id, "tricount" => $this->id]);
+        $data = $query->fetchAll();
+        $users = [];
+        foreach($data as $row){
+            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
+        }
+        return $users;
+    }
+
+
     public function get_subscriptions(): array {
         return Subscription::get_subscriptions_by_tricount($this);
     }
@@ -148,6 +160,15 @@ Class Tricount extends Model{
     public function get_users_not_subscriber(): array {
         return User::get_users_not_subscriber_by_tricount($this);
     }
+
+    public function get_operations_by_tricount(): array {
+        return Operation::get_operations_by_tricount($this);
+    }
+
+    public function get_balance_by_tricount(): array {
+        return Repartition::get_balance_by_tricount($this);
+    }
+    
 
     public function delete():Tricount|false{
         return false;//to do
