@@ -19,6 +19,9 @@ class Repartition extends Model {
     public static function get_user_weight(int $user, int $operation): int{
         $query = self::execute("SELECT weight FROM repartitions WHERE user = :user AND operation = :operation",["user" => $user, "operation" => $operation]);
         $data = $query->fetch();
+        if($data==false){
+            return 0;
+        }
         return (int)$data[0];
     }
 
