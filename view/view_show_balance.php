@@ -14,10 +14,9 @@
         </header>
         <div class="main">
             <ul>
-                <li><?php foreach($balance as $full_name => $amount){
-                    echo "$full_name : $amount \n";
-                } ?>
-                </li>    
+                <?php foreach($balance as $full_name => $amount): ?>
+                <li><?php echo "$full_name : $amount \n"; ?></li>    
+                <?php endforeach; ?>
             </ul>       
        
         <a href="user/settings">Settings</a>
