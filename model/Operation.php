@@ -45,8 +45,10 @@ Class Operation extends Model{
 
     public static function validate_title(string $title): array{
         $errors=[];
-        if(!strlen($title)>3){
-            $errors[] = "Title must be at least 3 characters long";
+        if($title==null or strlen($title)==0){
+            $errors[]= "Title is mandatory";
+        } elseif(strlen($title)<3){
+            $errors[] = "Title must have at least 3 characters";
         }
         return $errors;
     }
@@ -55,7 +57,20 @@ Class Operation extends Model{
     public static function validate_amount(float $amount): array{
         $errors=[];
         if($amount<=0){
-            $errors[] = "Amount must be greater than 0";
+            $errors[] = "Amount must be positive";
+        }
+        return $errors;
+    }
+
+    public function validate(): array{
+        $errors=[];
+        if($this->title==null or strlen($this->title)==0){
+            $errors[]= "Title is mandatory";
+        } elseif(strlen($this->title)<3){
+            $errors[] = "Title must have at least 3 characters";
+        }
+        if($this->amount<=0){
+            $errors[] = "Amount must be positive";
         }
         return $errors;
     }
@@ -91,6 +106,30 @@ Class Operation extends Model{
             }
            return $total = number_format($total, 2, '.', '');
         
+    }
+
+    public function persist():Operation {
+        if($this->id == NULL) {
+           $errors = $this->validate();
+            if(empty($errors)){
+                self::execute('INSERT INTO Operations (title, tricount,amount,initiator, operation_date) VALUES (:title, :tricount,:amount,:initiator, :operation_date)', 
+                               ['title' => $this->title,
+                                'tricount' => $this->tricount->id,
+                                'amount' => $this->amount,
+                                'initiator' =>$this->initiator,
+                                'operation_date' =>$this->operation_date
+                               ]);
+                $operation = self::get_operation_by_id(self::lastInsertId());
+                $this->id = $operation->id;
+               $this->created_at = $operation->created_at;
+                return $this;
+            } else {
+               return $errors; 
+            }
+        } else {
+            //on ne modifie jamais les messages : pas de "UPDATE" SQL.
+            throw new Exception("Not Implemented.");
+        }
     }
 
 

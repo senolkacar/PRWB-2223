@@ -20,27 +20,70 @@
             <form method='post' action='operation/add_operation' enctype='multipart/form-data'>
                 Title  <br>
                 <textarea name='title' id='title' rows='1'>Title</textarea> <br>
-                Amount  <br>
-                <textarea name='amount' id='amount' rows='3'>Amount</textarea> <br>
-                <p>Date </p>
-                <p>Paid by </p>
-                <p> repartition template (optional)</p>
-                <p>For whom ?(select at least one)</p>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
-
-            <?php if (count($errors) != 0): ?>
+                <?php if (count($errors_title) != 0): ?>
                 <div class='errors'>
-                    <p>Please correct the following error(s) :</p>
                     <ul>
-                        <?php foreach ($errors as $error): ?>
+                        <?php foreach ($errors_title as $error): ?>
                             <li><?= $error ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
             <?php endif; ?>
 
+
+                Amount  <br>
+                <textarea name='amount' id='amount' rows='3'>Amount</textarea> <br>
+                <?php if (count($errors_amount) != 0): ?>
+                <div class='errors'>
+                    <ul>
+                        <?php foreach ($errors_amount as $error_amount): ?>
+                            <li><?= $error_amount ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
+
+                <p>Date </p>
+                <input type="date" id="date" name="date">
+                <p>Paid by </p>
+
+                <div class='paid_by'>
+                            <select name = "payer" id="payer" value="">
+                            <?php foreach ($subscriptions as $subscription): ?>  
+                            <option value="<?=$subscription->full_name; ?>"><?=$subscription->full_name; ?></option>  
+                            <?php endforeach; ?>
+                            </select>                           
+                
+                </div>
+
+                <p> Use repartition template (optional)</p>
+                <div >
+                            <select name = "template" id="template" value="">
+                            <option value="no">No,I'll use custom repartition</option>  
+                            <option value="yes">Repartition template</option>  
+                            </select>                           
+                
+                </div>
+                <p>For whom ?(select at least one)</p>
+                <div class='checkbox'>
+                    <?php foreach ($subscriptions as $rsubscription): ?>  
+                        <input type="checkbox" name="<?=$subscription->full_name;?>" value="<?=$subscription->full_name;?>"><?=$subscription->full_name;?>
+                        <label for="weight">Weight</label>
+                        <input type="number" id="weight" name="weight" min="0" max="$nb_subscriptions">
+                         <br>
+                    <?php endforeach; ?>               
+
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+
             <p>Add a new repartition template</p>
+            <input type="checkbox" name="save_template" value="save this template">Save this template
+            <input type="text" id="name" name="name" value="Name"><br>
+
+
 
 
         </div>

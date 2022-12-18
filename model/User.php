@@ -173,6 +173,20 @@ Class User extends Model{
 
     }
 
+    public static function get_users_by_tricount(Tricount $tricount): array {
+        $query = self::execute("SELECT * FROM users where id in(SELECT user FROM subscriptions WHERE tricount = :tricount) OR id in (SELECT creator from tricounts WHERE id = :tricount)",
+          [ "tricount" =>$tricount->id]);
+        $data = $query->fetchAll();
+        $users = [];
+        foreach($data as $row) {
+            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
+        }
+        return $users;
+
+    }
+
+
+
    
 
 

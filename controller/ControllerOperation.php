@@ -44,14 +44,38 @@ class ControllerOperation extends Controller {
 
     public function add_operation():void {
         $user=$this->get_user_or_redirect();
-        $errors = [];
+        $errors_title = [];
+        $errors_amount=[];
+        $subscriptions=[];
+        $nb_subscriotions = count($subscriptions);
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
             $id= $_GET["param1"];
-            $tricount = Tricount::get_tricount_by_id($id);
-           
+            $tricount = Tricount::get_tricount_by_id($id);  
+            $subscriptions = User:: get_users_by_tricount( $tricount);   
            
         }
-        (new View("add_operation")) -> show(["tricount"=>$tricount,"errors"=>$errors]);
+        if(isset($_POST["title"]) && isset($_POST["amount"]) && isset($_POST["date"])
+            && isset($_POST["payer"]) ){
+                $errors_title = Operation::validate_title($_POST["title"]);
+                $errors_amount= Operation::validate_amount($_POST["amount"]);
+                if(count($errors_title)==0 && count($errors_amount)==0){
+                    $title=$_POST["title"];
+                    $amount=$_POST["amount"];
+                    $operation_date=$_POST["date"]->format('Y-m-d H:i:s');//change to string
+                    $initiator=$user;//payer could be some one else?
+                    $operation= new Operation($title,$tricount,$amount,$initiator,$operation_date);
+                   $operation->persist();
+                   $this ->redirect("tricount","show_tricount", $tricount->id);
+
+                }
+
+            }
+        (new View("add_operation")) -> show(["tricount"=>$tricount,
+                                            "errors_title"=>$errors_title,
+                                        "errors_amount" =>$errors_amount,
+                                        "subscriptions" =>$subscriptions,
+                                        "nb_subscriotions" =>$nb_subscriotions                                        
+                                        ]);
         
     }
     
