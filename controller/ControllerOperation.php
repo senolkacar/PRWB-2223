@@ -24,9 +24,21 @@ class ControllerOperation extends Controller {
            //var_dump(Repartition::include_user($user,$operation));   
            $repartitions = Repartition::get_repartitions_by_operation($operation);
            //var_dump($repartitions);
-           
+           $operations=Operation::get_operations_by_tricount( $operation->tricount);
+           $pages = count($operations);
+           var_dump($pages);
+           $current_page=0;
+           for($i=0; $i<$pages;++$i){
+               if($operations[$i]->id==$id)
+               $current_page = $i;
+           }
         }
-        (new View("show_operation")) -> show(["operation"=>$operation,"user"=>$user,"repartitions"=>$repartitions]);
+        (new View("show_operation")) -> show(["operation"=>$operation,
+                                            "user"=>$user,
+                                            "repartitions"=>$repartitions,
+                                            "operations"=>$operations,
+                                            "pages"=>$pages,
+                                            "current_page"=>$current_page]);
 
     }
 

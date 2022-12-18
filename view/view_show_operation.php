@@ -14,7 +14,7 @@
         <a href="tricount/edit_operation/<?=$operation->id; ?>"><button type="button" class="btn btn-primary btn-block">Edit</button></a>
         </header>
         <div class="main">
-            <p><?php echo $operation->amount." €"; ?></p>
+            <p><?php echo round($operation->amount, 2)." €"; ?></p>
             <p>Paid by <?=$operation->initiator->full_name; ?></p>
             <p> <?=$operation->operation_date; ?></p>
             <?php if(Repartition::include_user($user,$operation)): ?>
@@ -32,9 +32,16 @@
                     
             <?php endforeach; ?>
                 </li>
-            </ul>          
-        <a href="operation/show_operation/<?=$operation->id-1;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
-        <a href="operation/show_operation/<?=$operation->id+1;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
+            </ul>         
+        <?php if($current_page == 0 && $pages==1): ?> 
+        <?php elseif($pages>1 && $current_page == 0 ): ?> 
+            <a href="operation/show_operation/<?=$operations[$current_page+1]->id;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
+        <?php elseif( $pages>1 && $current_page == ($pages-1)): ?>
+            <a href="operation/show_operation/<?=$operations[$current_page-1]->id;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
+        <?php else: ?>
+            <a href="operation/show_operation/<?=$operations[$current_page-1]->id;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
+            <a href="operation/show_operation/<?=$operations[$current_page+1]->id;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
+        <?php endif; ?>
        
         </div>        
 
