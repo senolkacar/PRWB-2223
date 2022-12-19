@@ -109,12 +109,19 @@ class ControllerOperation extends Controller {
             $selected_subscriptions = $_POST["users"];
             $weights = $_POST["weights"];
             $index_weights=0;
+            //in html the third input could be inserted but hiden with the value of userId in order to calcule the index of weight; but how about id 1,3,4 instead of 1,2,3?
+            var_dump($_POST["users"]);
+            echo "<br>";
             var_dump($weights);
            // var_dump($weights[$index_weights]);
             //var_dump($selected_subscriptions);
             foreach($selected_subscriptions as $selected_user){
-                $select_user = User::get_user_by_name($selected_user);
-                $repartition = new Repartition($operation,$select_user,$weights[$index_weights]);
+                $select_user = User::get_user_by_id($selected_user);
+                var_dump($select_user);
+                while($weights[$index_weights]=="" && $index_weights < count($weights) ){//if id is not selected by wight is not ""?
+                    $index_weights ++;
+                }
+                $repartition = new Repartition($operation,$select_user,(int)$weights[$index_weights]);
                 $repartition->persist();
                 $repartitions[]=$repartition;
                 $index_weights++;

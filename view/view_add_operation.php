@@ -63,6 +63,7 @@
                         <input type="checkbox" name="users[]" value="<?=$subscription->id?>"><?=$subscription->full_name;?>
                         <label for="weight">Weight</label>
                         <input type="number" id="weight" name="weights[]" min="0" max="$nb_subscriptions">
+                        
                          <br>
                     <?php endforeach; ?>               
 
