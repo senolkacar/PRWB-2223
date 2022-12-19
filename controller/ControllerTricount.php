@@ -60,16 +60,8 @@ class ControllerTricount extends Controller {
             }
             $nb_participants = $tricount->get_nb_participants();
             $depenses = $tricount->get_depenses();
-            $total = 0;
-            $mytotal = 0;
-            foreach($depenses as $operation){
-                $total += $operation["amount"];
-                $total_weight = Repartition::get_total_weight_by_operation($operation["id"]);
-                $weight = Repartition::get_user_weight($user->id, $operation["id"]);
-                $mytotal+= $operation["amount"] * $weight / $total_weight;
-            }
-            $total = number_format($total, 2, '.', '');
-            $mytotal = number_format($mytotal, 2, '.', '');
+            $total = Operation::get_total($tricount);
+            $mytotal = Operation::get_my_total($tricount,$user);
             (new View("show_tricount"))->show(["tricount"=>$tricount,"nb_participants"=>$nb_participants,"depenses"=>$depenses,"total"=>$total,"mytotal"=>$mytotal]);
         }
         else {
