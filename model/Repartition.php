@@ -10,6 +10,13 @@ class Repartition extends Model {
         public User $user, 
         public int $weight)  {}
 
+
+    public function persist() : Repartition{
+         self::execute("INSERT INTO Repartition (operation,user,weight) VALUES (:operation,:user,:weight)",
+         ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight]);
+         return $this;
+     }
+
     public static function get_total_weight_by_operation(int $id): int {
         $query = self::execute("SELECT SUM(weight) FROM repartitions WHERE operation = :operation", ["operation" => $id]);
         $data = $query->fetch();

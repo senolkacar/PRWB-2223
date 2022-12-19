@@ -17,7 +17,7 @@
    
     </nav>
         <div class="main">
-            <form method='post' action='operation/add_operation' enctype='multipart/form-data'>
+            <form method='post' action='operation/add_operation/<?=$tricount->id;?>' enctype='multipart/form-data'>
                 Title  <br>
                 <textarea name='title' id='title' rows='1'>Title</textarea> <br>
                 <?php if (count($errors_title) != 0): ?>
@@ -67,7 +67,7 @@
                 <p>For whom ?(select at least one)</p>
                 <div class='checkbox'>
                     <?php foreach ($subscriptions as $rsubscription): ?>  
-                        <input type="checkbox" name="<?=$subscription->full_name;?>" value="<?=$subscription->full_name;?>"><?=$subscription->full_name;?>
+                        <input type="checkbox" name="users[]" value="<?=$subscription->full_name;?>"><?=$subscription->full_name;?>
                         <label for="weight">Weight</label>
                         <input type="number" id="weight" name="weight" min="0" max="$nb_subscriptions">
                          <br>
