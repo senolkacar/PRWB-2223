@@ -77,11 +77,14 @@ class Repartition extends Model {
         return $balance;
     }
    
-    //add
-
-    //delete
-
-    //get weight by opearion and user
+    public function delete(Tricount $tricount, User $user) : Repartition|false {
+        if ($user == $tricount->creator) {
+            self::execute('DELETE FROM repartitions WHERE operation in 
+            (select id from operations where tricount=:tricount)', ['tricount' => $tricount->id]);
+            return $this;
+        }
+        return false;
+    }
 
 
 

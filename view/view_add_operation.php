@@ -56,18 +56,11 @@
                 
                 </div>
 
-                <p> Use repartition template (optional)</p>
-                <div >
-                            <select name = "template" id="template" value="">
-                            <option value="no">No,I'll use custom repartition</option>  
-                            <option value="yes">Repartition template</option>  
-                            </select>                           
-                
-                </div>
+               <br>
                 <p>For whom ?(select at least one)</p>
                 <div class='checkbox'>
                     <?php foreach ($subscriptions as $subscription): ?>  
-                        <input type="checkbox" name="users[]" value="<?=$subscription->full_name;?>"><?=$subscription->full_name;?>
+                        <input type="checkbox" name="users[]" value="<?=$subscription->id?>"><?=$subscription->full_name;?>
                         <label for="weight">Weight</label>
                         <input type="number" id="weight" name="weights[]" min="0" max="$nb_subscriptions">
                          <br>
@@ -79,9 +72,7 @@
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
 
-            <p>Add a new repartition template</p>
-            <input type="checkbox" name="save_template" value="save this template">Save this template
-            <input type="text" id="name" name="name" value="Name"><br>
+           
 
 
 
