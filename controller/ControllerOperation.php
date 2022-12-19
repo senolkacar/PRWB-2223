@@ -48,23 +48,44 @@ class ControllerOperation extends Controller {
         $errors_amount=[];
         $subscriptions=[];
         $nb_subscriotions = count($subscriptions);
-        $errors=[];
-        var_dump($_POST);
+        //var_dump($_POST);
         
         
-        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            $id= $_GET["param1"];
-            $tricount = Tricount::get_tricount_by_id($id);  
-            $subscriptions = User:: get_users_by_tricount( $tricount);  
+       // if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+           // $id= $_GET["param1"];
+            //$tricount = Tricount::get_tricount_by_id($id);  // errors
+           // $subscriptions = User:: get_users_by_tricount( $tricount);  
                       
            
-        }
-        if(isset($_POST["param1"])&& $_GET["param1"] !==""){
+       // }
+        if(isset($_GET["param1"])&& $_GET["param1"] !==""){//url
             $id= $_GET["param1"];
             $tricount = Tricount::get_tricount_by_id($id);  
             $subscriptions = User:: get_users_by_tricount( $tricount);
+            if(isset($_POST["title"]) && isset($_POST["amount"]) && isset($_POST["date"])//body
+            && isset($_POST["payer"]) ){
+                $errors_title = Operation::validate_title($_POST["title"]);
+                $errors_amount= Operation::validate_amount($_POST["amount"]);
+                if(count($errors_title)==0 && count($errors_amount)==0){
+                    $operation=$this->add_depense($tricount);
+                    $this->add_repartition($tricount,$operation);}
+                        if (count($_POST) > 0 && count($errors_title)==0 && count($errors_amount) == 0 ){
+                             $this ->redirect("tricount","show_tricount",$id);            
+                        }
+         }
+             
+    }
+        (new View("add_operation")) -> show(["tricount"=>$tricount,
+            "errors_title"=>$errors_title,
+        "errors_amount" =>$errors_amount,
+        "subscriptions" =>$subscriptions,
+        "nb_subscriotions" =>$nb_subscriotions                                        
+        ]);
+}
 
-            if(isset($_POST["title"]) && isset($_POST["amount"]) && isset($_POST["date"])
+    public function add_depense(Tricount $tricount):Operation|false {
+       
+        if(isset($_POST["title"]) && isset($_POST["amount"]) && isset($_POST["date"])
             && isset($_POST["payer"]) ){
                 $errors_title = Operation::validate_title($_POST["title"]);
                 $errors_amount= Operation::validate_amount($_POST["amount"]);
@@ -72,41 +93,32 @@ class ControllerOperation extends Controller {
                     $title=$_POST["title"];
                     $amount=$_POST["amount"];
                     $operation_date=$_POST["date"];
-                    var_dump($operation_date);//string
-                   // $operation_date_string=$operation_date->format('Y-m-d H:i:s');//change to string
-                   // var_dump($operation_date_string);
-                    $initiator=$user;//payer could be some one else?
+                    $initiator=User::get_user_by_name($_POST["payer"])  ;//payer could be some one else?
+                    var_dump($initiator);
                     $operation= new Operation($title,$tricount,$amount,$initiator,$operation_date);
-                   $operation->persist();
-                   if(isset($_POST["users"]) && isset($_POST["weight"])){
-                       $selected_subscriptions = $_POST["users"];
-                       $weight = isset($_POST["weight"]);//[]?
-                       var_dump($selected_subscriptions);
-                       $selected_users = [];
-                       foreach($selected_subscriptions as $selected_user){
-                           $selected_user = User::get_user_by_name($selected_user);
-                           $repartition = new Repartition($operation,$selected_user,$weight);
-                           $repartition->persist();
-                       }
-                   }
-                   if (count($_POST) > 0 )
-                              //$this ->redirect("tricount","show_tricount", $tricount->id);// $tricount inconnu
-                   $this ->redirect("tricount","index");
-
+                   $operation->persist();                   
+                  return $operation;
+                         }
                 }
+}
 
+
+    public function add_repartition(Tricount $tricount, Operation $operation):array{
+        $repartitions =[];
+        if(isset($_POST["users"]) && isset($_POST["weight"])){
+            $selected_subscriptions = $_POST["users"];
+            $weight = isset($_POST["weight"]);
+            var_dump($selected_subscriptions);
+            foreach($selected_subscriptions as $selected_user){
+                $select_user = User::get_user_by_name($selected_user);
+                $repartition = new Repartition($operation,$select_user,$weight);
+                $repartition->persist();
+                $repartitions[]=$repartition;
             }
-         }
-       
-        (new View("add_operation")) -> show(["tricount"=>$tricount,
-                                            "errors_title"=>$errors_title,
-                                        "errors_amount" =>$errors_amount,
-                                        "subscriptions" =>$subscriptions,
-                                        "nb_subscriotions" =>$nb_subscriotions                                        
-                                        ]);
-    }
+        }
+        return $repartitions;
 
-     
+    }
 
 
 

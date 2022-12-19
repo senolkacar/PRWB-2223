@@ -12,7 +12,7 @@ class Repartition extends Model {
 
 
     public function persist() : Repartition{
-         self::execute("INSERT INTO Repartition (operation,user,weight) VALUES (:operation,:user,:weight)",
+         self::execute("INSERT INTO Repartitions (operation,user,weight) VALUES (:operation,:user,:weight)",
          ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight]);
          return $this;
      }

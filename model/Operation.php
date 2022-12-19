@@ -116,7 +116,7 @@ Class Operation extends Model{
                                ['title' => $this->title,
                                 'tricount' => $this->tricount->id,
                                 'amount' => $this->amount,
-                                'initiator' =>$this->initiator,
+                                'initiator' =>$this->initiator->id,
                                 'operation_date' =>$this->operation_date
                                ]);
                 $operation = self::get_operation_by_id(self::lastInsertId());
