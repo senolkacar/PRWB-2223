@@ -66,10 +66,10 @@
                 </div>
                 <p>For whom ?(select at least one)</p>
                 <div class='checkbox'>
-                    <?php foreach ($subscriptions as $rsubscription): ?>  
+                    <?php foreach ($subscriptions as $subscription): ?>  
                         <input type="checkbox" name="users[]" value="<?=$subscription->full_name;?>"><?=$subscription->full_name;?>
                         <label for="weight">Weight</label>
-                        <input type="number" id="weight" name="weight" min="0" max="$nb_subscriptions">
+                        <input type="number" id="weight" name="weight[]" min="0" max="$nb_subscriptions">
                          <br>
                     <?php endforeach; ?>               
 

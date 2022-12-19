@@ -48,17 +48,22 @@ class ControllerOperation extends Controller {
         $errors_amount=[];
         $subscriptions=[];
         $nb_subscriotions = count($subscriptions);
+        $errors=[];
+        var_dump($_POST);
+        
         
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
             $id= $_GET["param1"];
             $tricount = Tricount::get_tricount_by_id($id);  
-            $subscriptions = User:: get_users_by_tricount( $tricount);               
+            $subscriptions = User:: get_users_by_tricount( $tricount);  
+                      
            
         }
         if(isset($_POST["param1"])&& $_GET["param1"] !==""){
             $id= $_GET["param1"];
             $tricount = Tricount::get_tricount_by_id($id);  
             $subscriptions = User:: get_users_by_tricount( $tricount);
+
             if(isset($_POST["title"]) && isset($_POST["amount"]) && isset($_POST["date"])
             && isset($_POST["payer"]) ){
                 $errors_title = Operation::validate_title($_POST["title"]);
@@ -100,6 +105,13 @@ class ControllerOperation extends Controller {
                                         "nb_subscriotions" =>$nb_subscriotions                                        
                                         ]);
     }
+
+     
+
+
+
+
+
     
 
 
