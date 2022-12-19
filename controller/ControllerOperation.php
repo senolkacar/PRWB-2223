@@ -94,7 +94,7 @@ class ControllerOperation extends Controller {
                     $amount=$_POST["amount"];
                     $operation_date=$_POST["date"];
                     $initiator=User::get_user_by_name($_POST["payer"])  ;//payer could be some one else?
-                    var_dump($initiator);
+                    //var_dump($initiator);
                     $operation= new Operation($title,$tricount,$amount,$initiator,$operation_date);
                    $operation->persist();                   
                   return $operation;
@@ -104,16 +104,20 @@ class ControllerOperation extends Controller {
 
 
     public function add_repartition(Tricount $tricount, Operation $operation):array{
-        $repartitions =[];
-        if(isset($_POST["users"]) && isset($_POST["weight"])){
+         $repartitions =[];
+        if(isset($_POST["users"]) && isset($_POST["weights"])){
             $selected_subscriptions = $_POST["users"];
-            $weight = isset($_POST["weight"]);
-            var_dump($selected_subscriptions);
+            $weights = $_POST["weights"];
+            $index_weights=0;
+            var_dump($weights);
+           // var_dump($weights[$index_weights]);
+            //var_dump($selected_subscriptions);
             foreach($selected_subscriptions as $selected_user){
                 $select_user = User::get_user_by_name($selected_user);
-                $repartition = new Repartition($operation,$select_user,$weight);
+                $repartition = new Repartition($operation,$select_user,$weights[$index_weights]);
                 $repartition->persist();
                 $repartitions[]=$repartition;
+                $index_weights++;
             }
         }
         return $repartitions;
