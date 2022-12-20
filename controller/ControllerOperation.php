@@ -93,7 +93,7 @@ class ControllerOperation extends Controller {
                     $title=$_POST["title"];
                     $amount=$_POST["amount"];
                     $operation_date=$_POST["date"];
-                    $initiator=User::get_user_by_name($_POST["payer"])  ;//payer could be some one else?
+                    $initiator=User::get_user_by_name($_POST["payer"])  ;//payer could be some one else
                     //var_dump($initiator);
                     $operation= new Operation($title,$tricount,$amount,$initiator,$operation_date);
                    $operation->persist();                   
@@ -110,12 +110,6 @@ class ControllerOperation extends Controller {
             $weights = $_POST["weights"];
             $ids=$_POST["ids"];
             $index_weights=0;
-            //in html the third input could be inserted but hiden with the value of userId in order to calcule the index of weight; but how about id 1,3,4 instead of 1,2,3?
-            var_dump($_POST["users"]);
-            echo "<br>";
-            var_dump($weights);
-            echo "<br>";
-            var_dump($ids);
             foreach($selected_subscriptions as $selected_user){
                 $select_user = User::get_user_by_id($selected_user);
                 //var_dump($select_user);
