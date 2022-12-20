@@ -105,21 +105,23 @@ class ControllerOperation extends Controller {
 
     public function add_repartition(Tricount $tricount, Operation $operation):array{
          $repartitions =[];
-        if(isset($_POST["users"]) && isset($_POST["weights"])){
+        if(isset($_POST["users"]) && isset($_POST["weights"]) && isset($_POST["ids"])){
             $selected_subscriptions = $_POST["users"];
             $weights = $_POST["weights"];
+            $ids=$_POST["ids"];
             $index_weights=0;
             //in html the third input could be inserted but hiden with the value of userId in order to calcule the index of weight; but how about id 1,3,4 instead of 1,2,3?
             var_dump($_POST["users"]);
             echo "<br>";
             var_dump($weights);
-           // var_dump($weights[$index_weights]);
-            //var_dump($selected_subscriptions);
+            echo "<br>";
+            var_dump($ids);
             foreach($selected_subscriptions as $selected_user){
                 $select_user = User::get_user_by_id($selected_user);
-                var_dump($select_user);
-                while($weights[$index_weights]=="" && $index_weights < count($weights) ){//if id is not selected by wight is not ""?
-                    $index_weights ++;
+                //var_dump($select_user);
+                for($i=0;$i <count($ids);++$i){
+                    if($ids[$i]==$selected_user)
+                    $index_weights=$i;
                 }
                 $repartition = new Repartition($operation,$select_user,(int)$weights[$index_weights]);
                 $repartition->persist();
