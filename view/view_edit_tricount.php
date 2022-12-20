@@ -60,14 +60,9 @@
                 <?php elseif (strlen($success) != 0): ?>
                 <p><span class='success'><?= $success ?></span></p>
             <?php endif; ?>
-            <br>
-            <a class="navbar-brand" href="repartition/template">
-            <button type="button" class="btn btn-primary">Manage repartition templates</button>
-            </a>
             <br><br>
-            <form class='link' action='tricount/delete' method='post' >
-                    <input type='text' name='id_tricount' value='<?=$tricount->id;?>' hidden>
-                    <button type="button" class="btn btn-primary">Delete this tricount</button>
+            <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
+                    <button type="submit" class="btn btn-primary">Delete this tricount</button>
              </form>
 
           

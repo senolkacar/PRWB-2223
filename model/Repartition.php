@@ -77,13 +77,12 @@ class Repartition extends Model {
         return $balance;
     }
    
-    public function delete(Tricount $tricount, User $user) : Repartition|false {
-        if ($user == $tricount->creator) {
+    public static function delete(Tricount $tricount) : bool {
+        //if ($user == $tricount->creator) 
             self::execute('DELETE FROM repartitions WHERE operation in 
             (select id from operations where tricount=:tricount)', ['tricount' => $tricount->id]);
-            return $this;
-        }
-        return false;
+    
+        return true;
     }
 
 

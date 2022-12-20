@@ -132,6 +132,12 @@ Class Operation extends Model{
         }
     }
 
+    public static function delete(Tricount $tricount) : bool {
+        //if ($user == $tricount->creator) 
+            self::execute('DELETE FROM operations WHERE tricount=:tricount', ['tricount' => $tricount->id]);    
+        return true;
+    }
+
 
 }
 ?>

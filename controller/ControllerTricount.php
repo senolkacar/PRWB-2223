@@ -140,26 +140,34 @@ public function show_balance():void{
         
 }
 
-    public function delete() : void {
-        $user=$this->get_user_or_redirect();//is creator ?
-        $tricount = $this->delete_tricount();
-        if ($tricount) {
-            $this->redirect("tricount", "index");
-        } else {
-            throw new Exception("Wrong/missing ID or action no permited");
-        }
-    }
-    private function delete_tricount() :Tricount|false {
-        $user = $this->get_user_or_redirect();
+    public function delete() : void {//main
+        $user=$this->get_user_or_redirect();//
+        $errors = [];
+        if(isset($_GET["param1"]) && $_GET["param1"] !==""){
+            $id = $_GET["param1"];
+            $tricount = Tricount::get_tricount_by_id($id);
+            
+            if(isset($_POST["id_tricount"])){
+                if($tricount->creator == $user){
+                    $tricount = Tricount::get_tricount_by_id($id);
+                    $tricount ->delete($user);
+                    if ($tricount) {
+                         $this->redirect("tricount", "index");
+                     } else {
+                            throw new Exception("Wrong/missing ID or action no permited");
+                     }
 
-        if (isset($_POST['id_tricount']) && $_POST['id_tricount'] != "") {
-            $post_id = $_POST['id_tricount'];
-            $tricount = Tricount::get_tricount_by_id($post_id);//:Tricount|false
-            if ($tricount) {
-                return $tricount->delete();//to do  :Tricount|false
-            } 
+                }else{
+                    $errors[]="You may not creator of the tricount.";
+                }
+                
+            }
         }
-        return false;
+
+        (new View("delete_tricount"))->show(["tricount"=>$tricount, "errors"=>$errors]);
+
+
+        
     }
 
 
