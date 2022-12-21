@@ -9,17 +9,38 @@
     </head>
     <body>
     <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="tricount/show_tricount/<?=$tricount->id;?>">
+    <?php if($operation_name=="add"){?>
+        <a class="navbar-brand" href="tricount/show_tricount/<?=$tricount->id;?>">
         <button type="button" class="btn btn-primary">Cancel</button>
     </a>
-    <div class="title"><?=$tricount->title;?>  &#32 &#9654; &#32 New expense </div>
+    <?php }else{?>
+        <a class="navbar-brand" href="operation/show_operation/<?=$tricount->id;?>">
+        <button type="button" class="btn btn-primary">Cancel</button>
+    </a>
+    <?php }; ?> 
+    
+    <div class="title"><?=$tricount->title;?>  &#32 &#9654; &#32 <?=$header_title;?> </div>
     
    
     </nav>
         <div class="main">
-            <form method='post' action='operation/add_operation/<?=$tricount->id;?>' enctype='multipart/form-data'>
+            <?php if($operation_name=="add"){
+                $action = "operation/add_operation/$tricount->id";
+            }else{
+                $action = "operation/edit_operation/$operation->id";}
+            ?>
+            <form method='post' action=<?=$action?> enctype='multipart/form-data'>
                 Title  <br>
-                <textarea name='title' id='title' rows='1'>Title</textarea> <br>
+                <?php if(empty($operation)): 
+                    $title = "Title";
+                    $amount = "Amount";
+                    $date = "";
+                else:
+                    $title = $operation->title;
+                    $amount = $operation->amount;
+                    $date = $operation->operation_date;
+                endif; ?>
+                <textarea name='title' id='title' rows='1'><?=$title?></textarea> <br>
                 <?php if (count($errors_title) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -28,11 +49,11 @@
                         <?php endforeach; ?>
                     </ul>
                 </div>
-            <?php endif; ?>
+                <?php endif; ?>
 
 
                 Amount  <br>
-                <textarea name='amount' id='amount' rows='3'>Amount</textarea> <br>
+                <textarea name='amount' id='amount' rows='3'><?=$amount?></textarea> <br>
                 <?php if (count($errors_amount) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -44,7 +65,7 @@
                 <?php endif; ?>
 
                 <p>Date </p>
-                <input type="date" id="date" name="date">
+                <input type="date" id="date" name="date" value="<?=$date?>">
                 <p>Paid by </p>
 
                 <div class='paid_by'>

@@ -109,10 +109,19 @@ Class Operation extends Model{
     }
 
     public function persist():Operation {
-        if($this->id == NULL) {
-           $errors = $this->validate();
+        if(self::get_operation_by_id($this->id)){
+            self::execute('UPDATE operations SET title=:title, tricount=:tricount, amount=:amount, initiator=:initiator, operation_date=:operation_date WHERE id=:id', 
+            ['title' => $this->title,
+             'tricount' => $this->tricount->id,
+             'amount' => $this->amount,
+             'initiator' =>$this->initiator->id,
+             'operation_date' =>$this->operation_date,
+             'id' => $this->id
+            ]);
+        }else{
+            $errors = $this->validate();
             if(empty($errors)){
-                self::execute('INSERT INTO Operations (title, tricount,amount,initiator, operation_date) VALUES (:title, :tricount,:amount,:initiator, :operation_date)', 
+                self::execute('INSERT INTO operations (title, tricount,amount,initiator, operation_date) VALUES (:title, :tricount,:amount,:initiator, :operation_date)', 
                                ['title' => $this->title,
                                 'tricount' => $this->tricount->id,
                                 'amount' => $this->amount,
@@ -124,11 +133,8 @@ Class Operation extends Model{
                $this->created_at = $operation->created_at;
                 return $this;
             } else {
-               return $errors; 
+                return $errors;
             }
-        } else {
-            //on ne modifie jamais les messages : pas de "UPDATE" SQL.
-            throw new Exception("Not Implemented.");
         }
     }
 
@@ -136,6 +142,16 @@ Class Operation extends Model{
         //if ($user == $tricount->creator) 
             self::execute('DELETE FROM operations WHERE tricount=:tricount', ['tricount' => $tricount->id]);    
         return true;
+    }
+
+    public function get_users_by_operation_id(){
+        $query = self::execute("select * from users where id in(select initiator from operations where id=:operation) union select * from users where id in(select user from repartitions where operation=:operation)",["operation" => $this->id]);
+        $data = $query->fetchAll();
+        $users = [];
+        foreach($data as $row){
+            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
+        }
+        return $users;
     }
 
 

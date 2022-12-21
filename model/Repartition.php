@@ -12,9 +12,14 @@ class Repartition extends Model {
 
 
     public function persist() : Repartition{
-         self::execute("INSERT INTO Repartitions (operation,user,weight) VALUES (:operation,:user,:weight)",
+        if(self::get_repartition_by_id($this->id)){
+            self::execute("UPDATE Repartitions SET operation=:operation,user=:user,weight=:weight WHERE id=:id",
+            ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight,"id"=>$this->id]);
+        }else{
+            self::execute("INSERT INTO Repartitions (operation,user,weight) VALUES (:operation,:user,:weight)",
          ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight]);
-         return $this;
+        }
+        return $this;
      }
 
     public static function get_total_weight_by_operation(int $id): int {
@@ -51,6 +56,16 @@ class Repartition extends Model {
            return $repartitions;
         }
 
+    }
+
+    public static function get_repartition_by_id(int $id): Repartition|false {
+        $query = self::execute("SELECT * FROM repartitions WHERE id = :id", [":id" => $id]);
+        $data = $query->fetch();
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new Repartition(Operation::get_operation_by_id($data["operation"]),User::get_user_by_id($data["user"]),$data["weight"]);
+        }
     }
 
     public static function get_amount_by_user_and_operation(User $user, Operation $operation): float {
