@@ -25,35 +25,34 @@
         <div class="container-sm">
             <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data'>
                <h2>Settings</h2>
-            
-                Title: <br>
-                <textarea name='title'  id='title'  rows='1'><?= $tricount->title; ?></textarea> <br>
-                Description (optional) : <br>
-                <textarea name='description' id='description'  rows='2'><?= $tricount->description; ?></textarea> <br>  
-
-                <div class='subscriptions'>
-                     <p>Subscriptions</p>
-                    <fieldset style="width:150px">
-                    <ul>
-                        <?php foreach ($subscriptions as $subscription): ?>
-                            <li><?= $subscription->full_name ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                    </fieldset>
-                </div>
-                <br>
-
-                <div class='add-subscriber'>
-                            <select name = "subscriber" id="subscriber" value="add subscriber">
-                            <option value=" ">--Add a new subscriber--</option> 
-                            <?php foreach ($other_users as $other_user): ?>  
-                            <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option>  
-                            <?php endforeach; ?>
-                            </select>                           
+               <div class="mb-3 mt-3">
+                    <label for='title'> Title : </label>
+                    <textarea  class="form-control" name='title'  id='title' rows='1' ><?= $tricount->title; ?></textarea> 
+               </div>
+               <div class="mb-3 mt-3">
+                    <label for='description'> Descripton (optional) :  </label>
+                    <textarea class="form-control" name='description' id='description'  rows='2' ><?= $tricount->description; ?></textarea> 
+               </div>
                 
-                </div>
+                <h2>Subscriptions</h2>                    
+                <ul class="list-group" >
+                        <?php foreach ($subscriptions as $subscription): ?>
+                            <li class="list-group-item"><?= $subscription->full_name ?></li>
+                        <?php endforeach; ?>
+                </ul>                    
+                
                 <br>
-                <input type='submit' value='Save'>
+                <div class='add-subscriber'>
+                    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name = "subscriber" id="subscriber" value="add subscriber">
+                    <option selected>--Add a new subscriber--</option>
+                    <?php foreach ($other_users as $other_user): ?>  
+                    <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option> 
+                    <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <br>
+                <input type='submit' class="btn btn-primary" value='Save'>
             </form>
 
             <?php if (count($errors) != 0): ?>
@@ -69,8 +68,11 @@
                 <p><span class='success'><?= $success ?></span></p>
             <?php endif; ?>
             <br><br>
+
             <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
-                    <button type="submit" class="btn btn-primary">Delete this tricount</button>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-danger">Delete this tricount</button>
+                </div>
              </form>
         </div>
     </body>
