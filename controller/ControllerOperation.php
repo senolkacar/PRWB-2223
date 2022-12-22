@@ -55,8 +55,7 @@ class ControllerOperation extends Controller {
         $errors_title=[];
         $errors_amount=[];
         $subscriptions=[];
-        $operation=[];
-        $participants=[];
+        $operation=null;
         $operation_name = $operation_value;
         $nb_subscriptions = count($subscriptions);
         if(isset($_GET["param1"])&& $_GET["param1"]!=="")
@@ -67,9 +66,11 @@ class ControllerOperation extends Controller {
                 $header_title = "Edit expense";
                 $operation=Operation::get_operation_by_id($id);
                 $tricount=$operation->tricount;
+                $page_title="Edit operation";
             }else{
+                $page_title="Add operation";
                 $header_title = "New expense";
-                $tricount = Tricount::get_tricount_by_id($id);  
+                $tricount = Tricount::get_tricount_by_id($id);
             }
             $subscriptions = User::get_users_by_tricount($tricount);
             if(isset($_POST["title"]) && isset($_POST["amount"]) && isset($_POST["date"])//body
@@ -78,7 +79,7 @@ class ControllerOperation extends Controller {
                     $errors_amount= Operation::validate_amount($_POST["amount"]);
                     $errors = array_merge($errors_title,$errors_amount);
                     if(count($errors)==0){
-                        $this->add_depense($tricount);
+                        $operation=$this->add_depense($tricount,$operation);
                         $this->add_repartition($operation);
                         if($operation_name == "edit"){
                             $this->redirect("operation","show_operation",$operation->id);
@@ -91,32 +92,31 @@ class ControllerOperation extends Controller {
         (new View("add_or_edit_operation"))->show(["tricount"=>$tricount,
                                                     "operation_name"=>$operation_name,
                                                     "header_title"=>$header_title,
+                                                    "page_title"=>$page_title,
                                                     "subscriptions"=>$subscriptions,
                                                     "nb_subscriptions"=>$nb_subscriptions,
                                                     "errors_title"=>$errors_title,
                                                     "errors_amount"=>$errors_amount,
-                                                    "operation"=>$operation,
-                                                    "participants"=>$participants]);
+                                                    "operation"=>$operation,]);
     }
 
-    public function add_depense(Tricount $tricount):Operation|false {
-       
-        if(isset($_POST["title"]) && isset($_POST["amount"]) && isset($_POST["date"])
-            && isset($_POST["payer"]) ){
-                $errors_title = Operation::validate_title($_POST["title"]);
-                $errors_amount= Operation::validate_amount($_POST["amount"]);
-                if(count($errors_title)==0 && count($errors_amount)==0){
-                    $title=$_POST["title"];
-                    $amount=$_POST["amount"];
-                    $operation_date=$_POST["date"];
-                    $initiator=User::get_user_by_name($_POST["payer"])  ;//payer could be some one else
-                    //var_dump($initiator);
-                    $operation= new Operation($title,$tricount,$amount,$initiator,$operation_date);
-                   $operation->persist();                   
-                  return $operation;
-                         }
-                }
-}
+    public function add_depense(Tricount $tricount,?Operation $operation):Operation|false {
+        $title = $_POST["title"];
+        $amount = $_POST["amount"];
+        $operation_date=$_POST["date"];
+        $initiator=User::get_user_by_name($_POST["payer"]);
+        if($operation!==null){
+            $operation->title=$title;
+            $operation->amount=$amount;
+            $operation->operation_date=$operation_date;
+            $operation->initiator=$initiator;
+        }else{
+            $operation=new Operation($title,$tricount,$amount,$initiator,$operation_date);
+        }
+        $operation->persist();                   
+        return $operation;
+                         
+    }
 
 
     public function add_repartition(Operation $operation):array{

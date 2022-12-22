@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Add Operation</title>
+        <title><?=$page_title?></title>
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
@@ -53,7 +53,7 @@
 
 
                 Amount  <br>
-                <textarea name='amount' id='amount' rows='3'><?=$amount?></textarea> <br>
+                <input type="number" step="0.01" name='amount' id='amount' value="<?=$amount?>"> <br>
                 <?php if (count($errors_amount) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -83,7 +83,7 @@
                     <?php foreach ($subscriptions as $subscription): ?>  
                         <input type="checkbox" name="users[]" value="<?=$subscription->id?>"><?=$subscription->full_name;?>
                         <label for="weight">Weight</label>
-                        <input type="number" id="weight" name="weights[]" min="0" max="$nb_subscriptions">
+                        <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>">
                         <input type="hidden" id="ids" name="ids[]" value="<?=$subscription->id?>">
                          <br>
                     <?php endforeach; ?>               

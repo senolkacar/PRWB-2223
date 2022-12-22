@@ -12,9 +12,10 @@ class Repartition extends Model {
 
 
     public function persist() : Repartition{
-        if(self::get_repartition_by_id($this->id)){
-            self::execute("UPDATE Repartitions SET operation=:operation,user=:user,weight=:weight WHERE id=:id",
-            ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight,"id"=>$this->id]);
+        if($this->id!==null){
+            self::get_repartition_by_id($this->id);
+                self::execute("UPDATE Repartitions SET operation=:operation,user=:user,weight=:weight WHERE id=:id",
+                ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight,"id"=>$this->id]);
         }else{
             self::execute("INSERT INTO Repartitions (operation,user,weight) VALUES (:operation,:user,:weight)",
          ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight]);

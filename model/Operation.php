@@ -33,7 +33,7 @@ Class Operation extends Model{
 }
 
     public static function get_operation_by_id(int $id): Operation|false{
-        $query = self::execute("SELECT * FROM operations WHERE id = :id",[":id" => $id]);
+        $query = self::execute("SELECT * FROM operations WHERE id = :id",["id" => $id]);
         $data = $query->fetch();
         if($query->rowCount()==0){
             return false;
@@ -56,9 +56,19 @@ Class Operation extends Model{
 
     public static function validate_amount(float $amount): array{
         $errors=[];
-        if($amount<=0){
-            $errors[] = "Amount must be positive";
+        if($amount==null){
+            $errors[] = "Amount is mandatory";
         }
+        if(!is_numeric($amount)){
+            $errors[] = "Invalid value for amount";
+        }
+        else{
+            $amount = floatval($amount);
+            if($amount<=0){
+                $errors[] = "Amount must be positive";
+            }
+        }
+       
         return $errors;
     }
 
@@ -108,19 +118,19 @@ Class Operation extends Model{
         
     }
 
+
     public function persist():Operation {
-        if(self::get_operation_by_id($this->id)){
-            self::execute('UPDATE operations SET title=:title, tricount=:tricount, amount=:amount, initiator=:initiator, operation_date=:operation_date WHERE id=:id', 
-            ['title' => $this->title,
-             'tricount' => $this->tricount->id,
-             'amount' => $this->amount,
-             'initiator' =>$this->initiator->id,
-             'operation_date' =>$this->operation_date,
-             'id' => $this->id
-            ]);
+        if($this->id!==null){
+            self::get_operation_by_id($this->id);
+                self::execute('UPDATE operations SET title=:title, tricount=:tricount, amount=:amount, initiator=:initiator, operation_date=:operation_date WHERE id=:id', 
+                ['title' => $this->title,
+                 'tricount' => $this->tricount->id,
+                 'amount' => $this->amount,
+                 'initiator' =>$this->initiator->id,
+                 'operation_date' =>$this->operation_date,
+                 'id' => $this->id
+                ]);
         }else{
-            $errors = $this->validate();
-            if(empty($errors)){
                 self::execute('INSERT INTO operations (title, tricount,amount,initiator, operation_date) VALUES (:title, :tricount,:amount,:initiator, :operation_date)', 
                                ['title' => $this->title,
                                 'tricount' => $this->tricount->id,
@@ -130,12 +140,9 @@ Class Operation extends Model{
                                ]);
                 $operation = self::get_operation_by_id(self::lastInsertId());
                 $this->id = $operation->id;
-               $this->created_at = $operation->created_at;
-                return $this;
-            } else {
-                return $errors;
+                $this->created_at = $operation->created_at;
             }
-        }
+            return $this;
     }
 
     public static function delete(Tricount $tricount) : bool {
