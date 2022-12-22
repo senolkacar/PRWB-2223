@@ -55,12 +55,14 @@
                 <input type='submit' class="btn btn-primary" value='Save'>
             </form>
 
+            <br>
+            <div class="container-sm">
             <?php if (count($errors) != 0): ?>
                 <div class='errors'>
                     <p>Please correct the following error(s) :</p>
                     <ul>
                         <?php foreach ($errors as $error): ?>
-                            <li><?= $error ?></li>
+                            <li class="text-danger"><?= $error ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -70,7 +72,7 @@
             <br><br>
 
             <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
-                <div class="d-grid gap-2">
+            <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-danger">Delete this tricount</button>
                 </div>
              </form>

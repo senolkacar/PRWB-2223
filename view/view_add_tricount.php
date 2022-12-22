@@ -35,8 +35,8 @@
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
         </div>
-
-        <div>
+        <br>
+        <div class="container-sm">
             <?php if (count($errors) != 0): ?>
                 <div class='errors'>
                     <p>Please correct the following error(s) :</p>
