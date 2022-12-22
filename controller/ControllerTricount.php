@@ -79,7 +79,7 @@ class ControllerTricount extends Controller {
             $id= (int)$_GET["param1"];
             global $tricount;
             $tricount = Tricount::get_tricount_by_id($id);
-            $subscriptions =$tricount-> get_subscriptions();  
+            $subscriptions =$tricount-> get_users_including_creator();  
             $other_users = $tricount->get_users_not_subscriber();        
             //var_dump($other_users);  
             if(isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["subscriber"]) ) {

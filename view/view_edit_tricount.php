@@ -5,18 +5,27 @@
         <title>Edit Tricount</title>
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     </head>
     <body>
-    <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="tricount/index">
-        <button type="button" class="btn btn-primary">Back</button>
-    </a>
-    <p class="text-right"><?=$tricount->title?> &#32 &#9654; &#32 Edit</p>
-    </nav>
-        <div class="main">
+
+    <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
+            <div class="d-flex justify-content-between mb-3">   
+                <a class="navbar-brand" href="tricount/index">
+                <button type="button" class="btn btn-outline-danger">Back</button>
+                </a>
+                <div class="h2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Edit </div>
+                <div class="h2"> </div>
+            </div>
+        </div>
+
+        <div class="container-sm">
             <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data'>
-                <p>Settings</p>
+               <h2>Settings</h2>
+            
                 Title: <br>
                 <textarea name='title'  id='title'  rows='1'><?= $tricount->title; ?></textarea> <br>
                 Description (optional) : <br>
@@ -25,10 +34,9 @@
                 <div class='subscriptions'>
                      <p>Subscriptions</p>
                     <fieldset style="width:150px">
-                    <?=$tricount->creator->full_name;?>
                     <ul>
                         <?php foreach ($subscriptions as $subscription): ?>
-                            <li><?= $subscription->user->full_name ?></li>
+                            <li><?= $subscription->full_name ?></li>
                         <?php endforeach; ?>
                     </ul>
                     </fieldset>
@@ -64,10 +72,6 @@
             <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
                     <button type="submit" class="btn btn-primary">Delete this tricount</button>
              </form>
-
-          
-
-
         </div>
     </body>
 </html>
