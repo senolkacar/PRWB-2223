@@ -44,9 +44,11 @@ class ControllerOperation extends Controller {
 
     public function add_operation():void {
         $user=$this->get_user_or_redirect();
+        $status="add";
         $errors_title = [];
         $errors_amount=[];
         $subscriptions=[];
+        $operation=null;
         $nb_subscriotions = count($subscriptions);
         //var_dump($_POST);
         
@@ -76,6 +78,8 @@ class ControllerOperation extends Controller {
              
     }
         (new View("add_operation")) -> show(["tricount"=>$tricount,
+        "status"=>$status,
+        "operation"=>$operation,
             "errors_title"=>$errors_title,
         "errors_amount" =>$errors_amount,
         "subscriptions" =>$subscriptions,
@@ -127,6 +131,34 @@ class ControllerOperation extends Controller {
 
     }
 
+    public function edit_operation():void {
+        $user=$this->get_user_or_redirect();
+        $status="edit";
+        $errors_title = [];
+        $errors_amount=[];
+        $subscriptions=[];
+        $nb_subscriotions = count($subscriptions);
+        //var_dump($_POST);
+        
+        
+        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+           $id= $_GET["param1"];
+            $operation = Operation:: get_operation_by_id($id);  
+            $tricount = $operation->tricount;
+           $subscriptions = User:: get_users_by_tricount( $tricount);  
+                      
+           
+        }
+
+        (new View("add_operation")) -> show(["tricount"=>$operation,
+        "status"=>$status,
+        "operation"=>$operation,
+            "errors_title"=>$errors_title,
+        "errors_amount" =>$errors_amount,
+        "subscriptions" =>$subscriptions,
+        "nb_subscriotions" =>$nb_subscriotions                                        
+        ]);
+}
 
 
 

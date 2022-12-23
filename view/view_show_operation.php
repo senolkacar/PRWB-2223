@@ -11,7 +11,7 @@
         <header>
         <a href="tricount/show_tricount/<?=$operation->tricount->id; ?>"><button type="button" class="btn btn-primary btn-block">Back</button></a>
         <div class="title"><?=$operation->tricount->title?>&#9654; <?=$operation->title; ?> </div>
-        <a href="tricount/edit_operation/<?=$operation->id; ?>"><button type="button" class="btn btn-primary btn-block">Edit</button></a>
+        <a href="operation/edit_operation/<?=$operation->id; ?>"><button type="button" class="btn btn-primary btn-block">Edit</button></a>
         </header>
         <div class="main">
             <p><?php echo round($operation->amount, 2)." €"; ?></p>

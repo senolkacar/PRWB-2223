@@ -9,13 +9,22 @@
     </head>
     <body>
     <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="tricount/show_tricount/<?=$tricount->id;?>">
-        <button type="button" class="btn btn-primary">Cancel</button>
-    </a>
-    <div class="title"><?=$tricount->title;?>  &#32 &#9654; &#32 New expense </div>
-    
+        <?php if($status=="add"): ?>
+                <a class="navbar-brand" href="tricount/show_tricount/<?=$tricount->id;?>">
+                <button type="button" class="btn btn-primary">Cancel</button>  </a>
+            <?php elseif($status=="edit"): ?>
+                <a class="navbar-brand" href="operation/show_operation/<?=$operation->id;?>">
+                <button type="button" class="btn btn-primary">Cancel</button>  </a>
+            <?php endif; ?>
+   
+            <?php if($status=="add"): ?>
+                <div class="title"><?=$tricount->title;?>  &#32 &#9654; &#32 New expense </div>
+                 <?php elseif($status=="edit"): ?>
+                 <div class="title"><?=$operation->title;?>  &#32 &#9654; &#32 Edit expense </div>
+            <?php endif; ?>
    
     </nav>
+
         <div class="main">
             <form method='post' action='operation/add_operation/<?=$tricount->id;?>' enctype='multipart/form-data'>
                 Title  <br>
