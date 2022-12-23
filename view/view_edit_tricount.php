@@ -12,7 +12,7 @@
     </head>
     <body>
 
-    <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
+        <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
             <div class="d-flex justify-content-between mb-3">   
                 <a class="navbar-brand" href="tricount/index">
                 <button type="button" class="btn btn-outline-danger">Back</button>

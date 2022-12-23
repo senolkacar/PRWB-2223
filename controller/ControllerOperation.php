@@ -26,7 +26,7 @@ class ControllerOperation extends Controller {
            //var_dump($repartitions);
            $operations=Operation::get_operations_by_tricount( $operation->tricount);
            $pages = count($operations);
-           var_dump($pages);
+         
            $current_page=0;
            for($i=0; $i<$pages;++$i){
                if($operations[$i]->id==$id)
