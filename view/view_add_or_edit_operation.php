@@ -53,7 +53,7 @@
 
 
                 Amount  <br>
-                <input type="number" step="0.01" name='amount' id='amount' value="<?=$amount?>"> <br>
+                <input type="number" step="0.01" name='amount' id='amount' value="<?=$amount?>" placeholder="Amount"> <br>
                 <?php if (count($errors_amount) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -81,9 +81,15 @@
                 <p>For whom ?(select at least one)</p>
                 <div class='checkbox'>
                     <?php foreach ($subscriptions as $subscription): ?>  
-                        <input type="checkbox" name="users[]" value="<?=$subscription->id?>"><?=$subscription->full_name;?>
+                        <input type="checkbox" name="users[]" value="<?=$subscription->id?>"
+                        <?php foreach($users as $user): ?>
+                            <?php if($user->id == $subscription->id): ?>
+                                checked
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                        ><?=$subscription->full_name;?>
                         <label for="weight">Weight</label>
-                        <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>">
+                        <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="">
                         <input type="hidden" id="ids" name="ids[]" value="<?=$subscription->id?>">
                          <br>
                     <?php endforeach; ?>               

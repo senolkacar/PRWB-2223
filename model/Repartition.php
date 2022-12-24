@@ -12,14 +12,9 @@ class Repartition extends Model {
 
 
     public function persist() : Repartition{
-        if($this->id!==null){
-            self::get_repartition_by_id($this->id);
-                self::execute("UPDATE Repartitions SET operation=:operation,user=:user,weight=:weight WHERE id=:id",
-                ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight,"id"=>$this->id]);
-        }else{
-            self::execute("INSERT INTO Repartitions (operation,user,weight) VALUES (:operation,:user,:weight)",
+        self::execute("INSERT INTO Repartitions (operation,user,weight) VALUES (:operation,:user,:weight)",
          ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight]);
-        }
+    
         return $this;
      }
 
@@ -59,16 +54,6 @@ class Repartition extends Model {
 
     }
 
-    public static function get_repartition_by_id(int $id): Repartition|false {
-        $query = self::execute("SELECT * FROM repartitions WHERE id = :id", [":id" => $id]);
-        $data = $query->fetch();
-        if ($query->rowCount() == 0) {
-            return false;
-        } else {
-            return new Repartition(Operation::get_operation_by_id($data["operation"]),User::get_user_by_id($data["user"]),$data["weight"]);
-        }
-    }
-
     public static function get_amount_by_user_and_operation(User $user, Operation $operation): float {
         $weight_total = Repartition::get_total_weight_by_operation($operation->id);
         $weight_user = Repartition::get_user_weight($user->id,$operation->id);
@@ -99,6 +84,17 @@ class Repartition extends Model {
             (select id from operations where tricount=:tricount)', ['tricount' => $tricount->id]);
     
         return true;
+    }
+
+    public function delete_repartition() : bool {
+        self::execute('DELETE FROM repartitions WHERE operation=:operation', ['operation' => $this->operation->id]);
+        return true;
+    }
+    
+    public static function check_operation_exist(Operation $operation) : bool{
+        $query = self::execute("SELECT count(*) FROM repartitions WHERE operation = :operation " , [":operation" => $operation->id]);
+        $data = $query->fetch();
+        return ((int)$data[0])>0 ;
     }
 
 
