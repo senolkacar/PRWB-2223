@@ -89,7 +89,12 @@
                         <?php endforeach; ?>
                         ><?=$subscription->full_name;?>
                         <label for="weight">Weight</label>
-                        <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="">
+                        <?php foreach($repartitions as $repartition): ?>
+                        <?php if($repartition->user->id == $subscription->id): ?>
+                            <?php $weight[$subscription->full_name] = $repartition->weight; ?>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                        <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=empty($weight[$subscription->full_name]) ? 0 : $weight[$subscription->full_name] ?>">
                         <input type="hidden" id="ids" name="ids[]" value="<?=$subscription->id?>">
                          <br>
                     <?php endforeach; ?>               
