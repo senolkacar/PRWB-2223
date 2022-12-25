@@ -89,7 +89,7 @@ class ControllerOperation extends Controller {
                         $weights = $_POST["weights"];
                         $total_weight = 0;
                         foreach($weights as $weight) {
-                            $total_weight += (int)$weight;
+                            $total_weight = $total_weight + (int)$weight;
                         }
                     }
                     if  ($total_weight == 0){
@@ -154,8 +154,9 @@ class ControllerOperation extends Controller {
                 //var_dump($select_user);
                 for($i=0;$i <count($ids);++$i){
                     if($ids[$i]==$selected_user)
-                    $index_weights=$i;
+                    $index_weights=$i;//if (int)$weights[$index_weights] = 0 ?
                 }
+               
                 $repartition = new Repartition($operation,$select_user,(int)$weights[$index_weights]);
                 $repartition->persist();
                 $repartitions[]=$repartition;
