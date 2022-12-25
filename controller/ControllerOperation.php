@@ -54,6 +54,7 @@ class ControllerOperation extends Controller {
         $user=$this->get_user_or_redirect();
         $errors_title=[];
         $errors_amount=[];
+        $errors_weight=[];
         $subscriptions=[];
         $repartitions=[];
         $users=[];
@@ -84,7 +85,18 @@ class ControllerOperation extends Controller {
                     $errors_title = Operation::validate_title($_POST["title"]);
                     $errors_amount= Operation::validate_amount($_POST["amount"]);
                     $errors = array_merge($errors_title,$errors_amount);
-                    if(count($errors)==0){
+                    if( isset($_POST["weights"]) ){                       
+                        $weights = $_POST["weights"];
+                        $total_weight = 0;
+                        foreach($weights as $weight) {
+                            $total_weight += (int)$weight;
+                        }
+                    }
+                    if  ($total_weight == 0){
+                        $errors_weight[] = "total weight couldn't be 0";
+                    }
+                        
+                    if(count($errors)==0 && count($errors_weight) == 0){
                         $operation=$this->add_depense($tricount,$operation);
                         $this->add_repartition($operation,$is_new_operation);
                         if($operation_name == "edit"){
@@ -103,6 +115,7 @@ class ControllerOperation extends Controller {
                                                     "nb_subscriptions"=>$nb_subscriptions,
                                                     "errors_title"=>$errors_title,
                                                     "errors_amount"=>$errors_amount,
+                                                    "errors_weight" =>$errors_weight,
                                                     "operation"=>$operation,
                                                     "users"=>$users,
                                                     "repartitions"=>$repartitions]);

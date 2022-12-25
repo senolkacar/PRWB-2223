@@ -65,7 +65,8 @@
                 <?php endif; ?>
 
                 <p>Date </p>
-                <input type="date" id="date" name="date" value="<?=$date?>">
+                <input type="date" id="date" name="date"  min="1000-01-01" value="<?=$date?>">
+                
                 <p>Paid by </p>
 
                 <div class='paid_by'>
@@ -97,7 +98,14 @@
                         <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=empty($weight[$subscription->full_name]) ? 0 : $weight[$subscription->full_name] ?>">
                         <input type="hidden" id="ids" name="ids[]" value="<?=$subscription->id?>">
                          <br>
-                    <?php endforeach; ?>               
+                    <?php endforeach; ?>    
+                    <div class='errors'>
+                    <ul>
+                        <?php foreach ($errors_weight as $error_weight): ?>
+                            <li><?= $error_weight ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>           
 
                 </div>
 
