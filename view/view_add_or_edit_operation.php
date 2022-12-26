@@ -12,7 +12,7 @@
     <?php if($operation_name=="add"){?>
         <a class="navbar-brand" href="tricount/show_tricount/<?=$tricount->id;?>">
         <button type="button" class="btn btn-primary">Cancel</button>
-    </a>
+        </a>
     <?php }else{?>
         <a class="navbar-brand" href="operation/show_operation/<?=$tricount->id;?>">
         <button type="button" class="btn btn-primary">Cancel</button>
@@ -31,16 +31,16 @@
             ?>
             <form method='post' action=<?=$action?> enctype='multipart/form-data'>
                 Title  <br>
-                <?php if(empty($operation)): 
-                    $title = "Title";
-                    $amount = "Amount";
-                    $date = "";
-                else:
+                <?php if(empty($operation)){
+                    $title = "";
+                    $amount = "";
+                    $date = "2022-12-15";
+                }else{
                     $title = $operation->title;
                     $amount = $operation->amount;
                     $date = $operation->operation_date;
-                endif; ?>
-                <textarea name='title' id='title' rows='1'><?=$title?></textarea> <br>
+                };?>
+                <input type="text" name='title' id='title' rows='1' placeholder="Title" value=<?=$title?>> <br>
                 <?php if (count($errors_title) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -50,6 +50,7 @@
                     </ul>
                 </div>
                 <?php endif; ?>
+
 
 
                 Amount  <br>
@@ -65,7 +66,16 @@
                 <?php endif; ?>
 
                 <p>Date </p>
-                <input type="date" id="date" name="date" value="<?=$date?>">
+                <input type="date" id="date" name="date" required value="<?=$date?>">
+                <?php if (count($errors_date) != 0): ?>
+                <div class='errors'>
+                    <ul>
+                        <?php foreach ($errors_date as $error_date): ?>
+                            <li><?= $error_date ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
                 <p>Paid by </p>
 
                 <div class='paid_by'>
@@ -97,15 +107,37 @@
                         <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=empty($weight[$subscription->full_name]) ? 0 : $weight[$subscription->full_name] ?>">
                         <input type="hidden" id="ids" name="ids[]" value="<?=$subscription->id?>">
                          <br>
-                    <?php endforeach; ?>               
-
+                    <?php endforeach; ?>
+                    <?php if(count($errors_checkbox)!=0) : ?>
+                            <div class='errors'>
+                                <ul>
+                                    <?php foreach ($errors_checkbox as $error): ?>
+                                        <li><?= $error ?></li>
+                                    <?php endforeach; ?>
+                                    </ul>
+                            </div>
+                        <?php endif; ?>
+                    <?php if(count($errors_weights)!=0) : ?>
+                            <div class='errors'>
+                                <ul>
+                                    <?php foreach ($errors_weights as $error): ?>
+                                        <li><?= $error ?></li>
+                                    <?php endforeach; ?>
+                                    </ul>
+                            </div>
+                        <?php endif; ?>               
                 </div>
 
 
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
+            <?php if($operation_name=="edit"){?>
+                <a class="navbar-brand" href="operation/delete_operation/<?=$operation->id;?>">
+                <button type="button" class="btn btn-primary">Delete</button>
+                </a>
+            <?php }; ?>
 
-           
+            
 
 
 

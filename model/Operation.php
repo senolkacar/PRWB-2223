@@ -43,32 +43,65 @@ Class Operation extends Model{
         }
     }
 
-    public static function validate_title(string $title): array{
+    public static function validate_title(?string $title): array{
         $errors=[];
-        if($title==null or strlen($title)==0){
+        if($title==null or strlen($title)==0 or $title==""){
             $errors[]= "Title is mandatory";
         } elseif(strlen($title)<3){
-            $errors[] = "Title must have at least 3 characters";
+            $errors[]= "Title must have at least 3 characters";
         }
         return $errors;
     }
 
 
-    public static function validate_amount(float $amount): array{
+    public static function validate_amount(?string $amount): array{
         $errors=[];
         if($amount==null){
             $errors[] = "Amount is mandatory";
-        }
-        if(!is_numeric($amount)){
-            $errors[] = "Invalid value for amount";
-        }
-        else{
+        }else{
             $amount = floatval($amount);
             if($amount<=0){
                 $errors[] = "Amount must be positive";
             }
         }
        
+        return $errors;
+    }
+
+    public static function validate_weights(?array $weights): array{
+        $errors=[];
+        $total_weight = 0;
+        foreach($weights as $weight){
+            $total_weight += $weight;
+            if(!is_numeric($weight)){
+                $errors[] = "Invalid value for weight";
+            }
+            else{
+                $weight = floatval($weight);
+                if($weight<0){
+                    $errors[] = "Weight must be positive";
+                }
+            }
+        }
+        if($total_weight==0){
+            $errors[] = "You must specify at least one weight";
+        }
+        return $errors;
+    }
+
+    public static function validate_date(?string $date): array{
+        $errors=[];
+        if($date==null or strlen($date)==0 or $date=="0000-00-00"){
+            $errors[]= "Date is mandatory";
+        }
+        return $errors;
+    }
+
+    public static function validate_checkboxes(?array $checkboxes): array{
+        $errors=[];
+        if($checkboxes==null){
+            $errors[] = "You must select at least one user";
+        }
         return $errors;
     }
 
@@ -159,6 +192,11 @@ Class Operation extends Model{
             $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
         }
         return $users;
+    }
+
+    public function delete_operation(){
+        self::execute('DELETE FROM repartitions WHERE operation=:id', ['id' => $this->id]);
+        self::execute('DELETE FROM operations WHERE id=:id', ['id' => $this->id]);
     }
 
 
