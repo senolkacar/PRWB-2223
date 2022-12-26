@@ -97,14 +97,6 @@ Class Operation extends Model{
         return $errors;
     }
 
-    public static function validate_checkboxes(?array $checkboxes): array{
-        $errors=[];
-        if($checkboxes==null){
-            $errors[] = "You must select at least one user";
-        }
-        return $errors;
-    }
-
     public function validate(): array{
         $errors=[];
         if($this->title==null or strlen($this->title)==0){

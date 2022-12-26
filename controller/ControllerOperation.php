@@ -67,6 +67,10 @@ class ControllerOperation extends Controller
         $subscriptions = [];
         $repartitions = [];
         $users=[];
+        $_SESSION["title"] = "";
+        $_SESSION["amount"] = "";
+        $_SESSION["date"] = "2022-12-15";
+        $_SESSION["checkboxes"] = "";
         $operation = null;
         $is_new_operation = true;
         $operation_name = $operation_value;
@@ -80,6 +84,9 @@ class ControllerOperation extends Controller
                 $is_new_operation = false;
                 $users = $operation->get_users_by_operation_id();
                 $repartitions = Repartition::get_repartitions_by_operation($operation);
+                $_SESSION["title"] = $operation->title;
+                $_SESSION["amount"] = round($operation->amount,2);
+                $_SESSION["date"] = $operation->operation_date;
             } else {
                 $page_title = "Add operation";
                 $header_title = "New expense";
@@ -89,18 +96,21 @@ class ControllerOperation extends Controller
             $nb_subscriptions = count($subscriptions);
             if(isset($_POST["title"])){
                 $errors_title = Operation::validate_title($_POST["title"]);
+                $_SESSION["title"] = $_POST["title"];
             }
             if(isset($_POST["amount"])){
                 $errors_amount = Operation::validate_amount($_POST["amount"]);
+                $_SESSION["amount"] = round($_POST["amount"],2);
             }
-            if(isset($_POST["users"])){
-                $errors_checkbox = Operation::validate_checkboxes($_POST["users"]);
+            if(!isset($_POST["checkboxes"])&&count($_POST)>0){
+                $errors_checkbox[]= "You must select at least one user";
             }
             if(isset($_POST["weights"])){
                 $errors_weights = Operation::validate_weights($_POST["weights"]);
             }
             if(isset($_POST["date"])){
                 $errors_date = Operation::validate_date($_POST["date"]);
+                $_SESSION["date"] = $_POST["date"];
             } 
             $errors = array_merge($errors_title, $errors_amount, $errors_checkbox, $errors_weights, $errors_date);
             if ((count($errors)) == 0 && (count($_POST) > 0)) {
@@ -157,8 +167,8 @@ class ControllerOperation extends Controller
         } else {
             $repartition = [];
         }
-        if (isset($_POST["users"]) && isset($_POST["weights"]) && isset($_POST["ids"])) {
-            $selected_subscriptions = $_POST["users"];
+        if (isset($_POST["checkboxes"]) && isset($_POST["weights"]) && isset($_POST["ids"])) {
+            $selected_subscriptions = $_POST["checkboxes"];
             $weights = $_POST["weights"];
             $ids = $_POST["ids"];
             $index_weights = 0;

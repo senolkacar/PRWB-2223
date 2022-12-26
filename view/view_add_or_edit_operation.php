@@ -31,16 +31,7 @@
             ?>
             <form method='post' action=<?=$action?> enctype='multipart/form-data'>
                 Title  <br>
-                <?php if(empty($operation)){
-                    $title = "";
-                    $amount = "";
-                    $date = "2022-12-15";
-                }else{
-                    $title = $operation->title;
-                    $amount = $operation->amount;
-                    $date = $operation->operation_date;
-                };?>
-                <input type="text" name='title' id='title' rows='1' placeholder="Title" value=<?=$title?>> <br>
+                <input type="text" name='title' id='title' rows='1' placeholder="Title" value=<?=$_SESSION["title"]?>> <br>
                 <?php if (count($errors_title) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -54,7 +45,7 @@
 
 
                 Amount  <br>
-                <input type="number" step="0.01" name='amount' id='amount' value="<?=$amount?>" placeholder="Amount"> <br>
+                <input type="number" step="0.01" name='amount' id='amount' value="<?=$_SESSION["amount"]?>" placeholder="Amount"> <br>
                 <?php if (count($errors_amount) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -66,7 +57,7 @@
                 <?php endif; ?>
 
                 <p>Date </p>
-                <input type="date" id="date" name="date" required value="<?=$date?>">
+                <input type="date" id="date" name="date" required value="<?=$_SESSION["date"]?>">
                 <?php if (count($errors_date) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -91,7 +82,7 @@
                 <p>For whom ?(select at least one)</p>
                 <div class='checkbox'>
                     <?php foreach ($subscriptions as $subscription): ?>  
-                        <input type="checkbox" name="users[]" value="<?=$subscription->id?>"
+                        <input type="checkbox" name="checkboxes[]" value="<?=$subscription->id?>"
                         <?php foreach($users as $user): ?>
                             <?php if($user->id == $subscription->id): ?>
                                 checked
