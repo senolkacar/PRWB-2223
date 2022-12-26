@@ -19,7 +19,7 @@
         <div class="main">
             <form method='post' action='operation/add_operation/<?=$tricount->id;?>' enctype='multipart/form-data'>
                 Title  <br>
-                <textarea name='title' id='title' rows='1'>Title</textarea> <br>
+                <textarea name='title' id='title' rows='1'><?=$title;?></textarea> <br>
                 <?php if (count($errors_title) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -32,7 +32,7 @@
 
 
                 Amount  <br>
-                <textarea name='amount' id='amount' rows='3'>Amount</textarea> <br>
+                <textarea name='amount' id='amount' rows='3'><?=$amount;?></textarea> <br>
                 <?php if (count($errors_amount) != 0): ?>
                 <div class='errors'>
                     <ul>

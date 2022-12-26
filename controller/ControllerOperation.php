@@ -48,6 +48,8 @@ class ControllerOperation extends Controller {
         $errors_amount=[];
         $subscriptions=[];
         $nb_subscriotions = count($subscriptions);
+        $title="";
+        $amount="";
         //var_dump($_POST);
         
         
@@ -64,6 +66,9 @@ class ControllerOperation extends Controller {
             $subscriptions = User:: get_users_by_tricount( $tricount);
             if(isset($_POST["title"]) && isset($_POST["amount"]) && isset($_POST["date"])//body
             && isset($_POST["payer"]) ){
+                $title=$_POST["title"];
+                $amount=$_POST["amount"];
+
                 $errors_title = Operation::validate_title($_POST["title"]);
                 $errors_amount= Operation::validate_amount($_POST["amount"]);
                 if(count($errors_title)==0 && count($errors_amount)==0){
@@ -76,7 +81,9 @@ class ControllerOperation extends Controller {
              
     }
         (new View("add_operation")) -> show(["tricount"=>$tricount,
-            "errors_title"=>$errors_title,
+        "title"=>$title,
+        "amount"=>$amount,
+        "errors_title"=>$errors_title,
         "errors_amount" =>$errors_amount,
         "subscriptions" =>$subscriptions,
         "nb_subscriotions" =>$nb_subscriotions                                        
