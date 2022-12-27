@@ -70,7 +70,9 @@ class ControllerOperation extends Controller
         $_SESSION["title"] = "";
         $_SESSION["amount"] = "";
         $_SESSION["date"] = "2022-12-15";
-        $_SESSION["checkboxes"] = "";
+        $_SESSION["checkboxes"] = [];
+        $_SESSION["weights"] = [];
+        $_SESSION['ids'] = [];
         $operation = null;
         $is_new_operation = true;
         $operation_name = $operation_value;
@@ -87,6 +89,16 @@ class ControllerOperation extends Controller
                 $_SESSION["title"] = $operation->title;
                 $_SESSION["amount"] = round($operation->amount,2);
                 $_SESSION["date"] = $operation->operation_date;
+                $_SESSION["ids"] = [];
+                foreach ($repartitions as $repartition) {
+                    $_SESSION["weights"][] = $repartition->weight;
+                    $_SESSION["ids"][] = $repartition->user->id;
+                    $_SESSION["checkboxes"][] = $repartition->user->id;
+                }
+            
+                
+        
+
             } else {
                 $page_title = "Add operation";
                 $header_title = "New expense";
@@ -100,18 +112,25 @@ class ControllerOperation extends Controller
             }
             if(isset($_POST["amount"])){
                 $errors_amount = Operation::validate_amount($_POST["amount"]);
-                $_SESSION["amount"] = round($_POST["amount"],2);
+                $_SESSION["amount"] = $_POST["amount"];
             }
             if(!isset($_POST["checkboxes"])&&count($_POST)>0){
                 $errors_checkbox[]= "You must select at least one user";
             }
+            if(isset($_POST["checkboxes"])){
+                $_SESSION["checkboxes"] = $_POST["checkboxes"];
+            }
             if(isset($_POST["weights"])){
                 $errors_weights = Operation::validate_weights($_POST["weights"]);
+                $_SESSION["weights"] = $_POST["weights"];
             }
             if(isset($_POST["date"])){
                 $errors_date = Operation::validate_date($_POST["date"]);
                 $_SESSION["date"] = $_POST["date"];
             } 
+            if(isset($_POST["ids"])){
+                $_SESSION["ids"] = $_POST["ids"];
+            }
             $errors = array_merge($errors_title, $errors_amount, $errors_checkbox, $errors_weights, $errors_date);
             if ((count($errors)) == 0 && (count($_POST) > 0)) {
                 $operation = $this->add_depense($tricount, $operation);

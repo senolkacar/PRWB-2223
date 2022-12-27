@@ -83,19 +83,16 @@
                 <div class='checkbox'>
                     <?php foreach ($subscriptions as $subscription): ?>  
                         <input type="checkbox" name="checkboxes[]" value="<?=$subscription->id?>"
-                        <?php foreach($users as $user): ?>
-                            <?php if($user->id == $subscription->id): ?>
-                                checked
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                        <?php if (in_array($subscription->id, $_SESSION['checkboxes'])) { echo 'checked'; } ?>
                         ><?=$subscription->full_name;?>
                         <label for="weight">Weight</label>
-                        <?php foreach($repartitions as $repartition): ?>
-                        <?php if($repartition->user->id == $subscription->id): ?>
-                            <?php $weight[$subscription->full_name] = $repartition->weight; ?>
-                        <?php endif; ?>
-                        <?php endforeach; ?>
-                        <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=empty($weight[$subscription->full_name]) ? 0 : $weight[$subscription->full_name] ?>">
+                        <?php $weight = 0; ?>
+                        <?php for($i=0; $i<count($_SESSION["weights"]); $i++): ?>
+                            <?php if($_SESSION["ids"][$i]==$subscription->id): ?>
+                                <?php $weight = $_SESSION["weights"][$i]; ?>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+                        <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
                         <input type="hidden" id="ids" name="ids[]" value="<?=$subscription->id?>">
                          <br>
                     <?php endforeach; ?>
