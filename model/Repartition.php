@@ -12,9 +12,10 @@ class Repartition extends Model {
 
 
     public function persist() : Repartition{
-         self::execute("INSERT INTO Repartitions (operation,user,weight) VALUES (:operation,:user,:weight)",
+        self::execute("INSERT INTO Repartitions (operation,user,weight) VALUES (:operation,:user,:weight)",
          ["operation"=>$this->operation->id,"user"=>$this->user->id,"weight"=>$this->weight]);
-         return $this;
+    
+        return $this;
      }
 
     public static function get_total_weight_by_operation(int $id): int {
@@ -83,6 +84,17 @@ class Repartition extends Model {
             (select id from operations where tricount=:tricount)', ['tricount' => $tricount->id]);
     
         return true;
+    }
+
+    public function delete_repartition() : bool {
+        self::execute('DELETE FROM repartitions WHERE operation=:operation', ['operation' => $this->operation->id]);
+        return true;
+    }
+    
+    public static function check_operation_exist(Operation $operation) : bool{
+        $query = self::execute("SELECT count(*) FROM repartitions WHERE operation = :operation " , [":operation" => $operation->id]);
+        $data = $query->fetch();
+        return ((int)$data[0])>0 ;
     }
 
 

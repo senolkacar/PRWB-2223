@@ -33,7 +33,7 @@ Class Operation extends Model{
 }
 
     public static function get_operation_by_id(int $id): Operation|false{
-        $query = self::execute("SELECT * FROM operations WHERE id = :id",[":id" => $id]);
+        $query = self::execute("SELECT * FROM operations WHERE id = :id",["id" => $id]);
         $data = $query->fetch();
         if($query->rowCount()==0){
             return false;
@@ -43,21 +43,56 @@ Class Operation extends Model{
         }
     }
 
-    public static function validate_title(string $title): array{
+    public static function validate_title(?string $title): array{
         $errors=[];
-        if($title==null or strlen($title)==0){
+        if($title==null or strlen($title)==0 or $title==""){
             $errors[]= "Title is mandatory";
         } elseif(strlen($title)<3){
-            $errors[] = "Title must have at least 3 characters";
+            $errors[]= "Title must have at least 3 characters";
         }
         return $errors;
     }
 
 
-    public static function validate_amount(float $amount): array{
+    public static function validate_amount(?string $amount): array{
         $errors=[];
-        if($amount<=0){
-            $errors[] = "Amount must be positive";
+        if($amount==null){
+            $errors[] = "Amount is mandatory";
+        }else{
+            $amount = floatval($amount);
+            if($amount<=0){
+                $errors[] = "Amount must be positive";
+            }
+        }
+       
+        return $errors;
+    }
+
+    public static function validate_weights(?array $weights): array{
+        $errors=[];
+        $total_weight = 0;
+        foreach($weights as $weight){
+            $total_weight += $weight;
+            if(!is_numeric($weight)){
+                $errors[] = "Invalid value for weight";
+            }
+            else{
+                $weight = floatval($weight);
+                if($weight<0){
+                    $errors[] = "Weight must be positive";
+                }
+            }
+        }
+        if($total_weight==0){
+            $errors[] = "You must specify at least one weight";
+        }
+        return $errors;
+    }
+
+    public static function validate_date(?string $date): array{
+        $errors=[];
+        if($date==null or strlen($date)==0 or $date=="0000-00-00"){
+            $errors[]= "Date is mandatory";
         }
         return $errors;
     }
@@ -108,11 +143,20 @@ Class Operation extends Model{
         
     }
 
+
     public function persist():Operation {
-        if($this->id == NULL) {
-           $errors = $this->validate();
-            if(empty($errors)){
-                self::execute('INSERT INTO Operations (title, tricount,amount,initiator, operation_date) VALUES (:title, :tricount,:amount,:initiator, :operation_date)', 
+        if($this->id!==null){
+            self::get_operation_by_id($this->id);
+                self::execute('UPDATE operations SET title=:title, tricount=:tricount, amount=:amount, initiator=:initiator, operation_date=:operation_date WHERE id=:id', 
+                ['title' => $this->title,
+                 'tricount' => $this->tricount->id,
+                 'amount' => $this->amount,
+                 'initiator' =>$this->initiator->id,
+                 'operation_date' =>$this->operation_date,
+                 'id' => $this->id
+                ]);
+        }else{
+                self::execute('INSERT INTO operations (title, tricount,amount,initiator, operation_date) VALUES (:title, :tricount,:amount,:initiator, :operation_date)', 
                                ['title' => $this->title,
                                 'tricount' => $this->tricount->id,
                                 'amount' => $this->amount,
@@ -121,21 +165,30 @@ Class Operation extends Model{
                                ]);
                 $operation = self::get_operation_by_id(self::lastInsertId());
                 $this->id = $operation->id;
-               $this->created_at = $operation->created_at;
-                return $this;
-            } else {
-               return $errors; 
+                $this->created_at = $operation->created_at;
             }
-        } else {
-            //on ne modifie jamais les messages : pas de "UPDATE" SQL.
-            throw new Exception("Not Implemented.");
-        }
+            return $this;
     }
 
     public static function delete(Tricount $tricount) : bool {
         //if ($user == $tricount->creator) 
             self::execute('DELETE FROM operations WHERE tricount=:tricount', ['tricount' => $tricount->id]);    
         return true;
+    }
+
+    public function get_users_by_operation_id(){
+        $query = self::execute("select * from users where id in(select initiator from operations where id=:operation) union select * from users where id in(select user from repartitions where operation=:operation)",["operation" => $this->id]);
+        $data = $query->fetchAll();
+        $users = [];
+        foreach($data as $row){
+            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
+        }
+        return $users;
+    }
+
+    public function delete_operation(){
+        self::execute('DELETE FROM repartitions WHERE operation=:id', ['id' => $this->id]);
+        self::execute('DELETE FROM operations WHERE id=:id', ['id' => $this->id]);
     }
 
 
