@@ -26,7 +26,7 @@ Class User extends Model{
         }
     }
 
-    public static function get_user_by_name(string $full_name): User|false{
+    public static function get_user_by_name(?string $full_name): User|false{
         $query = self::execute("SELECT * FROM users WHERE full_name = :full_name",[":full_name" => $full_name]);
         $data = $query->fetch();
         if($query->rowCount()==0){

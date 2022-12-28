@@ -39,7 +39,7 @@
                     </div>
                     <span class="badge text-bg-light">
                         <?php if( $tricount['subscription_count'] == 0): ?>
-                         --&#32 you are alone
+                          you are alone
                         <?php else: ?>
                             <?php echo " with ". $tricount['subscription_count']." friends" ?>
                         <?php endif; ?>

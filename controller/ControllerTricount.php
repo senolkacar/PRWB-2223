@@ -72,19 +72,28 @@ class ControllerTricount extends Controller {
 
     public function edit_tricount():void {
         $user=$this->get_user_or_redirect();
+        $title="";
+        $description="";
+        $errors_title=[];
+        $errors_description=[];
         $errors=[];
+        $error="";
         $success="";
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
             global $id,$subscriptions,$other_users;
             $id= (int)$_GET["param1"];
-            global $tricount;
+            global $tricount; 
             $tricount = Tricount::get_tricount_by_id($id);
+            $title=$tricount->title;
+            $description=$tricount->description;
             $subscriptions =$tricount-> get_users_including_creator();  
             $other_users = $tricount->get_users_not_subscriber();        
             //var_dump($other_users);  
             if(isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["subscriber"]) ) {
                 if($user == $tricount -> creator) {
-                        $errors = Tricount::validate_title($_POST["title"]);//could have the same name with others
+                        $errors_title = Tricount::validate_title($_POST["title"]);//could have the same name with others
+                        $errors_description= Tricount::validate_description($_POST["description"]);
+                        $errors=(array_merge($errors_description,$errors_title));
                         if(count($errors) == 0) {
                         $tricount->title = $_POST["title"];
                         $tricount->description = $_POST["description"];
@@ -92,19 +101,18 @@ class ControllerTricount extends Controller {
                         var_dump($_POST["subscriber"]);
                         var_dump($subscriber);//false
                         $tricount->update();
-                        if($subscriber != false) {
+                        if($subscriber ) {
                             Subscription::persist($subscriber, $tricount);
                         }
                         }
         
                         if(count($_POST) > 0 && count($errors) == 0){
-                            $this -> redirect("tricount", "show_tricount", $tricount->id);  //add param2 ?
+                            $this -> redirect("tricount", "show_tricount", $tricount->id);  
                            // $success = "The tricount has been successfully updated.";
                         } 
     
                     }else{
-                        $errors[] = "only creator could edit this tricount.";
-                        //redirect ?
+                        $error = "only creator could edit this tricount.";
                     }
         }    
     }
@@ -113,9 +121,14 @@ class ControllerTricount extends Controller {
     }
     (new View("edit_tricount")) -> show(["id"=>$id,
     "tricount"=>$tricount,
+    "title"=>$title,
+    "description"=>$description,
+    "errors_description"=>$errors_description,
+    "errors_title"=>$errors_title,
     "subscriptions"=>$subscriptions,
     "other_users"=>$other_users,
     "success"=>$success,
+    "error"=>$error,
     "errors"=>$errors]);       
 
 }

@@ -27,12 +27,36 @@
                <h2>Settings</h2>
                <div class="mb-3 mt-3">
                     <label for='title'> Title : </label>
-                    <textarea  class="form-control" name='title'  id='title' rows='1' ><?= $tricount->title; ?></textarea> 
+                    <textarea  class="form-control" name='title'  id='title' rows='1' ><?= $title; ?></textarea> 
                </div>
+
+                <?php if (count($errors_title) != 0): ?>
+                    <div class='errors'>
+                        <ul>
+                            <?php foreach ($errors_title as $error_title): ?>
+                                <li class="text-danger"><?= $error_title ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+
                <div class="mb-3 mt-3">
                     <label for='description'> Descripton (optional) :  </label>
-                    <textarea class="form-control" name='description' id='description'  rows='2' ><?= $tricount->description; ?></textarea> 
+                    <textarea class="form-control" name='description' id='description'  rows='2' ><?= $description; ?></textarea> 
                </div>
+
+               <?php if (count($errors_description) != 0): ?>
+                    <div class='errors'>
+                        <ul>
+                            <?php foreach ($errors_description as $error_description): ?>
+                                <li class="text-danger"><?= $error_description ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+
                 
                 <h2>Subscriptions</h2>                    
                 <ul class="list-group" >
@@ -57,16 +81,10 @@
 
             <br>
             <div class="container-sm">
-            <?php if (count($errors) != 0): ?>
-                <div class='errors'>
-                    <p>Please correct the following error(s) :</p>
-                    <ul>
-                        <?php foreach ($errors as $error): ?>
-                            <li class="text-danger"><?= $error ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-                <?php elseif (strlen($success) != 0): ?>
+            
+            <div class="text-danger"><?= $error; ?> </div>                      
+
+            <?php if (count($errors) == 0 && strlen($success) != 0): ?>
                 <p><span class='success'><?= $success ?></span></p>
             <?php endif; ?>
             <br><br>

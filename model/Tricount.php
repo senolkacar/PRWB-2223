@@ -52,9 +52,9 @@ Class Tricount extends Model{
         return $errors;
     }
 
-    public function validate_description(string $description): array{
+    public static function validate_description(string $description): array{
         $errors=[];
-        if(strlen($description)>0&&strlen($description)<3){
+        if(strlen($description)>0 && strlen($description)<3){
             $errors[] = "Description must be at least 3 characters long";
         }
         return $errors;
