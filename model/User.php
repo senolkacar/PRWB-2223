@@ -91,6 +91,21 @@ Class User extends Model{
         return $errors;
     }
 
+    public function validate_email_for_edit(string $mail): array{
+        $errors=[];
+        $user = self::get_user_by_mail($mail);
+        if($user && $user->id != $this->id){
+            $errors[] = "Email already used";
+        }
+        if(!strlen($mail)>0){
+            $errors[] = "Email is required";
+        }
+        elseif(!filter_var($mail,FILTER_VALIDATE_EMAIL)){
+            $errors[] = "Invalid email";
+        }
+        return $errors;
+    }
+
     public static function validate_password(string $password): array{
         $errors=[];
         if(strlen($password)<8||strlen($password)>16){

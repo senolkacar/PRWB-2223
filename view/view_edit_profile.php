@@ -27,30 +27,55 @@
                 <div class="h2">Edit your profile</div>
                 <div class="mb-3 mt-3">
                     <label for='mail'> Mail : </label>
-                    <textarea class="form-control" name='mail' cols='30' rows='1'><?= $user->mail ?></textarea> <br>
+                    <textarea class="form-control" name='mail' cols='30' rows='1'><?= $mail ?></textarea> <br>
                 </div>
+
+                    <?php if (count($errors_mail) != 0): ?>
+                    <div class="text-danger">
+                        <ul>
+                            <?php foreach ($errors_mail as $error_mail): ?>
+                                <li><?= $error_mail ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                     <?php endif; ?>
+
                 <div class="mb-3 mt-3">
                     <label for='full_name'> Full name : </label>
-                    <textarea class="form-control" name='full_name' cols='30' rows='1'><?= $user->full_name ?></textarea> <br>
+                    <textarea class="form-control" name='full_name' cols='30' rows='1'><?= $full_name ?></textarea> <br>
                 </div>
+
+                    <?php if (count($errors_name) != 0): ?>
+                        <div class="text-danger">
+                            <ul>
+                                <?php foreach ($errors_name as $error_name): ?>
+                                    <li><?= $error_name ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <?php endif; ?>
+
+
                 <div class="mb-3 mt-3">
                     <label for='iban'> Iban : </label>
-                    <textarea class="form-control" name='iban' cols='30' rows='1'><?= $user->iban?></textarea> <br>
+                    <textarea class="form-control" name='iban' cols='30' rows='1'><?= $iban?></textarea> <br>
                 </div>
+
+                    <?php if (count($errors_iban) != 0): ?>
+                        <div class="text-danger">
+                            <ul>
+                                <?php foreach ($errors_iban as $error_iban): ?>
+                                    <li><?= $error_iban ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                
 
                 <input type='submit' class="btn btn-primary" value='Save Profile'>
             </form>
             <br>
-            <?php if (count($errors) != 0): ?>
-                <div class="text-danger">
-                    <p>Please correct the following error(s) :</p>
-                    <ul>
-                        <?php foreach ($errors as $error): ?>
-                            <li><?= $error ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php elseif (strlen($success) != 0): ?>
+            <?php if (count($errors) == 0 && strlen($success) != 0 ): ?>
                 <p><span class='success'><?= $success ?></span></p>
             <?php endif; ?>
 
