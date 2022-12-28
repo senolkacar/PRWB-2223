@@ -9,10 +9,7 @@ class ControllerMain extends Controller{
         if($this->user_logged()){
             $this->redirect("tricount","index");
         }else{
-            $mail ='';
-            $password = '';
-            $errors = [];
-            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors));
+            (new View("login"))->show();
         }
 
     }
@@ -35,33 +32,51 @@ class ControllerMain extends Controller{
     public function signup(){
         $mail ='';
         $full_name = '';
-        $iban = '';
+        $iban = null;
         $password = '';
-        $confirm_password = '';
+        $password_confirm = '';
         $errors = [];
-        if(isset($_POST["mail"])&&isset($_POST["full_name"])&&isset($_POST["password"])&&isset($_POST["confirm_password"])){
+        $errors_email = [];
+        $errors_full_name = [];
+        $errors_iban = [];
+        $errors_password = [];
+        $errors_password_confirm = [];
+        if(isset($_POST["mail"])&&isset($_POST["full_name"])&&isset($_POST["password"])&&isset($_POST["password_confirm"])){
             if(isset($_POST["iban"])){
                 $iban = $_POST["iban"];
             }
             $mail = $_POST["mail"];
             $full_name = $_POST["full_name"];
             $password = $_POST["password"];
-            $confirm_password = $_POST["confirm_password"];
+            $password_confirm = $_POST["password_confirm"];
             //role definit par défaut à "user"
             $user = new User($mail,Tools::my_hash($password),$full_name,"user",$iban);
-            $errors = User::validate_unicity($mail);
-            $errors = array_merge($errors,User::validate_full_name($full_name));
-            $errors = array_merge($errors,User::validate_password($password));
-            $errors = array_merge($errors,User::validate_passwords($password,$confirm_password));
-            $errors = array_merge($errors,User::validate_iban($iban));
-            $errors = array_merge($errors,User::validate_email($mail));
+            $errors_email = User::validate_email($mail);
+            $errors_full_name = User::validate_full_name($full_name);
+            $errors_iban = User::validate_iban($iban);
+            $errors_password = User::validate_password($password);
+            $errors_password_confirm = User::validate_passwords($password,$password_confirm);
+
+            $errors = (array_merge($errors_email,$errors_full_name,$errors_iban,$errors_password,$errors_password_confirm));
 
             if(count($errors)==0){
                 $user->persist();
                 $this->log_user($user);
             }
         }
-        (new View("signup"))->show(array("mail"=>$mail,"full_name"=>$full_name,"iban"=>$iban,"password"=>$password,"confirm_password"=>$confirm_password,"errors"=>$errors));
+        (new View("signup"))->show(array(
+            "mail"=>$mail,
+            "full_name"=>$full_name,
+            "iban"=>$iban,
+            "password"=>$password,
+            "password_confirm"=>$password_confirm,
+            "errors"=>$errors,
+            "errors_email"=>$errors_email,
+            "errors_full_name"=>$errors_full_name,
+            "errors_iban"=>$errors_iban,
+            "errors_password"=>$errors_password,
+            "errors_password_confirm"=>$errors_password_confirm
+        ));
         
     }
 }

@@ -16,7 +16,7 @@
             <div class="d-flex justify-content-between mb-3"> 
                 <a href="tricount/show_tricount/<?=$operation->tricount->id; ?>"><button type="button" class="btn btn-outline-danger">Back</button></a>
                 <div class="h5"><?=$operation->tricount->title?><i class="bi bi-caret-right-fill"></i> <?=$operation->title; ?> </div>         
-                <a href="tricount/edit_operation/<?=$operation->id; ?>"><button type="button" class="btn btn-primary">Edit</button></a>
+                <a href="operation/edit_operation/<?=$operation->id; ?>"><button type="button" class="btn btn-primary">Edit</button></a>
             </div> 
         </div>
 

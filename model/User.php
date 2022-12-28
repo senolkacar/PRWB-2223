@@ -78,20 +78,15 @@ Class User extends Model{
 
     public static function validate_email(string $mail): array{
         $errors=[];
-        if(!strlen($mail)>0){
-            $errors[] = "Email is required";
-        }
-        if(!filter_var($mail,FILTER_VALIDATE_EMAIL)){
-            $errors[] = "Invalid email";
-        }
-        return $errors;
-    }
-
-    public static function validate_unicity(string $mail): array{
-        $errors=[];
         $user = self::get_user_by_mail($mail);
         if($user){
             $errors[] = "Email already used";
+        }
+        if(!strlen($mail)>0){
+            $errors[] = "Email is required";
+        }
+        elseif(!filter_var($mail,FILTER_VALIDATE_EMAIL)){
+            $errors[] = "Invalid email";
         }
         return $errors;
     }
@@ -112,7 +107,9 @@ Class User extends Model{
     }
 
     public static function validate_passwords(string $password, string $password_confirm): array{
-        $errors=User::validate_password($password);
+        //should we show the validation for each password ?
+        //$errors=User::validate_password($password_confirm);
+        $errors=[];
         if($password !== $password_confirm){
             $errors[] = "Passwords don't match";
         }
@@ -134,11 +131,7 @@ Class User extends Model{
 
     public static function validate_full_name(string $full_name): array{        
         $errors=[];
-        $user= self::get_user_by_name($full_name);
-        //if($user){
-          //  $errors[]="This user name already exists.";
-       // }
-        if(!strlen($full_name)>3){
+        if(strlen($full_name)<3){
             $errors[] = "Full name must be at least 3 characters long";
         }
         return $errors;
@@ -146,8 +139,8 @@ Class User extends Model{
 
     public static function validate_iban(string $iban): array{
         $errors=[];
-    
-        if(!preg_match("/^[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}$/",$iban)){
+        
+        if(strlen($iban)>0&&(!preg_match("/^[A-Z]{2}\d{2} [\d ]{4} [\d ]{4} [\d ]{4}$/",strtoupper($iban)))){
             $errors[] = "Invalid IBAN";
         }
         return $errors;
