@@ -26,28 +26,38 @@
             <form method='post' action='tricount/add_tricount' enctype='multipart/form-data'>
                 <div class="mb-3 mt-3">
                     <label for='title'> Title : </label>
-                    <input type="text" class="form-control" name='title' id='title'>
+                    <input type="text" class="form-control" name='title' id='title' value = "<?=$title;?>">
                  </div>
+
+                 <?php if (count($errors_title) != 0): ?>
+                    <div class='errors'>
+                        <ul>
+                            <?php foreach ($errors_title as $error_title): ?>
+                                <li class="text-danger"><?= $error_title ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
                  <div class="mb-3 mt-3">
                     <label for='description'> Descripton (optional) :  </label>
-                    <textarea class="form-control" name='description' id='title' rows='3'></textarea> <br>
+                    <textarea class="form-control" name='description' id='title' rows='3'><?=$description;?></textarea> <br>
                  </div>
+
+                 <?php if (count($errors_title) != 0): ?>
+                    <div class='errors'>
+                        <ul>
+                            <?php foreach ($errors_description as $error_description): ?>
+                                <li class="text-danger"><?= $error_description ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
         </div>
         <br>
-        <div class="container-sm">
-            <?php if (count($errors) != 0): ?>
-                <div class='errors'>
-                    <p>Please correct the following error(s) :</p>
-                    <ul>
-                        <?php foreach ($errors as $error): ?>
-                            <li class="text-danger"><?= $error ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
-        </div>
     </body>
 </html>
 
