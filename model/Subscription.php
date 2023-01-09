@@ -52,5 +52,11 @@ class Subscription extends Model {
         return true;
     }
 
+    public static function delete_subscription(Tricount $tricount, User $user) : bool {
+        //check if initiator or repartition of one operation 
+        self::execute('DELETE FROM subscriptions WHERE tricount=:tricount and user=:user', ['tricount' => $tricount->id, 'user' => $user ->id]);    
+        return true;
+    }
+
 
 }

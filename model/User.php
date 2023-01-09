@@ -122,7 +122,7 @@ Class User extends Model{
     }
 
     public static function validate_passwords(string $password, string $password_confirm): array{
-        //should we show the validation for each password ?
+        //should we show the validation for each password ? only the first one is necessary. The second one should be the same as the first one(Tingting)
         //$errors=User::validate_password($password_confirm);
         $errors=[];
         if($password !== $password_confirm){
@@ -194,10 +194,18 @@ Class User extends Model{
 
     }
 
+    public function has_operation() : bool {
+        $query = self::execute("SELECT count(*) FROM repartitions where user=:user ", ["user"=>$this->id]);
+        $data = $query->fetch();
+        return ((int)$data[0]) > 0;
+    }
 
-
-
-   
+    public function is_initiator() : bool {
+        $query = self::execute("SELECT count(*) FROM operations where initiator=:user ", ["user"=>$this->id]);
+        $data = $query->fetch();
+        return ((int)$data[0]) > 0;
+    }
+ 
 
 
 }

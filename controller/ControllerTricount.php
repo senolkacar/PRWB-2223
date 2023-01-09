@@ -90,7 +90,6 @@ class ControllerTricount extends Controller {
         $depenses=[];
         $errors=[];
         $error="";
-        $success="";
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
             $id= (int)$_GET["param1"];           
             $tricount = Tricount::get_tricount_by_id($id);
@@ -99,60 +98,97 @@ class ControllerTricount extends Controller {
             $subscriptions =$tricount-> get_users_including_creator();  
             $other_users = $tricount->get_users_not_subscriber();        
             //var_dump($other_users);  
-            if(isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["subscriber"]) ) {
+            if(isset($_POST["title"]) && isset($_POST["description"]) ) {
                 if($user == $tricount -> creator) {
                         $title = $_POST["title"];
                         $description=$_POST["description"];
                         $errors_title = Tricount::validate_title($_POST["title"]);//could have the same name with others
                         $errors_description= Tricount::validate_description($_POST["description"]);
                         $errors=(array_merge($errors_description,$errors_title));
+
                         if(count($errors) == 0) {
                         $tricount->title = $_POST["title"];
                         $tricount->description = $_POST["description"];
-                        $subscriber = User::get_user_by_name($_POST["subscriber"]);//name unique for users
-                        var_dump($_POST["subscriber"]);
-                        var_dump($subscriber);//false
                         $tricount->update();
-                        if($subscriber ) {
-                            Subscription::persist($subscriber, $tricount);
                         }
-                        }
-        
+    
                         if(count($_POST) > 0 && count($errors) == 0){
                             $this -> redirect("tricount", "show_tricount", $tricount->id);  
-                           // $success = "The tricount has been successfully updated.";
                         } 
     
                     }else{
                         $error = "only creator could edit this tricount.";
                     }
-        }    
+            }    
+           
+        }
+        else{
+            $this -> redirect("tricount", "show_tricount");  
+        }
+        (new View("edit_tricount")) -> show(["id"=>$id,
+        "tricount"=>$tricount,
+        "title"=>$title,
+        "description"=>$description,
+        "errors_description"=>$errors_description,
+        "errors_title"=>$errors_title,
+        "subscriptions"=>$subscriptions,
+        "depenses"=>$depenses,
+        "other_users"=>$other_users,
+        "error"=>$error,
+        "errors"=>$errors]);       
+
     }
-    else{
-        $this -> redirect("tricount", "show_tricount");  
+
+    public function delete_subsription() :void {
+        $user=$this->get_user_or_redirect();
+
+        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+            $id= (int)$_GET["param1"];           
+            $tricount = Tricount::get_tricount_by_id($id);
+
+            var_dump($tricount);
+
+            if(isset($_POST["delete_member"]) ) {
+                if($user == $tricount -> creator) {                       
+                    $subscriber = User::get_user_by_id($_POST["delete_member"]);
+                    if($subscriber ) {
+                        Subscription::delete_subscription($tricount, $subscriber);//delete
+                        $this -> redirect("tricount", "edit_tricount", $tricount->id);
+                    }
+
+                }else{
+                        throw new Exception("only creator could edit this tricount.");
+                }
+            } 
+        }
+
+
     }
-    (new View("edit_tricount")) -> show(["id"=>$id,
-    "tricount"=>$tricount,
-    "title"=>$title,
-    "description"=>$description,
-    "errors_description"=>$errors_description,
-    "errors_title"=>$errors_title,
-    "subscriptions"=>$subscriptions,
-    "depenses"=>$depenses,
-    "other_users"=>$other_users,
-    "success"=>$success,
-    "error"=>$error,
-    "errors"=>$errors]);       
 
-}
+    public function add_subsription() :void {
+        $user=$this->get_user_or_redirect();
 
-public function delete_subsription() :void {
+        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+            $id= (int)$_GET["param1"];           
+            $tricount = Tricount::get_tricount_by_id($id);
 
-}
+            var_dump($tricount);
 
-public function add_subsription() :void {
+            if(isset($_POST["subscriber"]) ) {
+                if($user == $tricount -> creator) {                       
+                    $subscriber = User::get_user_by_name($_POST["subscriber"]);//name unique for users
+                    if($subscriber ) {
+                        Subscription::persist($subscriber, $tricount);
+                        $this -> redirect("tricount", "edit_tricount", $tricount->id);
+                    }
+
+                }else{
+                        throw new Exception("only creator could edit this tricount.");
+                }
+            }  
+        }
     
-}
+    }
     
 public function show_balance():void{
     $user=$this->get_user_or_redirect();

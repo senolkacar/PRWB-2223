@@ -58,14 +58,15 @@
             </form>
 
 
-            <form method='post' action='tricount/delete_subsription' enctype='multipart/form-data' id ="form2">
+            <form method='post' action='tricount/delete_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form2">
                 <h2>Subscriptions</h2>                    
                 <ul class="list-group" >
                         <?php foreach ($subscriptions as $subscription): ?>
                             <li class="list-group-item"><?= $subscription->full_name ?>
                             <?php if($subscription->full_name == $tricount->creator->full_name): ?>
                                 (creator)                                                      
-                                <?php elseif(count($depenses)==0): ?>
+                                <?php elseif(!($subscription->has_operation()) && !($subscription->is_initiator())): ?>
+                                    <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>
                                     <input type='submit' value='delete'>
                             <?php endif; ?>
                             </li>
@@ -75,7 +76,7 @@
                 
                 <br>
             <?php if(count($other_users)!=0): ?>
-                <form method='post' action='tricount/add_subsription' enctype='multipart/form-data' id ="form3">
+                <form method='post' action='tricount/add_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
                     <div class='add-subscriber'>
                         <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name = "subscriber" id="subscriber" value="add subscriber">
                         <option selected>--Add a new subscriber--</option>
@@ -94,10 +95,7 @@
             
             <div class="text-danger"><?= $error; ?> </div>                      
 
-            <?php if (count($errors) == 0 && strlen($success) != 0): ?>
-                <p><span class='success'><?= $success ?></span></p>
-            <?php endif; ?>
-            <br><br>
+           
 
             <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
             <div class="d-grid gap-2">
