@@ -91,9 +91,7 @@ class ControllerTricount extends Controller {
         $error="";
         $success="";
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            global $id,$subscriptions,$other_users;
-            $id= (int)$_GET["param1"];
-            global $tricount; 
+            $id= (int)$_GET["param1"];           
             $tricount = Tricount::get_tricount_by_id($id);
             $title=$tricount->title;
             $description=$tricount->description;
@@ -102,6 +100,8 @@ class ControllerTricount extends Controller {
             //var_dump($other_users);  
             if(isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["subscriber"]) ) {
                 if($user == $tricount -> creator) {
+                        $title = $_POST["title"];
+                        $description=$_POST["description"];
                         $errors_title = Tricount::validate_title($_POST["title"]);//could have the same name with others
                         $errors_description= Tricount::validate_description($_POST["description"]);
                         $errors=(array_merge($errors_description,$errors_title));

@@ -18,12 +18,12 @@
                 <button type="button" class="btn btn-outline-danger">Back</button>
                 </a>
                 <div class="h2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Edit </div>
-                <div class="h2"> </div>
+                <div ><button type='submit' class="btn btn-primary" form ="form1"> Save</button></div>
             </div>
         </div>
 
         <div class="container-sm">
-            <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data'>
+            <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form1">
                <h2>Settings</h2>
                <div class="mb-3 mt-3">
                     <label for='title'> Title : </label>
@@ -76,7 +76,7 @@
                 </div>
 
                 <br>
-                <input type='submit' class="btn btn-primary" value='Save'>
+                
             </form>
 
             <br>

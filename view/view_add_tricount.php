@@ -18,12 +18,13 @@
                 <button type="button" class="btn btn-outline-danger">Cancel</button>
                 </a>
                 <div class="h2">Tricount  &#32 <i class="bi bi-caret-right-fill"></i> &#32 Add </div>
-                <div class="h2"> </div>
+
+                <div> <button type="submit" class="btn btn-primary"  form="form1">Save</button> </div>
             </div>
         </div>
 
         <div class="container-sm">
-            <form method='post' action='tricount/add_tricount' enctype='multipart/form-data'>
+            <form method='post' action='tricount/add_tricount' enctype='multipart/form-data' id="form1">
                 <div class="mb-3 mt-3">
                     <label for='title'> Title : </label>
                     <input type="text" class="form-control" name='title' id='title' value = "<?=$title;?>">
@@ -44,7 +45,7 @@
                     <textarea class="form-control" name='description' id='title' rows='3'><?=$description;?></textarea> <br>
                  </div>
 
-                 <?php if (count($errors_title) != 0): ?>
+                 <?php if (count($errors_description) != 0): ?>
                     <div class='errors'>
                         <ul>
                             <?php foreach ($errors_description as $error_description): ?>
@@ -52,9 +53,7 @@
                             <?php endforeach; ?>
                         </ul>
                     </div>
-                <?php endif; ?>
-
-                <button type="submit" class="btn btn-primary">Save</button>
+                <?php endif; ?>               
             </form>
         </div>
         <br>

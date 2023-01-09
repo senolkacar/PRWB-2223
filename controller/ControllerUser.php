@@ -35,8 +35,8 @@ class ControllerUser extends Controller {
 
             $errors_mail = $user->validate_email_for_edit($_POST["mail"]);
 
-            User::validate_email($_POST["mail"]);
-            $user_check_mail = User::get_user_by_mail($_POST["mail"]);
+            //User::validate_email($_POST["mail"]);
+            //$user_check_mail = User::get_user_by_mail($_POST["mail"]);
             $errors_name = User::validate_full_name($_POST["full_name"]);
             $user_check_name = User::get_user_by_name($_POST["full_name"]);
             if($user_check_name != false && $user_check_name->id != $user -> id){
@@ -44,7 +44,7 @@ class ControllerUser extends Controller {
             }
             if(isset($_POST["iban"])&&strlen($_POST["iban"])>0){
                 $iban = $_POST["iban"];
-                $errors = array_merge($errors,User::validate_iban($_POST["iban"]));//not complete
+                $errors_iban = User::validate_iban($_POST["iban"]);          
             }
 
             $errors = (array_merge($errors_mail,$errors_name,$errors_iban));
