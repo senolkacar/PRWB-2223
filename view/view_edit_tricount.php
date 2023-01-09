@@ -9,6 +9,14 @@
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+        <style>
+            .btn {
+            background-color: none;
+            border: none;
+        
+            }
+
+        </style>
     </head>
     <body>
 
@@ -67,7 +75,8 @@
                                 (creator)                                                      
                                 <?php elseif(!($subscription->has_operation()) && !($subscription->is_initiator())): ?>
                                     <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>
-                                    <input type='submit' value='delete'>
+                                    <button type='submit'  class="btn"><i class="bi bi-trash"></i> </button>                                   
+
                             <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
