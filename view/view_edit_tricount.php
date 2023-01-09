@@ -55,29 +55,39 @@
                         </ul>
                     </div>
                 <?php endif; ?>
+            </form>
 
 
-                
+            <form method='post' action='tricount/delete_subsription' enctype='multipart/form-data' id ="form2">
                 <h2>Subscriptions</h2>                    
                 <ul class="list-group" >
                         <?php foreach ($subscriptions as $subscription): ?>
-                            <li class="list-group-item"><?= $subscription->full_name ?></li>
+                            <li class="list-group-item"><?= $subscription->full_name ?>
+                            <?php if($subscription->full_name == $tricount->creator->full_name): ?>
+                                (creator)                                                      
+                                <?php elseif(count($depenses)==0): ?>
+                                    <input type='submit' value='delete'>
+                            <?php endif; ?>
+                            </li>
                         <?php endforeach; ?>
-                </ul>                    
+                </ul> 
+            </form>                   
                 
                 <br>
-                <div class='add-subscriber'>
-                    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name = "subscriber" id="subscriber" value="add subscriber">
-                    <option selected>--Add a new subscriber--</option>
-                    <?php foreach ($other_users as $other_user): ?>  
-                    <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option> 
-                    <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <br>
-                
-            </form>
+            <?php if(count($other_users)!=0): ?>
+                <form method='post' action='tricount/add_subsription' enctype='multipart/form-data' id ="form3">
+                    <div class='add-subscriber'>
+                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name = "subscriber" id="subscriber" value="add subscriber">
+                        <option selected>--Add a new subscriber--</option>
+                        <?php foreach ($other_users as $other_user): ?>  
+                        <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option> 
+                        <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <input type='submit' value='add'>
+                    
+                </form>
+            <?php endif; ?>
 
             <br>
             <div class="container-sm">

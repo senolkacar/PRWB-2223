@@ -87,6 +87,7 @@ class ControllerTricount extends Controller {
         $description="";
         $errors_title=[];
         $errors_description=[];
+        $depenses=[];
         $errors=[];
         $error="";
         $success="";
@@ -137,11 +138,20 @@ class ControllerTricount extends Controller {
     "errors_description"=>$errors_description,
     "errors_title"=>$errors_title,
     "subscriptions"=>$subscriptions,
+    "depenses"=>$depenses,
     "other_users"=>$other_users,
     "success"=>$success,
     "error"=>$error,
     "errors"=>$errors]);       
 
+}
+
+public function delete_subsription() :void {
+
+}
+
+public function add_subsription() :void {
+    
 }
     
 public function show_balance():void{
