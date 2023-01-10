@@ -23,7 +23,7 @@
         <div class="container-sm">      
             <ul class="list-group align-items-center">
                     <?php if($nb_participants == 0): ?>
-                        <span class="m-3 border border-secondary w-100 rounded">
+                        <span class="m-3 border w-100 rounded">
                         <div class="text-center">
                         <div class="h3 p-3 border-bottom border-secondary" style="background-color: #F7F7F7">You are alone!</div>
                         <div class="text p-3">Click below to add your friends!</div>
@@ -40,34 +40,48 @@
                         </span>
             </ul>
                         <?php else: ?>
-                        <a class="btn btn-success w-100" href="tricount/show_balance/<?=$tricount->id; ?>">&#8633;View Balance</a>   
+                        <a class="btn btn-success w-100 mb-3" href="tricount/show_balance/<?=$tricount->id; ?>">&#8633;View Balance</a>   
                         <?php foreach ($depenses as $depense):  ?>
-                    <ul class="list-group w-100">
+                        <ul class="list-group w-100">
                         <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                            <a href='operation/show_operation/<?=$depense["id"]; ?>' style="text-decoration:none ; color:inherit">
-                            
-                            <div class="fw-bold">
-                        <?php 
-                            echo $depense["title"]." ".round($depense["amount"],2) ?> </a>
-                            </div>
+                        <div class="ms-2 me-auto">
+                            <div class="text">     
+                            <a href='operation/show_operation/<?=$depense["id"]; ?>' class="stretched-link" style='text-decoration:none ; color:inherit'>
+                            <p class="fw-bold"><?=$depense["title"]?></p>
+                            <?php echo "Paid by ".User::get_user_by_id($depense["initiator"])->full_name?>
+                            </div>  
+                        </div>
                         <br>
-                        <?php echo "Paid by ".User::get_user_by_id($depense["initiator"])->full_name." ".$depense["operation_date"] ?>
+                        <div class="text-end">
+                            <p class="fw-bold"><?=round($depense["amount"],2)?>&euro;</p>
+                            <?=$depense["operation_date"]?></a>
+                        </div>
                         </li>
+                    </ul>
                         <?php endforeach; ?>
                     <?php endif; ?>
                     <br>
-                    <?php echo "MY TOTAL ".$mytotal." &euro;"?>
-                    <a href="operation/add_operation/<?=$tricount->id?>"><button type="button" class="btn btn-primary btn-block">+</button></a>
-                    <?php echo "TOTAL EXPENSES ".$total."&euro;"?>
-
                 </ul>       
-       
-        <a href="user/settings">Settings</a>
-        </div>        
-
-
-        
+        </div>
+        <div class="container p-1 text-dark" style="background-color:#E3F2FD">
+        <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="position relative">
+            <div class="position-absolute top-0 start-50 translate-middle">
+        <a class="btn btn-primary btn-lg rounded-circle" href="operation/add_operation/<?=$tricount->id?>">+</a>
+            </div>
+        </div>
+                    <div class="d-flex justify-content-beetween w-100">
+                        <div class="me-auto">
+                            <div class="text">MY TOTAL</div>
+                            <div class="fw-bold"><?=$mytotal." &euro;"?></div>
+                        </div>
+                        <div class="text-end">
+                            <div class="text">TOTAL EXPENSES</div>
+                            <div class="fw-bold"><?=$total."&euro;"?></div>
+                        </div>
+                    </div>
+        </div>
+        </div>         
     </body>
 </html>
 
