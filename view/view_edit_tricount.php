@@ -70,34 +70,42 @@
                 <h2>Subscriptions</h2>                    
                 <ul class="list-group" >
                         <?php foreach ($subscriptions as $subscription): ?>
-                            <li class="list-group-item"><?= $subscription->full_name ?>
+                            <li class="list-group-item d-flex justify-content-between align-items-center"><?= $subscription->full_name ?>
                             <?php if($subscription->full_name == $tricount->creator->full_name): ?>
                                 (creator)                                                      
                                 <?php elseif(!($subscription->has_operation()) && !($subscription->is_initiator())): ?>
                                     <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>
+                                    <span class="badge bg-light">
                                     <button type='submit'  class="btn"><i class="bi bi-trash"></i> </button>                                   
-
+                                    </span>
                             <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
                 </ul> 
             </form>                   
                 
-                <br>
+            <br>
+
+            <div class="container-sm">
             <?php if(count($other_users)!=0): ?>
-                <form method='post' action='tricount/add_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
-                    <div class='add-subscriber'>
-                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name = "subscriber" id="subscriber" value="add subscriber">
-                        <option selected>--Add a new subscriber--</option>
-                        <?php foreach ($other_users as $other_user): ?>  
-                        <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option> 
-                        <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <input type='submit' value='add'>
-                    
+                <form method='post' class="form-inline" action='tricount/add_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
+                    <div class="input-group">              
+                        <select class="custom-select"  style="width: 85%" name = "subscriber" id="subscriber" value="add subscriber" required>
+                        <option value="">--Add a new subscriber--</option>
+                         <?php foreach ($other_users as $other_user): ?>  
+                         <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option> 
+                         <?php endforeach; ?>
+                         </select>  
+                                                      
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" style="width: auto" type='submit'>add</button>
+                        </div>                          
+                       
+                    </div>               
                 </form>
+
             <?php endif; ?>
+            </div>
 
             <br>
             <div class="container-sm">

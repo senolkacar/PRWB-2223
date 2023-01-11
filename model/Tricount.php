@@ -169,6 +169,13 @@ Class Tricount extends Model{
         return Repartition::get_balance_by_tricount($this);
     }
     
+    public function delete_repartition_templates(): void {
+        self::execute('DELETE FROM repartition_template_items WHERE repartition_template IN  (SELECT id FROM repartition_templates WHERE tricount = :tricount)'
+        , ['tricount' => $this->id]);
+
+        self::execute('DELETE FROM repartition_templates WHERE tricount = :tricount' , ['tricount' => $this->id]);       
+
+    }
 
     public function delete(User $user):Tricount|false{
         if($this->creator == $user){
@@ -178,8 +185,9 @@ Class Tricount extends Model{
                 if(Operation::delete($this))
                     Subscription::delete($this);
                     if(Subscription::delete($this)){
-                     self::execute('DELETE FROM tricounts WHERE id=:id', ['id' => $this->id]);
-                    return $this;
+                        $this ->delete_repartition_templates();
+                        self::execute('DELETE FROM tricounts WHERE id=:id', ['id' => $this->id]);
+                        return $this;
                     }
                 
         }  else 
