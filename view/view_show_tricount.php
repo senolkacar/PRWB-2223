@@ -15,7 +15,7 @@
         <div class="container p-3 mb-3 text-dark" style="background-color:#E3F2FD">
             <div class="d-flex justify-content-between">
             <a class="navbar-brand" href="tricount/index"><button type="button" class="btn btn-outline-danger">Back</button></a>
-            <div class="h2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Edit </div>
+            <div class="text-secondary mt-2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Expenses </div>
             <a class="navbar-brand" href="tricount/edit_tricount/<?=$tricount->id; ?>"><button type="button" class="btn btn-primary">Edit</button></a>
             </div>
         </div>
