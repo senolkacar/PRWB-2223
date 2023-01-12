@@ -63,14 +63,14 @@
                     <br>
                 </ul>       
         </div>
+        <footer class="footer mt-auto fixed-bottom">
         <div class="container p-1 text-dark" style="background-color:#E3F2FD">
-        <div class="navbar navbar-default navbar-fixed-bottom">
         <div class="position relative">
             <div class="position-absolute top-0 start-50 translate-middle">
         <a class="btn btn-primary btn-lg rounded-circle" href="operation/add_operation/<?=$tricount->id?>">+</a>
             </div>
         </div>
-                    <div class="d-flex justify-content-beetween w-100">
+                    <div class="d-flex p-1 justify-content-beetween w-100">
                         <div class="me-auto">
                             <div class="text">MY TOTAL</div>
                             <div class="fw-bold"><?=$mytotal." &euro;"?></div>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
         </div>
-        </div>         
+        </footer>         
     </body>
 </html>
 
