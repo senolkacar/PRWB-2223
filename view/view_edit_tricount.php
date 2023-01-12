@@ -25,7 +25,7 @@
                 <a class="navbar-brand" href="tricount/index">
                 <button type="button" class="btn btn-outline-danger">Back</button>
                 </a>
-                <div class="h2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Edit </div>
+                <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Edit </div>
                 <div ><button type='submit' class="btn btn-primary" form ="form1"> Save</button></div>
             </div>
         </div>
