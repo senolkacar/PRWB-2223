@@ -12,16 +12,18 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     </head>
     <body>
-        <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
-            <div class="d-flex justify-content-between mb-3">   
-                <a class="navbar-brand" href="tricount/index">
-                <button type="button" class="btn btn-outline-danger">Cancel</button>
-                </a>
-                <div class="h2">Tricount  &#32 <i class="bi bi-caret-right-fill"></i> &#32 Add </div>
+        <header>
+            <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
+                <div class="d-flex justify-content-between mb-3">   
+                    <a class="navbar-brand" href="tricount/index">
+                    <button type="button" class="btn btn-outline-danger">Cancel</button>
+                    </a>
+                    <div class="text-secondary fw-bold mt-2">Tricount  &#32 <i class="bi bi-caret-right-fill"></i> &#32 Add </div>
 
-                <div> <button type="submit" class="btn btn-primary"  form="form1">Save</button> </div>
+                    <div> <button type="submit" class="btn btn-primary"  form="form1">Save</button> </div>
+                </div>
             </div>
-        </div>
+        </header>
 
         <div class="container-sm">
             <form method='post' action='tricount/add_tricount' enctype='multipart/form-data' id="form1">

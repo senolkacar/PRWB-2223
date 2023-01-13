@@ -7,28 +7,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-        <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+        <link href="css/edit_tricount_style.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-        <style>
-            .btn {
-            background-color: none;
-            border: none;
-        
-            }
-
-        </style>
+   
     </head>
     <body>
 
-        <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
-            <div class="d-flex justify-content-between mb-3">   
-                <a class="navbar-brand" href="tricount/index">
-                <button type="button" class="btn btn-outline-danger">Back</button>
-                </a>
-                <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Edit </div>
-                <div ><button type='submit' class="btn btn-primary" form ="form1"> Save</button></div>
+        <header>
+            <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
+                <div class="d-flex justify-content-between mb-3">   
+                    <a class="navbar-brand" href="tricount/index">
+                    <button type="button" class="btn btn-outline-danger">Back</button>
+                    </a>
+                    <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Edit </div>
+                    <div ><button type='submit' class="btn btn-primary" form ="form1"> Save</button></div>
+                </div>
             </div>
-        </div>
+        </header>
 
         <div class="container-sm">
             <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form1">
@@ -75,9 +70,9 @@
                                 (creator)                                                      
                                 <?php elseif(!($subscription->has_operation()) && !($subscription->is_initiator())): ?>
                                     <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>
-                                    <span class="badge bg-light">
-                                    <button type='submit'  class="btn"><i class="bi bi-trash"></i> </button>                                   
-                                    </span>
+                                    
+                                    <button type='submit'  class="btn_delete"><span class="badge bg-white text-dark"><i class="bi bi-trash"></i> </span> </button>                                   
+                                   
                             <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
@@ -88,37 +83,40 @@
 
             <div class="container-sm">
             <?php if(count($other_users)!=0): ?>
-                <form method='post' class="form-inline" action='tricount/add_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
+                <form method='post' action='tricount/add_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
                     <div class="input-group">              
-                        <select class="custom-select"  style="width: 85%" name = "subscriber" id="subscriber" value="add subscriber" required>
-                        <option value="">--Add a new subscriber--</option>
-                         <?php foreach ($other_users as $other_user): ?>  
-                         <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option> 
-                         <?php endforeach; ?>
-                         </select>  
-                                                      
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" style="width: auto" type='submit'>add</button>
-                        </div>                          
-                       
+                        <select class="form-select" aria-label="Example select with button addon"  name = "subscriber" id="subscriber" value="add subscriber" required>
+                            <option value="">--Add a new subscriber--</option>
+                            <?php foreach ($other_users as $other_user): ?>  
+                            <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option> 
+                            <?php endforeach; ?>
+                         </select>                                                                               
+                        <button class="btn btn-primary" style="width: auto" type='submit'>add</button>                                                                  
                     </div>               
                 </form>
-
             <?php endif; ?>
             </div>
 
             <br>
-            <div class="container-sm">
+            <div class="container-sm">            
+            <div class="text-danger"><?= $error; ?> </div>      
             
-            <div class="text-danger"><?= $error; ?> </div>                      
+            <br>
+            
 
-           
-
-            <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
-            <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-danger">Delete this tricount</button>
-                </div>
-             </form>
         </div>
+
+        <footer class="footer mt-auto fixed-bottom">   
+            <div class="container-sm">                
+                <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
+                <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">Delete this tricount</button>
+                    </div>
+                </form>
+            </div>
+        <footer class="footer mt-auto fixed-bottom">
+
+
+       
     </body>
 </html>

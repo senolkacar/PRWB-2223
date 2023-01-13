@@ -44,18 +44,18 @@
                         <?php foreach ($depenses as $depense):  ?>
                         <ul class="list-group w-100">
                         <li class="list-group-item d-flex justify-content-between align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div class="text">     
-                            <a href='operation/show_operation/<?=$depense["id"]; ?>' class="stretched-link" style='text-decoration:none ; color:inherit'>
-                            <p class="fw-bold"><?=$depense["title"]?></p>
-                            <?php echo "Paid by ".User::get_user_by_id($depense["initiator"])->full_name?>
-                            </div>  
-                        </div>
-                        <br>
-                        <div class="text-end">
-                            <p class="fw-bold"><?=round($depense["amount"],2)?>&euro;</p>
-                            <?=$depense["operation_date"]?></a>
-                        </div>
+                            <div class="ms-2 me-auto">
+                                <div class="text">     
+                                <a href='operation/show_operation/<?=$depense["id"]; ?>' class="stretched-link" style='text-decoration:none ; color:inherit'>
+                                <p class="fw-bold"><?=$depense["title"]?></p>
+                                <?php echo "Paid by ".User::get_user_by_id($depense["initiator"])->full_name?>
+                                </div>  
+                            </div>
+                            <br>
+                            <div class="text-end">
+                                <p class="fw-bold"><?=round($depense["amount"],2)?>&euro;</p>
+                                <?=$depense["operation_date"]?></a>
+                            </div>
                         </li>
                     </ul>
                         <?php endforeach; ?>

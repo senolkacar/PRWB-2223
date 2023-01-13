@@ -16,7 +16,7 @@
         <div class="d-flex justify-content-between mb-3">  
             <a class="navbar-brand" href="user/settings">
             <button type="button" class="btn btn-outline-danger"> Back</button>  </a>
-            <div class="h2" >Edit Profile</div>
+            <div class="text-secondary fw-bold mt-2" >Edit Profile</div>
             <div class="h2"> </div>
         </div>
     </div>

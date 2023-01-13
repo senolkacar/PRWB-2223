@@ -12,13 +12,15 @@
       
     </head>
     <body>
-        <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
-            <div class="d-flex justify-content-between mb-3"> 
-                <a href="tricount/show_tricount/<?=$operation->tricount->id; ?>"><button type="button" class="btn btn-outline-danger">Back</button></a>
-                <div class="text-secondary fw-bold mt-2"><?=$operation->tricount->title?><i class="bi bi-caret-right-fill"></i> <?=$operation->title; ?> </div>         
-                <a href="operation/edit_operation/<?=$operation->id; ?>"><button type="button" class="btn btn-primary">Edit</button></a>
-            </div> 
-        </div>
+        <header>
+            <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
+                <div class="d-flex justify-content-between mb-3"> 
+                    <a href="tricount/show_tricount/<?=$operation->tricount->id; ?>"><button type="button" class="btn btn-outline-danger">Back</button></a>
+                    <div class="text-secondary fw-bold mt-2"><?=$operation->tricount->title?><i class="bi bi-caret-right-fill"></i> <?=$operation->title; ?> </div>         
+                    <a href="operation/edit_operation/<?=$operation->id; ?>"><button type="button" class="btn btn-primary">Edit</button></a>
+                </div> 
+            </div>
+        <header>
 
         <div class="container-sm">
             <h5 class="text-center"><?php echo round($operation->amount, 2)." €"; ?></h5>
@@ -51,22 +53,25 @@
             </ul> 
 
              <br><br>   
+             </div>   
           
-            <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
-                <div class="d-flex justify-content-between mb-3"> 
-                <?php if($current_page == 0 && $pages==1): ?> 
-                <?php elseif($pages>1 && $current_page == 0 ): ?> 
-                    <a href="operation/show_operation/<?=$operations[$current_page+1]->id;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
-                <?php elseif( $pages>1 && $current_page == ($pages-1)): ?>
-                    <a href="operation/show_operation/<?=$operations[$current_page-1]->id;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
-                <?php else: ?>
-                    <a href="operation/show_operation/<?=$operations[$current_page-1]->id;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
-                    <a href="operation/show_operation/<?=$operations[$current_page+1]->id;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
-                <?php endif; ?>
+             <footer class="footer mt-auto fixed-bottom">   
+                <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
+                    <div class="d-flex justify-content-between mb-3"> 
+                    <?php if($current_page == 0 && $pages==1): ?> 
+                    <?php elseif($pages>1 && $current_page == 0 ): ?> 
+                        <a href="operation/show_operation/<?=$operations[$current_page+1]->id;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
+                    <?php elseif( $pages>1 && $current_page == ($pages-1)): ?>
+                        <a href="operation/show_operation/<?=$operations[$current_page-1]->id;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
+                    <?php else: ?>
+                        <a href="operation/show_operation/<?=$operations[$current_page-1]->id;?>"><button type="button" class="btn btn-primary btn-block">Previous</button></a> 
+                        <a href="operation/show_operation/<?=$operations[$current_page+1]->id;?>"><button type="button" class="btn btn-primary btn-block">Next</button></a> 
+                    <?php endif; ?>
+                    </div>
                 </div>
-            </div>
+            </footer>
        
-        </div>        
+            
 
 
         
