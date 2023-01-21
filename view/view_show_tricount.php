@@ -40,7 +40,7 @@
                         </span>
             </ul>
                         <?php else: ?>
-                        <a class="btn btn-success w-100 mb-3" href="tricount/show_balance/<?=$tricount->id; ?>">&#8633;View Balance</a>   
+                        <a class="btn btn-success w-100 mb-3 p-2" href="tricount/show_balance/<?=$tricount->id; ?>"><i class="bi bi-arrow-left-right"></i> View Balance</a>   
                         <?php foreach ($depenses as $depense):  ?>
                         <ul class="list-group w-100">
                         <li class="list-group-item d-flex justify-content-between align-items-start">
