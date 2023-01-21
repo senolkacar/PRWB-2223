@@ -74,10 +74,9 @@ class ControllerTricount extends Controller {
             $total = Operation::get_total($tricount);
             $mytotal = Operation::get_my_total($tricount,$user);
             (new View("show_tricount"))->show(["tricount"=>$tricount,"nb_participants"=>$nb_participants,"depenses"=>$depenses,"total"=>$total,"mytotal"=>$mytotal]);
-        }
-        else {
-            $this->redirect("tricount");
-        }
+        }else{
+                $this->redirect("tricount");
+            }
         }
 
 
@@ -202,8 +201,9 @@ public function show_balance():void{
             $this->redirect("tricount");
         }
         $balance = $tricount->get_balance_by_tricount();
+        $user_name = $user->full_name;
         
-        (new View("show_balance"))->show(["tricount"=>$tricount,"balance"=>$balance]);
+        (new View("show_balance"))->show(["tricount"=>$tricount,"balance"=>$balance,"user"=>$user_name,"id"=>$id]);
     }else{
         $this->redirect("tricount");
     }
