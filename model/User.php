@@ -155,7 +155,7 @@ Class User extends Model{
     public static function validate_iban(string $iban): array{
         $errors=[];
         
-        if(strlen($iban)>0&&(!preg_match("/^[A-Z]{2}\d{2} [\d ]{4} [\d ]{4} [\d ]{4}$/",strtoupper($iban))))
+        if(strlen($iban)>0&&(!preg_match("/^([a-zA-Z]{2}[0-9]{2}(?:[\s-]?[0-9]{4}){3})$/",strtoupper($iban))))
         {
             $errors[] = "Invalid IBAN";
         }
