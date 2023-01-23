@@ -12,35 +12,63 @@
 </head>
 
 <body>
+
+    <header>
+        <div  class="container p-3 mb-3 text-dark" style="background-color: #0D6EFD;">
+        <i class="fa-solid fa-cat"></i>            
+        <h3 class="text-white">Tricount</h1>               
+        </div>
+    </header>
+
+
     <div class="login-form">
-    <form action="main/login" method="post">
-        <h2 class="text-center">Sign In</h2>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        <span class="fa fa-user"></span>
-                    </span>                    
+        <form action="main/login" method="post">
+            <h2 class="text-center">Sign In</h2>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <span class="fa fa-user"></span>
+                        </span>                    
+                    </div>
+                    <input type="email" class="form-control" name="mail" id="mail" placeholder="Username" required="required" value="<?=$mail; ?>">
+
                 </div>
-                <input type="email" class="form-control" name="mail" id="mail" placeholder="Username" required="required">
             </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        <i class="fa fa-lock"></i>
-                    </span>                    
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa fa-lock"></i>
+                        </span>                    
+                    </div>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" required="required" value="<?=$password; ?>">
+
+                    
+
                 </div>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Password" required="required">
+            </div>        
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Log in</button>
             </div>
-        </div>        
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block">Log in</button>
-        </div>
-        <p class="text-center">
-            <a href="main/signup" class="float-center">New here ? Click here to join the party <i class="fa fa-rocket"></i> !</a>
-        </p>
-    </form>
+
+            <div class ="container-sm">
+            <?php if (count($errors) != 0): ?>
+                        <div class='errors'>
+                            <ul>
+                                <?php foreach ($errors as $error): ?>
+                                    <li class="text-danger"><?= $error;?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+            <?php endif; ?>
+            </div>
+
+            <p class="text-center">
+                <a href="main/signup" class="float-center">New here ? Click here to join the party <i class="fa fa-rocket"></i> !</a>
+            </p>
+        </form>
+  
+                        
 </body>
 </html>

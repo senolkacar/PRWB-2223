@@ -9,7 +9,10 @@ class ControllerMain extends Controller{
         if($this->user_logged()){
             $this->redirect("tricount","index");
         }else{
-            (new View("login"))->show();
+            $mail ='';
+            $password = '';
+            $errors = [];
+            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors));
         }
 
     }
