@@ -105,8 +105,8 @@
             
 
         </div>
-
-        <footer class="footer mt-auto fixed-bottom">   
+        <br><br>                    
+        <footer class="footer mt-auto">   
             <div class="container-sm">                
                 <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
                 <div class="d-grid gap-2">
@@ -114,7 +114,7 @@
                     </div>
                 </form>
             </div>
-        <footer class="footer mt-auto fixed-bottom">
+        </footer >
 
 
        

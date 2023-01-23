@@ -148,16 +148,16 @@ class ControllerTricount extends Controller {
             var_dump($tricount);
 
             if(isset($_POST["delete_member"]) ) {
-                if($user == $tricount -> creator) {                       
+               // if($user == $tricount -> creator) {                       
                     $subscriber = User::get_user_by_id($_POST["delete_member"]);
                     if($subscriber ) {
                         Subscription::delete_subscription($tricount, $subscriber);//delete
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
                     }
 
-                }else{
-                        throw new Exception("only creator could edit this tricount.");
-                }
+                //}else{
+                    //    throw new Exception("only creator could edit this tricount.");
+                //}
             } 
         }
 
@@ -174,16 +174,16 @@ class ControllerTricount extends Controller {
             var_dump($tricount);
 
             if(isset($_POST["subscriber"]) ) {
-                if($user == $tricount -> creator) {                       
+                //if($user == $tricount -> creator) {                       
                     $subscriber = User::get_user_by_name($_POST["subscriber"]);//name unique for users
                     if($subscriber ) {
                         Subscription::persist($subscriber, $tricount);
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
                     }
 
-                }else{
-                        throw new Exception("only creator could edit this tricount.");
-                }
+               // }else{
+                       // throw new Exception("only creator could edit this tricount.");
+                //}
             }  
         }
     
