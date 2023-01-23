@@ -201,9 +201,16 @@ public function show_balance():void{
             $this->redirect("tricount");
         }
         $balance = $tricount->get_balance_by_tricount();
+        $max = 0;
+        foreach($balance as $amount){
+            if(abs($amount)>$max){
+                $max = abs($amount);
+            }
+        }
         $user_name = $user->full_name;
+        $max = round($max,2);
         
-        (new View("show_balance"))->show(["tricount"=>$tricount,"balance"=>$balance,"user"=>$user_name,"id"=>$id]);
+        (new View("show_balance"))->show(["tricount"=>$tricount,"balance"=>$balance,"user"=>$user_name,"id"=>$id,"max"=>$max]);
     }else{
         $this->redirect("tricount");
     }
