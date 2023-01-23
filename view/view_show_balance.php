@@ -26,14 +26,18 @@
                 <?php if($amount!=0):?>
                 <?php if($amount<0):?>
                 <li class="d-flex justify-content-center align-items-center">
-                <div class="progress-bar bg-danger rounded-start" role="progressbar" style="width: 100%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"><text class="text-end me-2 <?php echo ($user == $full_name) ? 'fw-bold' : '';?>"><?=$amount?><i class="bi bi-currency-euro"></i></text></div>
-                <div class="text-start p-1 w-100 <?php echo ($user == $full_name) ? 'fw-bold' : '';?>"><?=$full_name?><?php echo ($user == $full_name) ? ' (me) ' : '';?>
+                <div class="progress w-50" style="height:28px">
+                    <div class="progress-bar bg-danger rounded-start" role="progressbar" style="width: 100%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><text class="text-end me-2 <?php echo ($user == $full_name) ? 'fw-bold' : '';?>"><?=$amount?><i class="bi bi-currency-euro"></i></text></div>
+                </div>
+                <div class="text-start p-1 w-50 <?php echo ($user == $full_name) ? 'fw-bold' : '';?>"><?=$full_name?><?php echo ($user == $full_name) ? ' (me) ' : '';?>
                 </li>
                 <?php endif;?>
                 <?php if($amount>0):?>
                 <li class="d-flex justify-content-center align-items-center">
-                <div class="text-end p-1 w-100 <?php echo ($user == $full_name) ? 'fw-bold' : '';?>"><?=$full_name?><?php echo ($user == $full_name) ? ' (me) ' : '';?></div>
-                <div class="progress-bar bg-success rounded-end" role="progressbar" style="width: 100%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"><text class="text-start ms-2 <?php echo ($user == $full_name) ? 'fw-bold' : '';?>"><?=$amount?><i class="bi bi-currency-euro"></i></text></div>
+                <div class="text-end p-1 w-50 <?php echo ($user == $full_name) ? 'fw-bold' : '';?>"><?=$full_name?><?php echo ($user == $full_name) ? ' (me) ' : '';?></div>
+                <div class="progress w-50" style="height:28px">
+                    <div class="progress-bar bg-success rounded-end" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"><text class="text-start ms-2 <?php echo ($user == $full_name) ? 'fw-bold' : '';?>"><?=$amount?><i class="bi bi-currency-euro"></i></text></div>
+                </div>
                 </li>
                 <?php endif;?>
                 <?php endif;?>    

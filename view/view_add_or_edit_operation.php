@@ -14,7 +14,7 @@
         <button type="button" class="btn btn-primary">Cancel</button>
         </a>
     <?php }else{?>
-        <a class="navbar-brand" href="operation/show_operation/<?=$tricount->id;?>">
+        <a class="navbar-brand" href="operation/show_operation/<?=$operation->id;?>">
         <button type="button" class="btn btn-primary">Cancel</button>
     </a>
     <?php }; ?> 
