@@ -5,32 +5,36 @@
         <title><?=$page_title?></title>
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     </head>
-    <body>
-    <nav class="navbar navbar-light bg-light">
-    <?php if($operation_name=="add"){?>
-        <a class="navbar-brand" href="tricount/show_tricount/<?=$tricount->id;?>">
-        <button type="button" class="btn btn-primary">Cancel</button>
+    <header>
+        <div class="container p-3 mb-3 text-dark" style="background-color:#E3F2FD">
+            <div class="d-flex justify-content-between">
+            <?php if($operation_name=="add"){?>
+        <a class="navbar-brand" href="tricount/show_tricount/<?=$tricount->id;?>"><button type="button" class="btn btn-outline-danger">Back</button></a>
+        <?php }else{?>
+        <a class="navbar-brand" href="operation/show_operation/<?=$operation->id;?>"><button type="button" class="btn btn-outline-danger">Back</button></a>
         </a>
-    <?php }else{?>
-        <a class="navbar-brand" href="operation/show_operation/<?=$operation->id;?>">
-        <button type="button" class="btn btn-primary">Cancel</button>
-    </a>
-    <?php }; ?> 
-    
-    <div class="title"><?=$tricount->title;?>  &#32 &#9654; &#32 <?=$header_title;?> </div>
-    
-   
-    </nav>
-        <div class="main">
+        <?php }; ?> 
+            <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Expenses </div>
+            <button type="submit" class="btn btn-primary" form="form1">Save</button>
+            </div>
+        </div>
+    </header>
+    <body>
+        <div class="container-sm">
             <?php if($operation_name=="add"){
                 $action = "operation/add_operation/$tricount->id";
             }else{
                 $action = "operation/edit_operation/$operation->id";}
             ?>
-            <form method='post' action=<?=$action?> enctype='multipart/form-data'>
-                Title  <br>
-                <input type="text" name='title' id='title' rows='1' placeholder="Title" value=<?=$_SESSION["title"]?>> <br>
+            <div class="form-group">
+            <form method='post' action=<?=$action?> enctype='multipart/form-data' id="form1">
+            <div class="input-group mb-3">    
+                <input type="text" class="form-control" name='title' id='title' rows='1' placeholder="Title" value=<?=$_SESSION["title"]?>>
+            </div>
                 <?php if (count($errors_title) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -40,11 +44,10 @@
                     </ul>
                 </div>
                 <?php endif; ?>
-
-
-
-                Amount  <br>
-                <input type="number" step="0.01" name='amount' id='amount' value="<?=$_SESSION["amount"]?>" placeholder="Amount"> <br>
+                <div class="input-group mb-3">
+                <input type="number" class="form-control" step="0.01" name='amount' id='amount' value="<?=$_SESSION["amount"]?>" placeholder="Amount"> <br>
+                <span class="input-group-text">EUR</span>            
+                </div>
                 <?php if (count($errors_amount) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -54,9 +57,8 @@
                     </ul>
                 </div>
                 <?php endif; ?>
-
-                <p>Date </p>
-                <input type="date" id="date" name="date" required value="<?=$_SESSION["date"]?>">
+                <label for="date">Date</label>
+                <input type="date" class="form-control mt-2 mb-2" id="date" name="date" required value="<?=$_SESSION["date"]?>">
                 <?php if (count($errors_date) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -66,34 +68,35 @@
                     </ul>
                 </div>
                 <?php endif; ?>
-                <p>Paid by </p>
-
-                <div class='paid_by'>
-                            <select name = "payer" id="payer" value="">
+                <label for="paidby">Paid by:</label>
+                            <select class="form-control mt-2" id="payer" value="">
                             <?php foreach ($subscriptions as $subscription): ?>  
                             <option value="<?=$subscription->full_name; ?>"><?=$subscription->full_name; ?></option>  
                             <?php endforeach; ?>
                             </select>                           
-                
                 </div>
+    
 
                <br>
                 <p>For whom ?(select at least one)</p>
-                <div class='checkbox'>
-                    <?php foreach ($subscriptions as $subscription): ?>  
-                        <input type="checkbox" name="checkboxes[]" value="<?=$subscription->id?>"
+                    <?php foreach ($subscriptions as $subscription): ?>
+                        <div class='input-group input-group-lg'>  
+                        <div class="input-group-text mb-3">
+                        <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?=$subscription->id?>"
                         <?php if (in_array($subscription->id, $_SESSION['checkboxes'])) { echo 'checked'; } ?>
-                        ><?=$subscription->full_name;?>
-                        <label for="weight">Weight</label>
+                        >
+                        </div>
+                        <div class="input-group-text mb-3 w-50">
+                        <span class="text"><?=$subscription->full_name;?></span>
+                        </div>
                         <?php $weight = 0; ?>
                         <?php for($i=0; $i<count($_SESSION["weights"]); $i++): ?>
                             <?php if($_SESSION["ids"][$i]==$subscription->id): ?>
                                 <?php $weight = $_SESSION["weights"][$i]; ?>
                             <?php endif; ?>
                         <?php endfor; ?>
-                        <input type="number" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
+                        <input type="number" class="form-control mb-3" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
                         <input type="hidden" id="ids" name="ids[]" value="<?=$subscription->id?>">
-                         <br>
                     <?php endforeach; ?>
                     <?php if(count($errors_checkbox)!=0) : ?>
                             <div class='errors'>
@@ -114,21 +117,14 @@
                             </div>
                         <?php endif; ?>               
                 </div>
-
-
-                <button type="submit" class="btn btn-primary">Save</button>
             </form>
-            <?php if($operation_name=="edit"){?>
-                <a class="navbar-brand" href="operation/delete_operation/<?=$operation->id;?>">
-                <button type="button" class="btn btn-primary">Delete</button>
-                </a>
-            <?php }; ?>
-
-            
-
-
-
-
         </div>
+        <?php if($operation_name=="edit"){?>
+            <footer class="footer mt-auto w-100">   
+                <form class="link" href="operation/delete_operation/<?=$operation->id;?>" method="post">
+                <button type="button" class="btn btn-danger w-100">Delete</button>
+                </a>
+            </footer>
+            <?php }; ?>
     </body>
 </html>
