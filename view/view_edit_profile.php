@@ -75,7 +75,7 @@
             </form>
             <br>
             <?php if (count($errors) == 0 && strlen($success) != 0 ): ?>
-                <p><span class='success'><?= $success ?></span></p>
+                <p><span class='text-success'><?= $success ?></span></p>
             <?php endif; ?>
 
 
