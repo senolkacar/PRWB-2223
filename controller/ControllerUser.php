@@ -53,7 +53,7 @@ class ControllerUser extends Controller {
                 $user->full_name = $_POST["full_name"];
                 $user->iban = strtoupper($_POST["iban"]);
                 $user->persist_by_id();
-                $success = "Profile updated"; 
+                //$success = "Profile updated"; 
             }
         }
         if(count($_POST) > 0 && count($errors) == 0)
@@ -74,22 +74,45 @@ class ControllerUser extends Controller {
 
     public function edit_password():void{
         $user=$this->get_user_or_redirect();
+        $old_password ="";
+        $new_password ="";
+        $new_password_confirm ="";
         $errors = [];
         $success = "";
         if(isset($_POST["old_password"])&&isset($_POST["new_password"])&&isset($_POST["new_password_confirm"])){
-            if(!password_verify($_POST["old_password"],$user->hashed_password)){
-                $errors[] = "Wrong password";
+            $old_password = $_POST["old_password"];           
+            $new_password = $_POST["new_password"];            
+            $new_password_confirm = $_POST["new_password_confirm"];            
+
+            $errors_old_password = [];
+            $errors_new_password = User::validate_password($_POST["new_password"]);
+            $errors_password_confirm = User::validate_passwords($_POST["new_password"],$_POST["new_password_confirm"]);
+
+            if(!User::check_password ($_POST["old_password"],$user->hashed_password)){
+                $errors_old_password[] = "Wrong old password";
             }
-            if($_POST["new_password"]!=$_POST["new_password_confirm"]){
-                $errors[] = "Passwords don't match";
+            if($user->hashed_password == Tools::my_hash($new_password)){
+                $errors_new_password[] = "new password couldn't be the same as the old password";
             }
+
+            $errors = (array_merge($errors_old_password,$errors_new_password,$errors_password_confirm));
             if(count($errors)==0){
-                $user->hashed_password = password_hash($_POST["new_password"],PASSWORD_DEFAULT);
+                $user->hashed_password = Tools::my_hash($new_password);
                 $user->persist();
-                $success = "Password changed";
             }
         }
-        (new View("edit_password"))->show(["user"=>$user,"errors"=>$errors,"success"=>$success]);
+
+        if(count($_POST) > 0 && count($errors) == 0)
+            $this -> redirect("User", "edit_password", "ok");
+        if (isset($_GET['param1']) && $_GET['param1'] ==="ok")
+            $success = "Password changed";
+
+
+        (new View("edit_password"))->show(["user"=>$user,
+                                    "old_password"=>$old_password,
+                                    "new_password"=>$new_password,
+                                    "new_password_confirm"=>$new_password_confirm,
+                                    "errors"=>$errors,"success"=>$success]);
     }
 
 }

@@ -17,9 +17,9 @@
             <form method='post' action='user/edit_password' enctype='multipart/form-data'>
                 <p>Change your password</p>
 
-                <input type="password" class="form-control" name="old_password" id="old_password" placeholder="old password" required="required">
-                <input type="password" class="form-control" name="new_password" id="new_password" placeholder="New password" required="required">
-                <input type="password" class="form-control" name="new_password_confirm" id="new_password_confirm" placeholder="New password confirm" required="required">
+                <input type="password" class="form-control" name="old_password" id="old_password" placeholder="old password" required="required" value="<?=$old_password?>" >
+                <input type="password" class="form-control" name="new_password" id="new_password" placeholder="New password" required="required" value="<?=$new_password?>">
+                <input type="password" class="form-control" name="new_password_confirm" id="new_password_confirm" placeholder="New password confirm" required="required" value="<?=$new_password_confirm?>">
                 <input type='submit' value='Save Profile'>
             </form>
 

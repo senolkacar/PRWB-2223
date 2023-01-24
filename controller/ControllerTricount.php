@@ -15,8 +15,8 @@ class ControllerTricount extends Controller {
  
         $member=$this->get_user_or_redirect();
         //var_dump($member);//why user id = null ?
-        $member= User::get_user_by_mail($member->mail);
-        var_dump($member);
+        //$member= User::get_user_by_mail($member->mail);
+        //var_dump($member);
         $tricounts =[];
 
         if(isset($_GET["param1"]) && $_GET["parame1"] !=="") { 
@@ -48,7 +48,7 @@ class ControllerTricount extends Controller {
             $errors=(array_merge($errors_description,$errors_title));            
            
             if(count($errors)==0){
-                $user= User::get_user_by_mail($user->mail);                
+               // $user= User::get_user_by_mail($user->mail);                
                 $tricount = new Tricount($title,$user,$description);
                 $tricount -> persist();
                 $this->redirect("tricount","index");     
