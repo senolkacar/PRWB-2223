@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Edit Tricount</title>
-        <base href="<?= $web_root ?>"/>
+        <base href="<?= $web_root ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -16,10 +16,8 @@
         <header>
             <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
                 <div class="d-flex justify-content-between mb-3">   
-                    <a class="navbar-brand" href="tricount/index">
-                    <button type="button" class="btn btn-outline-danger">Back</button>
-                    </a>
-                    <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Edit </div>
+                    <a href="tricount/index" class="btn btn-outline-danger"> Back </a>
+                    <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32; <i class="bi bi-caret-right-fill"></i> &#32; Edit </div>
                     <div ><button type='submit' class="btn btn-primary" form ="form1"> Save</button></div>
                 </div>
             </div>
@@ -85,7 +83,7 @@
             <?php if(count($other_users)!=0): ?>
                 <form method='post' action='tricount/add_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
                     <div class="input-group">              
-                        <select class="form-select" aria-label="Example select with button addon"  name = "subscriber" id="subscriber" value="add subscriber" required>
+                        <select class="form-select" aria-label="Example select with button addon"  name = "subscriber" id="subscriber" required>
                             <option value="">--Add a new subscriber--</option>
                             <?php foreach ($other_users as $other_user): ?>  
                             <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option> 
@@ -99,7 +97,8 @@
 
             <br>
             <div class="container-sm">            
-            <div class="text-danger"><?= $error; ?> </div>      
+            <div class="text-danger"><?= $error; ?> </div>    
+            </div>  
             
             <br>
             

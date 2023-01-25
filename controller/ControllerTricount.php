@@ -97,15 +97,15 @@ class ControllerTricount extends Controller {
         $depenses=[];
         $errors=[];
         $error="";
+
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            $id= (int)$_GET["param1"];
-            if(!is_numeric($id)){
+            $id= (int)$_GET["param1"];                             
+            $tricount = Tricount::get_tricount_by_id($id);
+
+            if(!in_array($user,$tricount->get_users_including_creator())) {
                 $this->redirect("tricount");
             }
-            if(!$user->is_involved($id)&&!$user->is_creator($id)){
-                $this->redirect("tricount");
-            }          
-            $tricount = Tricount::get_tricount_by_id($id);
+
             $title=$tricount->title;
             $description=$tricount->description;
             $subscriptions =$tricount-> get_users_including_creator();  
@@ -156,16 +156,8 @@ class ControllerTricount extends Controller {
         $user=$this->get_user_or_redirect();
 
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            $id=(int)$_GET["param1"];
-            if(!is_numeric($id)){
-                $this->redirect("tricount");
-            }
-            if(!$user->is_involved($id)){
-                $this->redirect("tricount");
-            }           
+            $id=(int)$_GET["param1"];            
             $tricount = Tricount::get_tricount_by_id($id);
-
-            var_dump($tricount);
 
             if(isset($_POST["delete_member"]) ) {
                // if($user == $tricount -> creator) {                       
@@ -190,8 +182,6 @@ class ControllerTricount extends Controller {
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
             $id= (int)$_GET["param1"];           
             $tricount = Tricount::get_tricount_by_id($id);
-
-            var_dump($tricount);
 
             if(isset($_POST["subscriber"]) ) {
                 //if($user == $tricount -> creator) {                       
