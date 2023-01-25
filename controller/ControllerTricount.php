@@ -70,6 +70,9 @@ class ControllerTricount extends Controller {
             if(!is_numeric($id)){
                 $this->redirect("tricount");
             }
+            if(!$user->is_involved($id)){
+                $this->redirect("tricount");
+            }
             $tricount = Tricount::get_tricount_by_id($id);
             if($tricount==null){
                 $this->redirect("tricount");

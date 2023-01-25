@@ -207,6 +207,12 @@ Class User extends Model{
         $data = $query->fetch();
         return ((int)$data[0]) > 0;
     }
+
+    public function is_involved(int $tricountid) : bool{
+        $query = self::execute("SELECT count(*) FROM subscriptions where user=:user and tricount=:tricount",["user"=>$this->id,"tricount"=>$tricountid]);
+        $data = $query->fetch();
+        return ((int)$data[0]) > 0;
+    }
  
 
 
