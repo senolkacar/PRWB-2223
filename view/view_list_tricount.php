@@ -16,8 +16,7 @@
             <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;"> 
                 <div class="d-flex justify-content-between mb-3">
                     <div class="h2">Your tricounts </div>
-                    <a href="tricount/add_tricount"><button type="button" 
-                    class="btn btn-primary btn-block,sticky-sm-top,">Add</button></a>
+                    <a href="tricount/add_tricount" class="btn btn-primary btn-block,sticky-sm-top,">Add</a>
                 </div>
             </div>
         </header>
@@ -29,8 +28,8 @@
                 <li class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="ms-2 me-auto">
                         <div class="fw-bold">
-                            <a href='tricount/show_tricount/<?=$tricount['id']?>'class="stretched-link"  style="text-decoration:none ; color:inherit;">
-                             <?=$tricount['title']?> 
+                            <a href='tricount/show_tricount/<?=$tricount['id']?>' class="stretched-link"  style="text-decoration:none ; color:inherit;">
+                             <?=$tricount['title']?></a>
                         </div> 
                        
                         <?php if(!$tricount['description'] || $tricount['description'] == "NULL" ): ?>
@@ -46,7 +45,6 @@
                             <?php echo " with ". $tricount['subscription_count']." friends" ?>
                         <?php endif; ?>
                     </span>
-                    </a>
                     
             <?php endforeach; ?>
             

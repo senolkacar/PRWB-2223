@@ -68,7 +68,7 @@
                 <a href="main/signup" class="float-center">New here ? Click here to join the party <i class="fa fa-rocket"></i> !</a>
             </p>
         </form>
-  
+    </div>
                         
 </body>
 </html>

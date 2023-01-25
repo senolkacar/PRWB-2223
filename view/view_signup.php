@@ -99,9 +99,8 @@
                     <?php endif; ?>
                     <input type="submit" class="btn btn-primary w-100 mt-3"  value="Sign Up">
             </form>
-            <a href="main/index"> <button type="button" class="btn btn-outline-danger w-100 mt-2 mb-3">Cancel</button></a>
+            <a href="main/index" class="btn btn-outline-danger w-100 mt-2 mb-3">Cancel</a>
         </div>
-    </div>
     </div>
 </body>
 
