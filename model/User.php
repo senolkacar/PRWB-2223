@@ -214,6 +214,12 @@ Class User extends Model{
         return ((int)$data[0]) > 0;
     }
 
+    public function is_creator(int $tricountid) : bool {
+        $query = self::execute("SELECT count(*) FROM tricounts where id=:tricount and creator=:user ", ["tricount"=>$tricountid,"user"=>$this->id]);
+        $data = $query->fetch();
+        return ((int)$data[0]) > 0;
+    }
+
     public function is_involved_in_operation(int $operationid) : bool{
         $query = self::execute("SELECT count(*) FROM repartitions where operation=:operation and user=:user",["user"=>$this->id,"operation"=>$operationid]);
         $data = $query->fetch();
