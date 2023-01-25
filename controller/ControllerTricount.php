@@ -98,7 +98,13 @@ class ControllerTricount extends Controller {
         $errors=[];
         $error="";
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            $id= (int)$_GET["param1"];           
+            $id= (int)$_GET["param1"];
+            if(!is_numeric($id)){
+                $this->redirect("tricount");
+            }
+            if(!$user->is_involved($id)){
+                $this->redirect("tricount");
+            }           
             $tricount = Tricount::get_tricount_by_id($id);
             $title=$tricount->title;
             $description=$tricount->description;
@@ -150,7 +156,7 @@ class ControllerTricount extends Controller {
         $user=$this->get_user_or_redirect();
 
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
-            $id= (int)$_GET["param1"];           
+            $id=(int)$_GET["param1"];           
             $tricount = Tricount::get_tricount_by_id($id);
 
             var_dump($tricount);
@@ -158,7 +164,7 @@ class ControllerTricount extends Controller {
             if(isset($_POST["delete_member"]) ) {
                // if($user == $tricount -> creator) {                       
                     $subscriber = User::get_user_by_id($_POST["delete_member"]);
-                    if($subscriber ) {
+                    if($subscriber) {
                         Subscription::delete_subscription($tricount, $subscriber);//delete
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
                     }
@@ -202,6 +208,9 @@ public function show_balance():void{
     if(isset($_GET["param1"]) && $_GET["param1"] !==""){
         $id = $_GET["param1"];
         if(!is_numeric($id)){
+            $this->redirect("tricount");
+        }
+        if(!$user->is_involved($id)){
             $this->redirect("tricount");
         }
         $tricount = Tricount::get_tricount_by_id($id);

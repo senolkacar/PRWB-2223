@@ -22,6 +22,12 @@ class ControllerOperation extends Controller
         $user = $this->get_user_or_redirect();
         if (isset($_GET["param1"]) && $_GET["param1"] !== "") {
             $id = $_GET["param1"];
+            if(!is_numeric($id)){
+                $this->redirect("tricount");
+            }
+            if(!$user->is_involved_in_operation($id)){
+                $this->redirect("tricount");
+            }
             $operation = Operation::get_operation_by_id($id);
             //var_dump(Repartition::include_user($user,$operation));   
             $repartitions = Repartition::get_repartitions_by_operation($operation);
@@ -77,6 +83,12 @@ class ControllerOperation extends Controller
         $operation_name = $operation_value;
         if (isset($_GET["param1"]) && $_GET["param1"] !== "") {
             $id = $_GET["param1"];
+            if(!is_numeric($id)){
+                $this->redirect("tricount");
+            }
+            if(!$user->is_involved_in_operation($id)){
+                $this->redirect("tricount");
+            }
             if ($operation_name == "edit") {
                 $header_title = "Edit expense";
                 $operation = Operation::get_operation_by_id($id);
@@ -211,6 +223,12 @@ class ControllerOperation extends Controller
         $user = $this->get_user_or_redirect();
         if (isset($_GET["param1"]) && $_GET["param1"] !== "") {
             $id = $_GET["param1"];
+            if(!is_numeric($id)){
+                $this->redirect("tricount");
+            }
+            if(!$user->is_involved_in_operation($id)){
+                $this->redirect("tricount");
+            }
             $operation = Operation::get_operation_by_id($id);
             $operation->delete_operation();
             $this->redirect("tricount", "show_tricount", $operation->tricount->id);
