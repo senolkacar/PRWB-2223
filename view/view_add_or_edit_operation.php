@@ -39,7 +39,7 @@
                 <div class='errors'>
                     <ul>
                         <?php foreach ($errors_title as $error): ?>
-                            <li><?= $error ?></li>
+                            <text class="text-danger"><li><?= $error ?></li></text>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -52,7 +52,7 @@
                 <div class='errors'>
                     <ul>
                         <?php foreach ($errors_amount as $error_amount): ?>
-                            <li><?= $error_amount ?></li>
+                            <text class="text-danger"><li><?= $error_amount ?></li></text>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -63,7 +63,7 @@
                 <div class='errors'>
                     <ul>
                         <?php foreach ($errors_date as $error_date): ?>
-                            <li><?= $error_date ?></li>
+                            <text class="text-danger"><li><?= $error_date ?></li></text>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -102,7 +102,7 @@
                             <div class='errors'>
                                 <ul>
                                     <?php foreach ($errors_checkbox as $error): ?>
-                                        <li><?= $error ?></li>
+                                        <text class="text-danger"><li><?= $error ?></li></text>
                                     <?php endforeach; ?>
                                     </ul>
                             </div>
@@ -111,7 +111,7 @@
                             <div class='errors'>
                                 <ul>
                                     <?php foreach ($errors_weights as $error): ?>
-                                        <li><?= $error ?></li>
+                                        <text class="text-danger"><li><?= $error ?></li></text>
                                     <?php endforeach; ?>
                                     </ul>
                             </div>
