@@ -33,13 +33,13 @@
                 <div class="position-relative">
                     <div class="position-absolute bottom-0 start-0"></div>
                     <a href="user/edit_profile" class="btn btn-outline-primary form-control mb-2">  
-                        <p class="text">Edit profile</p> 
+                        <div class="text">Edit profile</div> 
                     </a>
                     <a href="user/edit_password" class="btn btn-outline-primary form-control mb-2">
-                        <p class="text">Change password</p>
+                        <div class="text">Change password</div>
                     </a>
                     <a href="main/logout" class="btn btn btn-danger input-block-level form-control mb-2">
-                        <p class="text">logout</p>
+                        <div class="text">logout</div>
                     </a>
                 </div>                
             </div>
