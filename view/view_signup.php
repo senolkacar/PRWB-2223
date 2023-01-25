@@ -26,7 +26,7 @@
                 <div class="input-group-prepend mt-3">
                     <span class="input-group-text">@</span>
                 </div>
-            <input type="email" class="form-control mt-3" placeholder="Email" name="mail" id="mail" value="<?=$mail?>">
+            <input type="email" class="form-control mt-3 <?php echo count($errors_email)!=0 ? 'is-invalid' : ''?>" placeholder="Email" name="mail" id="mail" value="<?=$mail?>">
             </div>
                     <?php if (count($errors_email) != 0): ?>
                     <div class='errors'>
@@ -41,7 +41,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="bi bi-person-fill"></i></span> 
                 </div>
-            <input type="text" class="form-control" name="full_name" placeholder="Full Name" id="full_name" value="<?=$full_name?>">
+            <input type="text" class="form-control <?php echo count($errors_full_name)!=0 ? 'is-invalid' : ''?>" name="full_name" placeholder="Full Name" id="full_name" value="<?=$full_name?>">
             </div>        
                 <?php if (count($errors_full_name) != 0): ?>
                     <div class='errors'>
@@ -56,7 +56,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="bi bi-credit-card-2-front-fill"></i></span>
                 </div>
-            <input type="text" class="form-control" name="iban" placeholder="IBAN" id="iban" value="<?=$iban?>">
+            <input type="text" class="form-control <?php echo count($errors_iban)!=0 ? 'is-invalid' : ''?>" name="iban" placeholder="IBAN" id="iban" value="<?=$iban?>">
             </div>       
                 <?php if (count($errors_iban) != 0): ?>
                     <div class='errors'>
@@ -71,7 +71,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                 </div>
-            <input type="password" class="form-control" placeholder="Password" name="password" id="password" value="<?=$password?>">
+            <input type="password" class="form-control <?php echo count($errors_password)!=0 ? 'is-invalid' : ''?>" placeholder="Password" name="password" id="password" value="<?=$password?>">
             </div>      
                 <?php if (count($errors_password) != 0): ?>
                     <div class='errors'>
@@ -86,7 +86,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                 </div>
-            <input type="password" class="form-control" placeholder="Confirm your password" name="password_confirm" id="password_confirm" value="<?=$password_confirm?>">
+            <input type="password" class="form-control <?php echo count($errors_password_confirm)!=0 ? 'is-invalid' : ''?>" placeholder="Confirm your password" name="password_confirm" id="password_confirm" value="<?=$password_confirm?>">
             </div>
                     <?php if (count($errors_password_confirm) != 0): ?>
                     <div class='errors'>

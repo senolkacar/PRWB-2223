@@ -32,8 +32,8 @@
             ?>
             <div class="form-group">
             <form method='post' action=<?=$action?> enctype='multipart/form-data' id="form1">
-            <div class="input-group mb-3">    
-                <input type="text" class="form-control" name='title' id='title' rows='1' placeholder="Title" value=<?=$_SESSION["title"]?>>
+            <div class="input-group mb-3 has-validation">    
+                <input type="text" class="form-control <?php echo count($errors_title)!=0 ? 'is-invalid' : ''?> " name='title' id='title' rows='1' placeholder="Title" value=<?=$_SESSION["title"]?>>
             </div>
                 <?php if (count($errors_title) != 0): ?>
                 <div class='errors'>
@@ -45,7 +45,7 @@
                 </div>
                 <?php endif; ?>
                 <div class="input-group mb-3">
-                <input type="number" class="form-control" step="0.01" name='amount' id='amount' value="<?=$_SESSION["amount"]?>" placeholder="Amount"> <br>
+                <input type="number" class="form-control <?php echo count($errors_amount)!=0 ? 'is-invalid' : ''?>" step="0.01" name='amount' id='amount' value="<?=$_SESSION["amount"]?>" placeholder="Amount"> <br>
                 <span class="input-group-text">EUR</span>            
                 </div>
                 <?php if (count($errors_amount) != 0): ?>

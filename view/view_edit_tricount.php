@@ -28,9 +28,9 @@
         <div class="container-sm">
             <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form1">
                <h2>Settings</h2>
-               <div class="mb-3 mt-3">
+               <div class="mb-3 mt-3 has-validation">
                     <label for='title'> Title : </label>
-                    <textarea  class="form-control" name='title'  id='title' rows='1' ><?= $title; ?></textarea> 
+                    <textarea class="form-control <?php echo count($errors_title)!=0 ? 'is-invalid' : ''?>" name='title'  id='title' rows='1' ><?= $title; ?></textarea> 
                </div>
 
                 <?php if (count($errors_title) != 0): ?>
@@ -46,7 +46,7 @@
 
                <div class="mb-3 mt-3">
                     <label for='description'> Descripton (optional) :  </label>
-                    <textarea class="form-control" name='description' id='description'  rows='2' ><?= $description; ?></textarea> 
+                    <textarea class="form-control <?php echo count($errors_description)!=0 ? 'is-invalid' : ''?>" name='description' id='description'  rows='2' ><?= $description; ?></textarea> 
                </div>
 
                <?php if (count($errors_description) != 0): ?>
