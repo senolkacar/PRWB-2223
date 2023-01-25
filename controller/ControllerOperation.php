@@ -24,11 +24,14 @@ class ControllerOperation extends Controller
             $id = $_GET["param1"];
             if(!is_numeric($id)){
                 $this->redirect("tricount");
-            }
-            if(!$user->is_involved_in_operation($id)){
+            }          
+            
+            $operation = Operation::get_operation_by_id($id);
+            $tricount_id = $operation->tricount->id;
+            $tricount = Tricount::get_tricount_by_id($tricount_id);            
+            if(!in_array($user,$tricount->get_users_including_creator())){
                 $this->redirect("tricount");
             }
-            $operation = Operation::get_operation_by_id($id);
             //var_dump(Repartition::include_user($user,$operation));   
             $repartitions = Repartition::get_repartitions_by_operation($operation);
             //var_dump($repartitions);

@@ -225,7 +225,7 @@ Class User extends Model{
         $data = $query->fetch();
         return ((int)$data[0]) > 0;
 
-    }
+    } // not include member with weight 0
  
 
 
