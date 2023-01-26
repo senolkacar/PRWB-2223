@@ -15,7 +15,7 @@
 
     <header>
         <div class="container p-3 mb-3 text-dark" style="background-color: #0D6EFD;">       
-        <h3 class="text-white"><i class="fa-solid fa-cat"></i>&nbsp;Tricount</h3>               
+        <h3 class="text-white"><i class="fa-solid fa-cat me-3"></i>Tricount</h3>               
         </div>
     </header>
     <div class="container d-flex align-items-center min-vh-100">
