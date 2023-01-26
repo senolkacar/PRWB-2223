@@ -91,16 +91,23 @@ class ControllerOperation extends Controller
         $operation_name = $operation_value;
         if (isset($_GET["param1"]) && $_GET["param1"] !== "") {
             $id = $_GET["param1"];
-            if(!is_numeric($id)){
+            if($id !=null && !is_numeric($id)){
                 $this->redirect("tricount");
             }
-            if(!$user->is_involved_in_operation($id)){
-                $this->redirect("tricount");
-            }
+
             if ($operation_name == "edit") {
                 $header_title = "Edit expense";
-                $operation = Operation::get_operation_by_id($id);
-                $tricount = $operation->tricount;
+                $operation = Operation::get_operation_by_id($id);//if id does not exist?
+                if ($operation){
+                    $tricount = $operation->tricount;
+                    if(!in_array($user,$tricount->get_users_including_creator())){
+                        $this->redirect("tricount");
+                       }
+                } else {
+                    $this->redirect("tricount");
+                }
+                
+
                 $page_title = "Edit operation";
                 $is_new_operation = false;
                 $users = $operation->get_users_by_operation_id();
@@ -113,11 +120,7 @@ class ControllerOperation extends Controller
                     $weights[] = $repartition->weight;
                     $ids[] = $repartition->user->id;
                     $checkboxes[] = $repartition->user->id;
-                }
-            
-                
-        
-
+                }           
             } else {
                 $page_title = "Add operation";
                 $header_title = "New expense";
@@ -244,7 +247,7 @@ class ControllerOperation extends Controller
             if(!is_numeric($id)){
                 $this->redirect("tricount");
             }
-            if(!$user->is_involved_in_operation($id)){
+            if(!($user->is_involved_in_operation($id))){
                 $this->redirect("tricount");
             }
             $operation = Operation::get_operation_by_id($id);
