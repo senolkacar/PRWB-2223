@@ -122,7 +122,7 @@ class ControllerOperation extends Controller
                     $checkboxes[] = $repartition->user->id;
                 }           
             } else {
-                if(!($user->is_involved_in_operation($id) ||$user->is_creator($id))){ // access conditions for add_operation
+                if(!($user->is_involved($id) ||$user->is_creator($id))){ // access conditions for add_operation
                     $this->redirect("tricount");
                 }
                 $page_title = "Add operation";
@@ -243,19 +243,25 @@ class ControllerOperation extends Controller
     }
 
     function delete_operation(): void
-    {
+    { 
+        $errors=[];
         $user = $this->get_user_or_redirect();
         if (isset($_GET["param1"]) && $_GET["param1"] !== "") {
             $id = $_GET["param1"];
             if(!is_numeric($id)){
                 $this->redirect("tricount");
             }
-            if(!($user->is_involved_in_operation($id))){
-                $this->redirect("tricount");
-            }
             $operation = Operation::get_operation_by_id($id);
-            $operation->delete_operation();
-            $this->redirect("tricount", "show_tricount", $operation->tricount->id);
+            if(!($user->is_involved_in_operation($id))&&!($user->is_initiator($id))){
+                $errors[]="You dont have the right to delete this operation";
+            }
+            if(isset($_POST["operationid"])){
+                $operation = Operation::get_operation_by_id($id);
+                $operation->delete_operation();
+                $this->redirect("tricount", "show_tricount", $operation->tricount->id);
+            }
+            
         }
+        (new View("delete_operation"))->show(["operation"=>$operation, "errors"=>$errors]);
     }
 }
