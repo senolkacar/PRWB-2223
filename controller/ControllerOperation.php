@@ -97,7 +97,7 @@ class ControllerOperation extends Controller
 
             if ($operation_name == "edit") {
                 $header_title = "Edit expense";
-                $operation = Operation::get_operation_by_id($id);//if id does not exist?
+                $operation = Operation::get_operation_by_id($id);//if operation id does not exist?
                 if ($operation){  //access conditions for edit_operation
                     $tricount = $operation->tricount;
                     if(!in_array($user,$tricount->get_users_including_creator())){
@@ -122,7 +122,7 @@ class ControllerOperation extends Controller
                     $checkboxes[] = $repartition->user->id;
                 }           
             } else {
-                if(!($user->is_involved_in_operation($id) ||$user->is_creator($id))){ // access conditions for add_operation
+                if(!($user->is_involved($id) ||$user->is_creator($id))){ // $id is tricount id. access conditions for add_operation
                     $this->redirect("tricount");
                 }
                 $page_title = "Add operation";
