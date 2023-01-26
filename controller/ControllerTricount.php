@@ -98,13 +98,16 @@ class ControllerTricount extends Controller {
         $errors=[];
         $error="";
 
-        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+        if(isset($_GET["param1"]) && is_numeric($_GET["param1"]) ) { 
             $id= (int)$_GET["param1"];                             
             $tricount = Tricount::get_tricount_by_id($id);
-
-            if(!in_array($user,$tricount->get_users_including_creator())) {
+            if($tricount){
+                if(!in_array($user,$tricount->get_users_including_creator())) {
+                    $this->redirect("tricount");
+                }
+            }else {// if $tricount doesn't exist
                 $this->redirect("tricount");
-            }
+            }            
 
             $title=$tricount->title;
             $description=$tricount->description;
@@ -115,7 +118,7 @@ class ControllerTricount extends Controller {
                 if($user == $tricount -> creator) {
                         $title = $_POST["title"];
                         $description=$_POST["description"];
-                        $errors_title = Tricount::validate_title($_POST["title"]);//could have the same name with others
+                        $errors_title = Tricount::validate_title($_POST["title"]);//could have the same name with the others
                         $errors_description= Tricount::validate_description($_POST["description"]);
                         $errors=(array_merge($errors_description,$errors_title));
 
@@ -136,19 +139,19 @@ class ControllerTricount extends Controller {
            
         }
         else{
-            $this -> redirect("tricount", "show_tricount");  
+            $this->redirect("tricount");
         }
         (new View("edit_tricount")) -> show(["id"=>$id,
-        "tricount"=>$tricount,
-        "title"=>$title,
-        "description"=>$description,
-        "errors_description"=>$errors_description,
-        "errors_title"=>$errors_title,
-        "subscriptions"=>$subscriptions,
-        "depenses"=>$depenses,
-        "other_users"=>$other_users,
-        "error"=>$error,
-        "errors"=>$errors]);       
+                                            "tricount"=>$tricount,
+                                            "title"=>$title,
+                                            "description"=>$description,
+                                            "errors_description"=>$errors_description,
+                                            "errors_title"=>$errors_title,
+                                            "subscriptions"=>$subscriptions,
+                                            "depenses"=>$depenses,
+                                            "other_users"=>$other_users,
+                                            "error"=>$error,
+                                            "errors"=>$errors]);       
 
     }
 
@@ -206,7 +209,7 @@ public function show_balance():void{
         if(!is_numeric($id)){
             $this->redirect("tricount");
         }
-        if(!$user->is_involved($id)){
+        if(!($user->is_involved($id) || $user->is_creator($id))){
             $this->redirect("tricount");
         }
         $tricount = Tricount::get_tricount_by_id($id);
@@ -230,11 +233,14 @@ public function show_balance():void{
         
 }
 
-    public function delete() : void {//main
-        $user=$this->get_user_or_redirect();//
+    public function delete() : void {
+        $user=$this->get_user_or_redirect();
         $errors = [];
         if(isset($_GET["param1"]) && $_GET["param1"] !==""){
             $id = $_GET["param1"];
+            if(!is_numeric($id)){
+                $this->redirect("tricount");
+            }
             if(!$user->is_involved($id)&&!$user->is_creator($id)){
                 $this->redirect("tricount");
             }
@@ -247,7 +253,8 @@ public function show_balance():void{
                     if ($tricount) {
                          $this->redirect("tricount", "index");
                      } else {
-                            throw new Exception("Wrong/missing ID or action no permited");
+                        $errors[]="Wrong/missing ID or action no permited";
+                        //throw new Exception("Wrong/missing ID or action no permited");
                      }
 
                 }else{
