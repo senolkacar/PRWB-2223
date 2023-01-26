@@ -238,6 +238,9 @@ public function show_balance():void{
         $errors = [];
         if(isset($_GET["param1"]) && $_GET["param1"] !==""){
             $id = $_GET["param1"];
+            if(!is_numeric($id)){
+                $this->redirect("tricount");
+            }
             if(!$user->is_involved($id)&&!$user->is_creator($id)){
                 $this->redirect("tricount");
             }
