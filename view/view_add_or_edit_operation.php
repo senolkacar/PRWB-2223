@@ -33,7 +33,7 @@
             <div class="form-group">
             <form method='post' action=<?=$action?> enctype='multipart/form-data' id="form1">
             <div class="input-group mb-3 has-validation">    
-                <input type="text" class="form-control <?php echo count($errors_title)!=0 ? 'is-invalid' : ''?> " name='title' id='title' rows='1' placeholder="Title" value=<?=$_SESSION["title"]?>>
+                <input type="text" class="form-control <?php echo count($errors_title)!=0 ? 'is-invalid' : ''?> " name='title' id='title' rows='1' placeholder="Title" value=<?=$title?>>
             </div>
                 <?php if (count($errors_title) != 0): ?>
                 <div class='errors'>
@@ -45,7 +45,7 @@
                 </div>
                 <?php endif; ?>
                 <div class="input-group mb-3">
-                <input type="number" class="form-control <?php echo count($errors_amount)!=0 ? 'is-invalid' : ''?>" step="0.01" name='amount' id='amount' value="<?=$_SESSION["amount"]?>" placeholder="Amount"> <br>
+                <input type="number" class="form-control <?php echo count($errors_amount)!=0 ? 'is-invalid' : ''?>" step="0.01" name='amount' id='amount' value="<?=$amount?>" placeholder="Amount">
                 <span class="input-group-text">EUR</span>            
                 </div>
                 <?php if (count($errors_amount) != 0): ?>
@@ -58,7 +58,7 @@
                 </div>
                 <?php endif; ?>
                 <label for="date">Date</label>
-                <input type="date" class="form-control mt-2 mb-2" id="date" name="date" required value="<?=$_SESSION["date"]?>">
+                <input type="date" class="form-control mt-2 mb-2" id="date" name="date" required value="<?=$date?>">
                 <?php if (count($errors_date) != 0): ?>
                 <div class='errors'>
                     <ul>
@@ -69,30 +69,27 @@
                 </div>
                 <?php endif; ?>
                 <label for="paidby">Paid by:</label>
-                            <select class="form-control mt-2" id="payer" value="">
+                            <select class="form-control mt-2" name="payer">
                             <?php foreach ($subscriptions as $subscription): ?>  
                             <option value="<?=$subscription->full_name; ?>"><?=$subscription->full_name; ?></option>  
                             <?php endforeach; ?>
                             </select>                           
                 </div>
-    
-
-               <br>
                 <p>For whom ?(select at least one)</p>
                     <?php foreach ($subscriptions as $subscription): ?>
                         <div class='input-group input-group-lg'>  
                         <div class="input-group-text mb-3">
                         <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?=$subscription->id?>"
-                        <?php if (in_array($subscription->id, $_SESSION['checkboxes'])) { echo 'checked'; } ?>
+                        <?php if (in_array($subscription->id, $checkboxes)) { echo 'checked'; } ?>
                         >
                         </div>
                         <div class="input-group-text mb-3 w-50">
                         <span class="text"><?=$subscription->full_name;?></span>
                         </div>
                         <?php $weight = 0; ?>
-                        <?php for($i=0; $i<count($_SESSION["weights"]); $i++): ?>
-                            <?php if($_SESSION["ids"][$i]==$subscription->id): ?>
-                                <?php $weight = $_SESSION["weights"][$i]; ?>
+                        <?php for($i=0; $i<count($weights); $i++): ?>
+                            <?php if($ids[$i]==$subscription->id): ?>
+                                <?php $weight = $weights[$i]; ?>
                             <?php endif; ?>
                         <?php endfor; ?>
                         <input type="number" class="form-control mb-3" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
