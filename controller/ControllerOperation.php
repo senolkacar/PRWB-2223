@@ -27,7 +27,7 @@ class ControllerOperation extends Controller
             }          
             
             $operation = Operation::get_operation_by_id($id);
-            if($operation->tricount != null) {
+            if($operation) {
                 $tricount_id = $operation->tricount->id;
                 $tricount = Tricount::get_tricount_by_id($tricount_id);            
                 if(!in_array($user,$tricount->get_users_including_creator())){
@@ -89,12 +89,9 @@ class ControllerOperation extends Controller
         $operation = null;
         $is_new_operation = true;
         $operation_name = $operation_value;
-        if (isset($_GET["param1"]) && $_GET["param1"] !== "") {
-            $id = $_GET["param1"];
-            if($id !=null && !is_numeric($id)){ ///access condition
-                $this->redirect("tricount");
-            }   
-
+        if (isset($_GET["param1"]) && is_numeric($_GET["param1"])) {
+            $id = $_GET["param1"]; 
+                       
             if ($operation_name == "edit") {
                 $header_title = "Edit expense";
                 $operation = Operation::get_operation_by_id($id);//if operation id does not exist?
@@ -105,8 +102,7 @@ class ControllerOperation extends Controller
                        }
                 } else {
                     $this->redirect("tricount");
-                }
-                
+                }                
 
                 $page_title = "Edit operation";
                 $is_new_operation = false;
@@ -169,6 +165,8 @@ class ControllerOperation extends Controller
                     $this->redirect("tricount", "show_tricount", $tricount->id);
                 }
             }
+        } else{
+            $this->redirect("tricount");
         }
 
         (new View("add_or_edit_operation"))->show([

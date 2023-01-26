@@ -233,8 +233,8 @@ public function show_balance():void{
         
 }
 
-    public function delete() : void {//main
-        $user=$this->get_user_or_redirect();//
+    public function delete() : void {
+        $user=$this->get_user_or_redirect();
         $errors = [];
         if(isset($_GET["param1"]) && $_GET["param1"] !==""){
             $id = $_GET["param1"];
@@ -253,7 +253,8 @@ public function show_balance():void{
                     if ($tricount) {
                          $this->redirect("tricount", "index");
                      } else {
-                            throw new Exception("Wrong/missing ID or action no permited");
+                        $errors[]="Wrong/missing ID or action no permited";
+                        //throw new Exception("Wrong/missing ID or action no permited");
                      }
 
                 }else{
