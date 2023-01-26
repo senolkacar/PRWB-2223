@@ -20,7 +20,7 @@
     </header>
 
     <div class="container d-flex align-items-center min-vh-100">
-    <div class="container-sm border">
+    <div class="container-sm border rounded">
         <form action="main/login" method="post">
             <h2 class="text-center mt-3 pb-3 border-bottom">Sign In</h2>
             <div class="input-group mt-3">
