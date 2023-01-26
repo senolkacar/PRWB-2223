@@ -94,7 +94,7 @@
                         <?php endfor; ?>
                         <input type="number" class="form-control mb-3" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
                         <input type="hidden" id="ids" name="ids[]" value="<?=$subscription->id?>">
-                    <?php endforeach; ?>
+                    <?php endforeach; ?>                 
                     <?php if(count($errors_checkbox)!=0) : ?>
                             <div class='errors'>
                                 <ul>

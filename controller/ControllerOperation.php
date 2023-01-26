@@ -91,14 +91,14 @@ class ControllerOperation extends Controller
         $operation_name = $operation_value;
         if (isset($_GET["param1"]) && $_GET["param1"] !== "") {
             $id = $_GET["param1"];
-            if($id !=null && !is_numeric($id)){
+            if($id !=null && !is_numeric($id)){ ///access condition
                 $this->redirect("tricount");
-            }
+            }   
 
             if ($operation_name == "edit") {
                 $header_title = "Edit expense";
                 $operation = Operation::get_operation_by_id($id);//if id does not exist?
-                if ($operation){
+                if ($operation){  //access conditions for edit_operation
                     $tricount = $operation->tricount;
                     if(!in_array($user,$tricount->get_users_including_creator())){
                         $this->redirect("tricount");
@@ -122,6 +122,9 @@ class ControllerOperation extends Controller
                     $checkboxes[] = $repartition->user->id;
                 }           
             } else {
+                if(!($user->is_involved_in_operation($id) ||$user->is_creator($id))){ // access conditions for add_operation
+                    $this->redirect("tricount");
+                }
                 $page_title = "Add operation";
                 $header_title = "New expense";
                 $tricount = Tricount::get_tricount_by_id($id);
