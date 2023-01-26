@@ -250,13 +250,14 @@ class ControllerOperation extends Controller
                 $this->redirect("tricount");
             }
             $operation = Operation::get_operation_by_id($id);
-            if(!($user->is_involved_in_operation($id))&&!($user->is_initiator($id))){
-                $errors[]="You dont have the right to delete this operation";
-            }
             if(isset($_POST["operationid"])){
-                $operation = Operation::get_operation_by_id($id);
-                $operation->delete_operation();
-                $this->redirect("tricount", "show_tricount", $operation->tricount->id);
+                if(($user->is_involved_in_operation($id))||($user->is_initiator($id))){
+                    $operation = Operation::get_operation_by_id($id);
+                    $operation->delete_operation();
+                    $this->redirect("tricount", "show_tricount", $operation->tricount->id);
+                }else{
+                    $errors[]="You dont have the right to delete this operation";
+                }
             }
             
         }
