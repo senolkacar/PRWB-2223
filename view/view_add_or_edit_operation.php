@@ -118,9 +118,7 @@
         </div>
         <?php if($operation_name=="edit"){?>
             <footer class="footer mt-auto w-100">   
-                <form class="link" href="operation/delete_operation/<?=$operation->id;?>" method="post">
-                <button type="button" class="btn btn-danger w-100">Delete</button>
-                </a>
+                <a class="btn btn-danger w-100" href="operation/delete_operation/<?=$operation->id;?>" method="post">Delete</a>
             </footer>
             <?php }; ?>
     </body>
