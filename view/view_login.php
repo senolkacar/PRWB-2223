@@ -6,7 +6,7 @@
     <title>Tricount</title>
     <base href="<?= $web_root ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
@@ -15,12 +15,11 @@
 
     <header>
         <div class="container p-3 mb-3 text-dark" style="background-color: #0D6EFD;">
-        <i class="fa-solid fa-cat"></i>            
-        <h3 class="text-white">Tricount</h3>               
+        <h3 class="text-white"><i class="fa-solid fa-cat"></i>&nbsp;Tricount</h3>               
         </div>
     </header>
 
-
+    <div class="container d-flex align-items-center min-vh-100">
     <div class="login-form">
         <form action="main/login" method="post">
             <h2 class="text-center">Sign In</h2>
@@ -69,6 +68,6 @@
             </p>
         </form>
     </div>
-                        
+    </div>             
 </body>
 </html>
