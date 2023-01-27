@@ -20,8 +20,8 @@
         </div>
         </header>
         <div class="container-sm">      
-            <ul class="list-group align-items-center">
                     <?php if($nb_participants == 0): ?>
+            <ul class="list-group align-items-center">
                         <li class="m-3 border w-100 rounded">
                         <div class="text-center">
                         <div class="h3 p-3 border-bottom border-secondary" style="background-color: #F7F7F7">You are alone!</div>
@@ -29,7 +29,9 @@
                         <a class="btn btn-primary mb-3" href="tricount/edit_tricount/<?=$tricount->id; ?>">Add Friends</a>
                         </div>
                     </li>
+            </ul>
                         <?php elseif(!$depenses): ?>
+            <ul class="list-group align-items-center">
                         <li class="m-3 border border-secondary w-100 rounded">
                         <div class="text-center">
                         <div class="h3 p-3 border-bottom border-secondary" style="background-color: #F7F7F7"><?php echo "Your tricount is empty!" ?></div>
@@ -44,15 +46,15 @@
                         <ul class="list-group w-100">
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
-                                <div class="text">     
-                                <a href='operation/show_operation/<?=$depense["id"]; ?>' class="stretched-link" style='text-decoration:none ; color:inherit'>
+                                <div class="text">
+                                <a href='operation/show_operation/<?=$depense["id"]; ?>' class="stretched-link" style='text-decoration:none ; color:inherit'></a>     
                                 <p class="fw-bold"><?=$depense["title"]?></p>
                                 <?php echo "Paid by ".User::get_user_by_id($depense["initiator"])->full_name?>
                                 </div>  
                             </div>
                             <div class="text-end">
                                 <p class="fw-bold"><?=round($depense["amount"],2)?>&euro;</p>
-                                <?=$depense["operation_date"]?></a>
+                                <?=$depense["operation_date"]?>
                             </div>
                         </li>
                     </ul>
