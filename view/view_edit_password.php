@@ -14,9 +14,7 @@
 
         <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
             <div class="d-flex justify-content-between mb-3">  
-                <a class="navbar-brand" href="user/settings">
-                <button type="button" class="btn btn-outline-danger">Back</button>
-                </a>
+                <a class="btn btn-outline-danger" href="user/settings">Back</a>
                 <div class="text-secondary fw-bold mt-2" >Change Password</div>
                 <div class="h2"> </div>
             </div>
