@@ -30,7 +30,7 @@
                     <div class='errors'>
                         <ul>
                             <?php foreach ($errors_email as $error): ?>
-                                <text class="text-danger"><li><?= $error ?></li></text>
+                                <li class="text-danger"><?= $error ?></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
@@ -43,7 +43,7 @@
                     <div class='errors'>
                         <ul>
                             <?php foreach ($errors_full_name as $error): ?>
-                                <text class="text-danger"><li><?= $error ?></li></text>
+                                <li class="text-danger"><?= $error ?></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
@@ -56,7 +56,7 @@
                     <div class='errors'>
                         <ul>
                             <?php foreach ($errors_iban as $error): ?>
-                                <text class="text-danger"><li><?= $error ?></li></text>
+                                <li class="text-danger"><?= $error ?></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
@@ -69,7 +69,7 @@
                     <div class='errors'>
                         <ul>
                             <?php foreach ($errors_password as $error): ?>
-                                <text class="text-danger"><li><?= $error ?></li></text>
+                                <li class="text-danger"><?= $error ?></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
@@ -82,7 +82,7 @@
                     <div class='errors'>
                         <ul>
                             <?php foreach ($errors_password_confirm as $error): ?>
-                                <text class="text-danger"><li><?= $error ?></li></text>
+                                <li class="text-danger"><?= $error ?></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
