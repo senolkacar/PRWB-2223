@@ -151,7 +151,23 @@ class ControllerOperation extends Controller
                 if(!isset($_POST["checkboxes"])){
                     $errors_checkbox[]= "You must select at least one user";
                 }else{
+                    $filteredarrayweight = array_filter($weights,function($value){
+                        return $value>0;
+                    });
+                    $weightsIndex=array_keys($filteredarrayweight);
+                    $checkboxesIndex=[];
                     $checkboxes = $_POST["checkboxes"];
+                    foreach($checkboxes as $val){
+                        foreach($ids as $key=>$value){
+                          if($value==$val){
+                            $checkboxesIndex[]=$key;
+                          }
+                        }
+                    }
+                    if($weightsIndex!=$checkboxesIndex){
+                        $errors_checkbox[]= "Check your input";
+                    }
+                
                 }
 
             }
