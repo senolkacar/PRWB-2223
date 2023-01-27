@@ -202,11 +202,18 @@ Class User extends Model{
         return ((int)$data[0]) > 0;
     }
 
-    public function is_initiator(int $operationid) : bool {
+    public function is_initiator() : bool {
+       $query = self::execute("SELECT count(*) FROM operations where initiator=:user ", ["user"=>$this->id]);
+        $data = $query->fetch();
+        return ((int)$data[0]) > 0;
+     }
+    public function is_initiator_check(int $operationid) : bool {
         $query = self::execute("SELECT count(*) FROM operations where id=:id and initiator=:user ", ["user"=>$this->id,"id"=>$operationid]);
         $data = $query->fetch();
         return ((int)$data[0]) > 0;
     }
+
+    
 
     public function is_involved(int $tricountid) : bool{ // without creator
         $query = self::execute("SELECT count(*) FROM subscriptions where user=:user and tricount=:tricount",["user"=>$this->id,"tricount"=>$tricountid]);
