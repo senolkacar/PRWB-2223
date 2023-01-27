@@ -17,7 +17,6 @@
             <a class="btn btn-outline-danger" href="tricount/show_tricount/<?=$tricount->id;?>">Back</a>
             <?php }else{?>
             <a class="btn btn-outline-danger" href="operation/show_operation/<?=$operation->id;?>">Back</a>
-            </a>
             <?php }; ?> 
             <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32;<i class="bi bi-caret-right-fill"></i> &#32; Expenses </div>
             <button type="submit" class="btn btn-primary" form="form1">Save</button>
