@@ -128,32 +128,35 @@ class ControllerOperation extends Controller
             $subscriptions = User::get_users_by_tricount($tricount);
             $nb_subscriptions = count($subscriptions);
 
-            if(isset($_POST["title"])){
-                $errors_title = Operation::validate_title($_POST["title"]);
-                $title = $_POST["title"];
+            if(count($_POST)>0){
+                if(isset($_POST["title"])){
+                    $errors_title = Operation::validate_title($_POST["title"]);
+                    $title = $_POST["title"];
+                }
+                if(isset($_POST["amount"])){
+                    $errors_amount = Operation::validate_amount($_POST["amount"]);
+                    $amount = $_POST["amount"];
+                }
+                if(isset($_POST["weights"])){
+                    $errors_weights = Operation::validate_weights($_POST["weights"]);
+                    $weights = $_POST["weights"];
+                }
+                if(isset($_POST["date"])){
+                    $errors_date = Operation::validate_date($_POST["date"]);
+                    $date = $_POST["date"];
+                } 
+                if(isset($_POST["ids"])){
+                    $ids = $_POST["ids"];
+                }
+                if(!isset($_POST["checkboxes"])){
+                    $errors_checkbox[]= "You must select at least one user";
+                }else{
+                    $checkboxes = $_POST["checkboxes"];
+                }
+
             }
-            if(isset($_POST["amount"])){
-                $errors_amount = Operation::validate_amount($_POST["amount"]);
-                $amount = $_POST["amount"];
-            }
-            if(!isset($_POST["checkboxes"])&&count($_POST)>0){
-                $errors_checkbox[]= "You must select at least one user";
-                $checkboxes= []; 
-            }
-            if(isset($_POST["checkboxes"])){
-                $checkboxes[] = $_POST["checkboxes"];
-            }
-            if(isset($_POST["weights"])){
-                $errors_weights = Operation::validate_weights($_POST["weights"]);
-                $weights[] = $_POST["weights"];
-            }
-            if(isset($_POST["date"])){
-                $errors_date = Operation::validate_date($_POST["date"]);
-                $date = $_POST["date"];
-            } 
-            if(isset($_POST["ids"])){
-                $ids[] = $_POST["ids"];
-            }
+            
+            
             $errors = array_merge($errors_title, $errors_amount, $errors_checkbox, $errors_weights, $errors_date);
             if ((count($errors)) == 0 && (count($_POST) > 0)) {
                 var_dump($_POST["payer"]);

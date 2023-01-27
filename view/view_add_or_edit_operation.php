@@ -79,7 +79,7 @@
                     <?php foreach ($subscriptions as $subscription): ?>
                         <div class='input-group input-group-lg'>  
                         <div class="input-group-text mb-3">
-                        <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?=$subscription->id?>"
+                        <input type="checkbox" class="form-check-input" id="checkboxes" name="checkboxes[]" value="<?=$subscription->id?>"
                         <?php if (in_array($subscription->id, $checkboxes)) { echo 'checked'; } ?>
                         >
                         </div>
