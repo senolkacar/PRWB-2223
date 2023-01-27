@@ -18,7 +18,7 @@
             Are you sure ?
             </div>
             <div class="text-center text-danger mt-3">
-            Do you really want to delete operation <text class="fw-bold">"<?=$operation->title;?></text>" ?
+            Do you really want to delete operation <p class="fw-bold" style="display:inline">"<?=$operation->title;?></p>" ?
             </div>          
             <div class="text-center text-danger mt-3">
             This process cannot be undone.
