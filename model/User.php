@@ -202,8 +202,8 @@ Class User extends Model{
         return ((int)$data[0]) > 0;
     }
 
-    public function is_initiator() : bool {
-        $query = self::execute("SELECT count(*) FROM operations where initiator=:user ", ["user"=>$this->id]);
+    public function is_initiator(int $operationid) : bool {
+        $query = self::execute("SELECT count(*) FROM operations where id=:id and initiator=:user ", ["user"=>$this->id,"id"=>$operationid]);
         $data = $query->fetch();
         return ((int)$data[0]) > 0;
     }

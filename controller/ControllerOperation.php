@@ -250,17 +250,35 @@ class ControllerOperation extends Controller
                 $this->redirect("tricount");
             }
             $operation = Operation::get_operation_by_id($id);
-            if(isset($_POST["operationid"])){
-                if(($user->is_involved_in_operation($id))||($user->is_initiator($id))){
+            if (!$operation ){
+                $this->redirect("tricount");
+            }
+            if($user->is_involved_in_operation($id)||$user->is_initiator($id)){ 
+                if(isset($_POST["operationid"])){
                     $operation = Operation::get_operation_by_id($id);
                     $operation->delete_operation();
                     $this->redirect("tricount", "show_tricount", $operation->tricount->id);
-                }else{
-                    $errors[]="You dont have the right to delete this operation";
-                }
+                }            
+            }else{
+                $this->redirect("tricount");
             }
-            
         }
+
         (new View("delete_operation"))->show(["operation"=>$operation, "errors"=>$errors]);
     }
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
