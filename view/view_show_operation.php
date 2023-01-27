@@ -44,10 +44,12 @@
                             (me)
                             <?php endif; ?> </div>
                         <div>
-                        <?php echo Repartition::get_amount_by_user_and_operation($repartition->user, $repartition->operation)." €"; ?> </div>
-                    
+                        <?php echo Repartition::get_amount_by_user_and_operation($repartition->user, $repartition->operation)." €"; ?> 
+                        </div>
+                    </div>
+                    </li>
             <?php endforeach; ?>
-                </li>
+                
             </ul> 
 
              <br><br>   
