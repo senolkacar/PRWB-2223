@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Tricount</title>
@@ -11,14 +11,13 @@
     </head>
     <body>
 
-    <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
-        <div class="d-flex justify-content-between mb-3">  
-            <a class="navbar-brand" href="user/settings">
-            <button type="button" class="btn btn-outline-danger"> Back</button>  </a>
-            <div class="text-secondary fw-bold mt-2" >Edit Profile</div>
-            <div class="h2"> </div>
+        <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
+            <div class="d-flex justify-content-between mb-3">  
+                <a href="user/settings" class="btn btn-outline-danger"> Back  </a>
+                <div class="text-secondary fw-bold mt-2" >Edit Profile</div>
+                <div class="h2"> </div>
+            </div>
         </div>
-    </div>
 
 
         <div class="container-sm">
@@ -26,7 +25,7 @@
                 <div class="h2">Edit your profile</div>
                 <div class="mb-3 mt-3">
                     <label for='mail'> Mail : </label>
-                    <textarea class="form-control" name='mail' cols='30' rows='1'><?= $mail ?></textarea> <br>
+                    <textarea class="form-control" name='mail' id='mail' cols='30' rows='1'><?= $mail ?></textarea> <br>
                 </div>
 
                     <?php if (count($errors_mail) != 0): ?>
@@ -41,7 +40,7 @@
 
                 <div class="mb-3 mt-3">
                     <label for='full_name'> Full name : </label>
-                    <textarea class="form-control" name='full_name' cols='30' rows='1'><?= $full_name ?></textarea> <br>
+                    <textarea class="form-control" name='full_name' id='full_name' cols='30' rows='1'><?= $full_name ?></textarea> <br>
                 </div>
 
                     <?php if (count($errors_name) != 0): ?>
@@ -57,7 +56,7 @@
 
                 <div class="mb-3 mt-3">
                     <label for='iban'> Iban : </label>
-                    <textarea class="form-control" name='iban' cols='30' rows='1'><?= $iban?></textarea> <br>
+                    <textarea class="form-control" name='iban' id='iban' cols='30' rows='1'><?= $iban?></textarea> <br>
                 </div>
 
                     <?php if (count($errors_iban) != 0): ?>
