@@ -9,21 +9,21 @@
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     </head>
+    <body>
     <header>
         <div class="container p-3 mb-3 text-dark" style="background-color:#E3F2FD">
             <div class="d-flex justify-content-between">
             <?php if($operation_name=="add"){?>
-        <a class="navbar-brand" href="tricount/show_tricount/<?=$tricount->id;?>"><button type="button" class="btn btn-outline-danger">Back</button></a>
-        <?php }else{?>
-        <a class="navbar-brand" href="operation/show_operation/<?=$operation->id;?>"><button type="button" class="btn btn-outline-danger">Back</button></a>
-        </a>
-        <?php }; ?> 
-            <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32<i class="bi bi-caret-right-fill"></i> &#32 Expenses </div>
+            <a class="btn btn-outline-danger" href="tricount/show_tricount/<?=$tricount->id;?>">Back</a>
+            <?php }else{?>
+            <a class="btn btn-outline-danger" href="operation/show_operation/<?=$operation->id;?>">Back</a>
+            </a>
+            <?php }; ?> 
+            <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32;<i class="bi bi-caret-right-fill"></i> &#32; Expenses </div>
             <button type="submit" class="btn btn-primary" form="form1">Save</button>
             </div>
         </div>
-    </header>
-    <body>
+        </header>
         <div class="container-sm">
             <?php if($operation_name=="add"){
                 $action = "operation/add_operation/$tricount->id";
@@ -33,26 +33,26 @@
             <div class="form-group">
             <form method='post' action=<?=$action?> enctype='multipart/form-data' id="form1">
             <div class="input-group mb-3 has-validation">    
-                <input type="text" class="form-control <?php echo count($errors_title)!=0 ? 'is-invalid' : ''?> " name='title' id='title' rows='1' placeholder="Title" value=<?=$title?>>
+                <input type="text" class="form-control<?php echo count($errors_title)!=0 ? ' is-invalid' : ''?>" name='title' id='title' placeholder="Title" value="<?=$title?>">
             </div>
                 <?php if (count($errors_title) != 0): ?>
                 <div class='errors'>
                     <ul>
                         <?php foreach ($errors_title as $error): ?>
-                            <text class="text-danger"><li><?= $error ?></li></text>
+                            <li class="text-danger"><?= $error ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
                 <?php endif; ?>
                 <div class="input-group mb-3">
-                <input type="number" class="form-control <?php echo count($errors_amount)!=0 ? 'is-invalid' : ''?>" step="0.01" name='amount' id='amount' value="<?=$amount?>" placeholder="Amount">
+                <input type="number" class="form-control<?php echo count($errors_amount)!=0 ? ' is-invalid' : ''?>" step="0.01" name='amount' id='amount' value="<?=$amount?>" placeholder="Amount">
                 <span class="input-group-text">EUR</span>            
                 </div>
                 <?php if (count($errors_amount) != 0): ?>
                 <div class='errors'>
                     <ul>
                         <?php foreach ($errors_amount as $error_amount): ?>
-                            <text class="text-danger"><li><?= $error_amount ?></li></text>
+                            <li class="text-danger"><?= $error_amount ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -63,25 +63,23 @@
                 <div class='errors'>
                     <ul>
                         <?php foreach ($errors_date as $error_date): ?>
-                            <text class="text-danger"><li><?= $error_date ?></li></text>
+                            <li class="text-danger"><?= $error_date ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
                 <?php endif; ?>
-                <label for="paidby">Paid by:</label>
-                            <select class="form-control mt-2" name="payer">
+                <label for="payer">Paid by:</label>
+                            <select class="form-control mt-2" name="payer" id="payer">
                             <?php foreach ($subscriptions as $subscription): ?>  
                             <option value="<?=$subscription->full_name; ?>"><?=$subscription->full_name; ?></option>  
                             <?php endforeach; ?>
                             </select>                           
-                </div>
-                <p>For whom ?(select at least one)</p>
+                <p class="mt-2">For whom ?(select at least one)</p>
                     <?php foreach ($subscriptions as $subscription): ?>
                         <div class='input-group input-group-lg'>  
                         <div class="input-group-text mb-3">
-                        <input type="checkbox" class="form-check-input" id="checkboxes" name="checkboxes[]" value="<?=$subscription->id?>"
-                        <?php if (in_array($subscription->id, $checkboxes)) { echo 'checked'; } ?>
-                        >
+                        <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?=$subscription->id?>"
+                        <?php if (in_array($subscription->id, $checkboxes)) { echo 'checked'; } ?>>
                         </div>
                         <div class="input-group-text mb-3 w-50">
                         <span class="text"><?=$subscription->full_name;?></span>
@@ -92,14 +90,15 @@
                                 <?php $weight = $weights[$i]; ?>
                             <?php endif; ?>
                         <?php endfor; ?>
-                        <input type="number" class="form-control mb-3" id="weight" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
-                        <input type="hidden" id="ids" name="ids[]" value="<?=$subscription->id?>">
+                        <input type="number" class="form-control mb-3" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
+                        <input type="hidden" name="ids[]" value="<?=$subscription->id?>">
+                        </div>
                     <?php endforeach; ?>                 
                     <?php if(count($errors_checkbox)!=0) : ?>
                             <div class='errors'>
                                 <ul>
                                     <?php foreach ($errors_checkbox as $error): ?>
-                                        <text class="text-danger"><li><?= $error ?></li></text>
+                                        <li class="text-danger"><?= $error ?></li>
                                     <?php endforeach; ?>
                                     </ul>
                             </div>
@@ -108,12 +107,11 @@
                             <div class='errors'>
                                 <ul>
                                     <?php foreach ($errors_weights as $error): ?>
-                                        <text class="text-danger"><li><?= $error ?></li></text>
+                                        <li class="text-danger"><?= $error ?></li>
                                     <?php endforeach; ?>
                                     </ul>
                             </div>
                         <?php endif; ?>               
-                </div>
             </form>
         </div>
         <?php if($operation_name=="edit"){?>
@@ -121,5 +119,6 @@
                 <a class="btn btn-danger w-100" href="operation/delete_operation/<?=$operation->id;?>">Delete</a>
             </footer>
             <?php }; ?>
+        </div>
     </body>
 </html>
