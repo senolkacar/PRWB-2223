@@ -115,7 +115,6 @@ class ControllerTricount extends Controller {
             $other_users = $tricount->get_users_not_subscriber();        
             //var_dump($other_users);  
             if(isset($_POST["title"]) && isset($_POST["description"]) ) {
-                if($user == $tricount -> creator) {
                         $title = $_POST["title"];
                         $description=$_POST["description"];
                         $errors_title = Tricount::validate_title($_POST["title"]);//could have the same name with the others
@@ -130,17 +129,14 @@ class ControllerTricount extends Controller {
     
                         if(count($_POST) > 0 && count($errors) == 0){
                             $this -> redirect("tricount", "show_tricount", $tricount->id);  
-                        } 
-    
-                    }else{
-                        $error = "only creator could edit this tricount.";
-                    }
+                        }     
             }    
            
         }
         else{
             $this->redirect("tricount");
         }
+
         (new View("edit_tricount")) -> show(["id"=>$id,
                                             "tricount"=>$tricount,
                                             "title"=>$title,
@@ -162,17 +158,12 @@ class ControllerTricount extends Controller {
             $id=(int)$_GET["param1"];            
             $tricount = Tricount::get_tricount_by_id($id);
 
-            if(isset($_POST["delete_member"]) ) {
-               // if($user == $tricount -> creator) {                       
+            if(isset($_POST["delete_member"]) ) {                    
                     $subscriber = User::get_user_by_id($_POST["delete_member"]);
                     if($subscriber) {
                         Subscription::delete_subscription($tricount, $subscriber);//delete
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
                     }
-
-                //}else{
-                    //    throw new Exception("only creator could edit this tricount.");
-                //}
             } 
         }
 
@@ -186,17 +177,12 @@ class ControllerTricount extends Controller {
             $id= (int)$_GET["param1"];           
             $tricount = Tricount::get_tricount_by_id($id);
 
-            if(isset($_POST["subscriber"]) ) {
-                //if($user == $tricount -> creator) {                       
+            if(isset($_POST["subscriber"]) ) {                    
                     $subscriber = User::get_user_by_name($_POST["subscriber"]);//name unique for users
                     if($subscriber ) {
                         Subscription::persist($subscriber, $tricount);
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
                     }
-
-               // }else{
-                       // throw new Exception("only creator could edit this tricount.");
-                //}
             }  
         }
     
@@ -247,7 +233,6 @@ public function show_balance():void{
             $tricount = Tricount::get_tricount_by_id($id);
             
             if(isset($_POST["id_tricount"])){
-                if($tricount->creator == $user){
                     $tricount = Tricount::get_tricount_by_id($id);
                     $tricount ->delete($user);
                     if ($tricount) {
@@ -255,12 +240,7 @@ public function show_balance():void{
                      } else {
                         $errors[]="Wrong/missing ID or action no permited";
                         //throw new Exception("Wrong/missing ID or action no permited");
-                     }
-
-                }else{
-                    $errors[]="You may not creator of the tricount.";
-                }
-                
+                     }                
             }
         }
 

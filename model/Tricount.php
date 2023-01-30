@@ -178,7 +178,7 @@ Class Tricount extends Model{
     }
 
     public function delete(User $user):Tricount|false{
-        if($this->creator == $user){
+       
             Repartition::delete($this);
             if (Repartition::delete($this))
                 Operation::delete($this);
@@ -187,11 +187,9 @@ Class Tricount extends Model{
                     if(Subscription::delete($this)){
                         $this ->delete_repartition_templates();
                         self::execute('DELETE FROM tricounts WHERE id=:id', ['id' => $this->id]);
-                        return $this;
+                        
                     }
-                
-        }  else 
-        return false;
+             return $this;               
       
     }
     
