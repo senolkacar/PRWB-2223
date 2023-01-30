@@ -147,7 +147,7 @@ class ControllerTricount extends Controller {
             $id=(int)$_GET["param1"];            
             $tricount = Tricount::get_tricount_by_id($id);
 
-            if(isset($_POST["delete_member"]) ) {                    
+            if(isset($_POST["delete_member"]) ) {                   
                     $subscriber = User::get_user_by_id($_POST["delete_member"]);
                     if($subscriber) {
                         Subscription::delete_subscription($tricount, $subscriber);//delete

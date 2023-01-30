@@ -47,14 +47,14 @@
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="text">
-                                <a href='operation/show_operation/<?=$depense["id"]; ?>' class="stretched-link" style='text-decoration:none ; color:inherit'></a>     
-                                <p class="fw-bold"><?=$depense["title"]?></p>
-                                <?php echo "Paid by ".User::get_user_by_id($depense["initiator"])->full_name?>
+                                <a href='operation/show_operation/<?=$depense->id; ?>' class="stretched-link" style='text-decoration:none ; color:inherit'></a>     
+                                <p class="fw-bold"><?=$depense->title?></p>
+                                <?php echo "Paid by ".$depense->initiator->full_name?>
                                 </div>  
                             </div>
                             <div class="text-end">
-                                <p class="fw-bold"><?=round($depense["amount"],2)?>&euro;</p>
-                                <?=$depense["operation_date"]?>
+                                <p class="fw-bold"><?=round($depense->amount,2)?>&euro;</p>
+                                <?=$depense->operation_date?>
                             </div>
                         </li>
                     </ul>

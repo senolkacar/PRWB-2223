@@ -97,7 +97,12 @@ Class Tricount extends Model{
 
     public function get_depenses() : array {//should return object
         $query = self::execute("SELECT * FROM operations where tricount =:tricount order by operation_date desc",["tricount" =>$this->id]);
-        return $query->fetchAll();
+        $data = $query->fetchAll();
+        $depenses=[];
+        foreach($data as $row){
+            $depenses[] = new Operation($row["title"],Tricount::get_tricount_by_id($row["tricount"]),$row["amount"],User::get_user_by_id($row["initiator"]),$row["operation_date"],$row["created_at"],$row["id"]);
+        }
+        return $depenses;
     }
 
     public function get_nb_participants(): int{

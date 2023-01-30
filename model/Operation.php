@@ -125,9 +125,9 @@ Class Operation extends Model{
         $depenses = $tricount->get_depenses();
             $mytotal = 0;
             foreach($depenses as $operation){
-                $total_weight = Repartition::get_total_weight_by_operation($operation["id"]);
-                $weight = Repartition::get_user_weight($user->id, $operation["id"]);
-                $mytotal+= $operation["amount"] * $weight / $total_weight;
+                $total_weight = Repartition::get_total_weight_by_operation($operation->id);
+                $weight = Repartition::get_user_weight($user->id, $operation->id);
+                $mytotal+= $operation->amount * $weight / $total_weight;
             }
            return $mytotal = number_format($mytotal, 2, '.', '');
         
@@ -137,7 +137,7 @@ Class Operation extends Model{
         $depenses = $tricount->get_depenses();
             $total = 0;
             foreach($depenses as $operation){
-                $total+= $operation["amount"];
+                $total+= $operation->amount;
             }
            return $total = number_format($total, 2, '.', '');
         
