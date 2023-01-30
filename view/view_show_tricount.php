@@ -21,7 +21,7 @@
         </header>
         <div class="container-sm">      
                     <?php if($nb_participants == 0): ?>
-            <ul class="list-group align-items-center">
+            <ul class="list-group list-unstyled align-items-center">
                         <li class="m-3 border w-100 rounded">
                         <div class="text-center">
                         <div class="h3 p-3 border-bottom border-secondary" style="background-color: #F7F7F7">You are alone!</div>
@@ -31,7 +31,7 @@
                     </li>
             </ul>
                         <?php elseif(!$depenses): ?>
-            <ul class="list-group align-items-center">
+            <ul class="list-group list-unstyled align-items-center">
                         <li class="m-3 border border-secondary w-100 rounded">
                         <div class="text-center">
                         <div class="h3 p-3 border-bottom border-secondary" style="background-color: #F7F7F7"><?php echo "Your tricount is empty!" ?></div>
