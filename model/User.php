@@ -118,7 +118,7 @@ Class User extends Model{
         return $errors;
     }
 
-    public static function validate_full_name(string $full_name): array{      //for new user, name unique 
+    public static function validate_full_name(string $full_name): array{   
         $errors=[];
         if(strlen(trim($full_name))<3){
             $errors[] = "Full name must be at least 3 characters long";
