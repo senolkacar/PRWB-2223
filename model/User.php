@@ -49,7 +49,7 @@ Class User extends Model{
 
     private static function validate_email_format(string $mail):array{
         $errors=[];
-        if(!strlen($mail)>0){
+        if(!strlen(trim($mail))>0){
             $errors[] = "Email is required";
         }
         elseif(!filter_var($mail,FILTER_VALIDATE_EMAIL)){
@@ -65,7 +65,7 @@ Class User extends Model{
         if($user){
             $errors1[] = "Email already used";
         }
-        $errors=(array_merge($errors1,$this::validate_email_format($mail)));
+        $errors=(array_merge($errors1,User::validate_email_format($mail)));
         return $errors;
     }
 
@@ -75,7 +75,7 @@ Class User extends Model{
         if($user && $user->id != $this->id){ 
             $errors1[] = "Email already used";
         }        
-        $errors=(array_merge($errors1,$this::validate_email_format($mail)));
+        $errors=(array_merge($errors1,self::validate_email_format($mail)));
         return $errors;
     }
 
@@ -118,11 +118,31 @@ Class User extends Model{
         return $errors;
     }
 
-    public static function validate_full_name(string $full_name): array{        
+    private static function validate_full_name_format(string $full_name){
         $errors=[];
         if(strlen(trim($full_name))<3){
             $errors[] = "Full name must be at least 3 characters long";
         }
+        return $errors;
+    }
+
+    public static function validate_full_name(string $full_name): array{      //for new user, name unique 
+        $errors1=[];
+        $user = self::get_user_by_name($full_name);
+        if($user){
+            $errors1[] = "name already used";
+        } 
+        $errors=(array_merge($errors1,self::validate_full_name_format($full_name)));
+        return $errors;
+    }
+
+    public function validate_full_name_for_edit(string $full_name){
+        $errors1=[];
+        $user = self::get_user_by_name($full_name);
+        if($user && $user->id != $this->id){ 
+            $errors1[] = "name already used";
+        }        
+        $errors=(array_merge($errors1,self::validate_full_name_format($full_name)));
         return $errors;
     }
 

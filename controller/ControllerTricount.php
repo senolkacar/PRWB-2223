@@ -11,8 +11,7 @@ require_once 'framework/Controller.php';
 class ControllerTricount extends Controller {
 
 
-    public function index() : void {
- 
+    public function index() : void { 
         $member=$this->get_user_or_redirect();
         $tricounts =[];
         $tricounts =$member->get_tricounts_involved();
@@ -23,7 +22,7 @@ class ControllerTricount extends Controller {
 
     public function add_tricount():void {
         $user=$this->get_user_or_redirect();
-        //var_dump($user);//why user id = null ?
+        //var_dump($user);
         $title="";
         $description="";
         $errors_title=[];
@@ -49,7 +48,6 @@ class ControllerTricount extends Controller {
             "description"=>$description,
             "errors_title"=>$errors_title,
             "errors_description"=>$errors_description]);
-
     }
 
     public function show_tricount():void {
@@ -102,11 +100,11 @@ class ControllerTricount extends Controller {
             $description=$tricount->description;
             $subscriptions =$tricount->get_users_including_creator();  
             $other_users = $tricount->get_users_not_subscriber();        
-            //var_dump($other_users);  
+          
             if(isset($_POST["title"]) && isset($_POST["description"]) ) {
                         $title = $_POST["title"];
                         $description=$_POST["description"];
-                        $errors_title = Tricount::validate_title($_POST["title"]);//could have the same name with the others
+                        $errors_title = Tricount::validate_title($_POST["title"]);//the new tricount could have the same name with the others
                         $errors_description= Tricount::validate_description($_POST["description"]);
                         $errors=(array_merge($errors_description,$errors_title));
 
@@ -150,7 +148,7 @@ class ControllerTricount extends Controller {
             if(isset($_POST["delete_member"]) ) {                   
                     $subscriber = User::get_user_by_id($_POST["delete_member"]);
                     if($subscriber) {
-                        Subscription::delete_subscription($tricount, $subscriber);//delete
+                        Subscription::delete_subscription($tricount, $subscriber);
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
                     }
             } 
