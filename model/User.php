@@ -168,14 +168,14 @@ Class User extends Model{
 
     }
 
-    public function has_operation() : bool {
-        $query = self::execute("SELECT count(*) FROM repartitions where user=:user ", ["user"=>$this->id]);
+    public function has_operation(Tricount $tricount) : bool {
+        $query = self::execute("SELECT count(*) FROM repartitions where user=:user and operation in (select id from operations where tricount=:tricount)", ["user"=>$this->id, "tricount"=>$tricount->id]);
         $data = $query->fetch();
         return ((int)$data[0]) > 0;
     }
 
-    public function is_initiator() : bool {
-       $query = self::execute("SELECT count(*) FROM operations where initiator=:user ", ["user"=>$this->id]);
+    public function is_initiator(Tricount $tricount) : bool {
+       $query = self::execute("SELECT count(*) FROM operations where initiator=:user and tricount=:tricount", ["user"=>$this->id,"tricount"=>$tricount->id]);
         $data = $query->fetch();
         return ((int)$data[0]) > 0;
      }

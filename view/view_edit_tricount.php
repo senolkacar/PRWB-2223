@@ -66,9 +66,8 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center"><?= $subscription->full_name ?>
                             <?php if($subscription->full_name == $tricount->creator->full_name): ?>
                                 (creator)                                                      
-                                <?php elseif(!($subscription->has_operation()) && !($subscription->is_initiator())): ?>
-                                    <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>
-                                    
+                                <?php elseif(!($subscription->has_operation($tricount)) && !($subscription->is_initiator($tricount))): ?>
+                                    <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>                                    
                                     <button type='submit'  class="btn_delete"><span class="badge bg-white text-dark"><i class="bi bi-trash"></i> </span> </button>                                   
                                    
                             <?php endif; ?>
