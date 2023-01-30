@@ -164,8 +164,10 @@ class ControllerTricount extends Controller {
             $id= (int)$_GET["param1"];           
             $tricount = Tricount::get_tricount_by_id($id);
 
-            if(isset($_POST["subscriber"]) ) {                    
-                    $subscriber = User::get_user_by_name($_POST["subscriber"]);//name unique for users
+            if(isset($_POST["subscriber"]) ) {    
+                var_dump($_POST["subscriber"]);            
+                    $subscriber = User::get_user_by_id($_POST["subscriber"]);//name not unique for users. use user id instead of full name to get user
+                var_dump($subscriber);
                     if($subscriber ) {
                         Subscription::persist($subscriber, $tricount);
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);

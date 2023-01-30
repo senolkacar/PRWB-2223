@@ -64,7 +64,7 @@
                 <ul class="list-group" >
                         <?php foreach ($subscriptions as $subscription): ?>
                             <li class="list-group-item d-flex justify-content-between align-items-center"><?= $subscription->full_name ?>
-                            <?php if($subscription->full_name == $tricount->creator->full_name): ?>
+                            <?php if($subscription->id == $tricount->creator->id): ?>
                                 (creator)                                                      
                                 <?php elseif(!($subscription->has_operation($tricount)) && !($subscription->is_initiator($tricount))): ?>
                                     <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>                                    
@@ -85,7 +85,7 @@
                         <select class="form-select" aria-label="Example select with button addon"  name = "subscriber" id="subscriber" required>
                             <option value="">--Add a new subscriber--</option>
                             <?php foreach ($other_users as $other_user): ?>  
-                            <option value="<?=$other_user->full_name; ?>"><?=$other_user->full_name; ?></option> 
+                            <option value="<?=$other_user->id; ?>"><?=$other_user->full_name; ?></option>                             
                             <?php endforeach; ?>
                          </select>                                                                               
                         <button class="btn btn-primary" style="width: auto" type='submit'>add</button>                                                                  

@@ -26,7 +26,7 @@ Class User extends Model{
         }
     }
 
-    public static function get_user_by_name(?string $full_name): User|false{
+    public static function get_user_by_name(?string $full_name): User|false{ // If name isn't unique should avoid to use this method.
         $query = self::execute("SELECT * FROM users WHERE full_name = :full_name",[":full_name" => $full_name]);
         $data = $query->fetch();
         if($query->rowCount()==0){
@@ -118,31 +118,11 @@ Class User extends Model{
         return $errors;
     }
 
-    private static function validate_full_name_format(string $full_name){
+    public static function validate_full_name(string $full_name): array{      //for new user, name unique 
         $errors=[];
         if(strlen(trim($full_name))<3){
             $errors[] = "Full name must be at least 3 characters long";
         }
-        return $errors;
-    }
-
-    public static function validate_full_name(string $full_name): array{      //for new user, name unique 
-        $errors1=[];
-        $user = self::get_user_by_name($full_name);
-        if($user){
-            $errors1[] = "name already used";
-        } 
-        $errors=(array_merge($errors1,self::validate_full_name_format($full_name)));
-        return $errors;
-    }
-
-    public function validate_full_name_for_edit(string $full_name){
-        $errors1=[];
-        $user = self::get_user_by_name($full_name);
-        if($user && $user->id != $this->id){ 
-            $errors1[] = "name already used";
-        }        
-        $errors=(array_merge($errors1,self::validate_full_name_format($full_name)));
         return $errors;
     }
 

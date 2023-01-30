@@ -34,12 +34,8 @@ class ControllerUser extends Controller {
             $full_name=$_POST["full_name"];
 
             $errors_mail = $user->validate_email_for_edit($mail);
-            $errors_name = $user->validate_full_name_for_edit($full_name);
-            //$errors_name = User::validate_full_name($_POST["full_name"]);
-            //$user_check_name = User::get_user_by_name($_POST["full_name"]);
-            //if($user_check_name != false && $user_check_name->id != $user -> id){
-            //    $errors_name[] = "user name exist already.";
-            //}
+            $errors_name = User::validate_full_name($full_name);
+
             if(isset($_POST["iban"]) && strlen(trim($_POST["iban"]))>0){
                 $iban = $_POST["iban"];
                 $errors_iban = User::validate_iban($_POST["iban"]);          
