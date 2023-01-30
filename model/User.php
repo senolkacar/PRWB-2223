@@ -96,7 +96,8 @@ Class User extends Model{
     }
 
     public static function validate_passwords(string $password, string $password_confirm): array{
-        //should we show the validation for each password ? only the first one is necessary. The second one should be the same as the first one(Tingting)
+        //should we show the validation for each password ? 
+        //only the first one is necessary. The second one should be the same as the first one(Tingting)
         //$errors=User::validate_password($password_confirm);
         $errors=[];
         if($password !== $password_confirm){
@@ -183,9 +184,7 @@ Class User extends Model{
         $query = self::execute("SELECT count(*) FROM operations where id=:id and initiator=:user ", ["user"=>$this->id,"id"=>$operationid]);
         $data = $query->fetch();
         return ((int)$data[0]) > 0;
-    }
-
-    
+    } 
 
     public function is_involved(int $tricountid) : bool{ // without creator
         $query = self::execute("SELECT count(*) FROM subscriptions where user=:user and tricount=:tricount",["user"=>$this->id,"tricount"=>$tricountid]);

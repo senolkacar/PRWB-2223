@@ -15,11 +15,6 @@ class ControllerTricount extends Controller {
  
         $member=$this->get_user_or_redirect();
         $tricounts =[];
-
-        if(isset($_GET["param1"]) && $_GET["parame1"] !=="") { 
-            $member = User::get_user_by_mail($_GET["param1"]);
-            }
-
         $tricounts =$member->get_tricounts_involved();
         (new View("list_tricount"))->show([
             "tricounts" => $tricounts
@@ -105,7 +100,7 @@ class ControllerTricount extends Controller {
 
             $title=$tricount->title;
             $description=$tricount->description;
-            $subscriptions =$tricount-> get_users_including_creator();  
+            $subscriptions =$tricount->get_users_including_creator();  
             $other_users = $tricount->get_users_not_subscriber();        
             //var_dump($other_users);  
             if(isset($_POST["title"]) && isset($_POST["description"]) ) {
