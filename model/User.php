@@ -37,28 +37,7 @@ Class User extends Model{
     }
 
 
-    public static function get_users(): array{
-        $query = self::execute("SELECT * FROM users",[]);
-        $data = $query->fetchAll();
-        $users = [];
-        foreach($data as $row){
-            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
-        }
-        return $users;
-    }
-
-    public function get_other_users() : array{
-        $query = self::execute("SELECT * FROM users WHERE mail <> :mail",["mail"=>$this->mail]);
-        $data = $query->fetchAll();
-        $users = [];
-        foreach($data as $row){
-            $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
-        }
-        return $users;
-    
-    }
-
-    public function persist() : User{
+    public function persist() : User{ //used by singup to be modified
         if(self::get_user_by_mail($this->mail)){
             self::execute("UPDATE users SET hashed_password = :hashed_password, full_name = :full_name, role = :role, iban = :iban WHERE mail = :mail",["hashed_password"=>$this->hashed_password,"full_name"=>$this->full_name,"role"=>$this->role,"iban"=>$this->iban,"mail"=>$this->mail]);
         }else{
@@ -78,7 +57,7 @@ Class User extends Model{
         return $this;
     }
 
-    public static function validate_email(string $mail): array{
+    public static function validate_email(string $mail): array{// ?
         $errors=[];
         $user = self::get_user_by_mail($mail);
         if($user){
@@ -94,11 +73,14 @@ Class User extends Model{
     }
 
     public function validate_email_for_edit(string $mail): array{
+
         $errors=[];
         $user = self::get_user_by_mail($mail);
-        if($user && $user->id != $this->id){
+        if($user && $user->id != $this->id){ //
             $errors[] = "Email already used";
         }
+
+        
         if(!strlen($mail)>0){
             $errors[] = "Email is required";
         }

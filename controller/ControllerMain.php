@@ -63,7 +63,7 @@ class ControllerMain extends Controller{
             $errors = (array_merge($errors_email,$errors_full_name,$errors_iban,$errors_password,$errors_password_confirm));
 
             if(count($errors)==0){
-                $user->persist();
+                $user->persist();// change to persisit by id ?
                 $this->log_user($user);
             }
         }
