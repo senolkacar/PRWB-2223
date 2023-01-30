@@ -53,7 +53,6 @@ class ControllerUser extends Controller {
                 $user->full_name = $_POST["full_name"];
                 $user->iban = strtoupper($_POST["iban"]);
                 $user->persist();
-                //$success = "Profile updated"; 
             }
         }
         if(count($_POST) > 0 && count($errors) == 0)

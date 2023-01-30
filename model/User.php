@@ -37,7 +37,7 @@ Class User extends Model{
     }
 
 
-    public function persist(){ //used by singup to be modified
+    public function persist(){ 
         if($this->id == null){
             self::execute("INSERT INTO users (mail,hashed_password,full_name,role,iban) VALUES (:mail,:hashed_password,:full_name,:role,:iban)",["mail"=>$this->mail,"hashed_password"=>$this->hashed_password,"full_name"=>$this->full_name,"role"=>$this->role,"iban"=>$this->iban]);
             $user = self::get_user_by_id(self::lastInsertId());
@@ -47,12 +47,8 @@ Class User extends Model{
         }
     }
 
-    public static function validate_email(string $mail): array{// ?
+    private static function validate_email_format(string $mail):array{
         $errors=[];
-        $user = self::get_user_by_mail($mail);
-        if($user){
-            $errors[] = "Email already used";
-        }
         if(!strlen($mail)>0){
             $errors[] = "Email is required";
         }
@@ -60,29 +56,32 @@ Class User extends Model{
             $errors[] = "Invalid email";
         }
         return $errors;
+
     }
 
-    public function validate_email_for_edit(string $mail): array{
-
-        $errors=[];
+    public static function validate_email(string $mail): array{  //for new user (signup)
+        $errors1=[];
         $user = self::get_user_by_mail($mail);
-        if($user && $user->id != $this->id){ //
-            $errors[] = "Email already used";
+        if($user){
+            $errors1[] = "Email already used";
         }
+        $errors=(array_merge($errors1,$this::validate_email_format($mail)));
+        return $errors;
+    }
 
-        
-        if(!strlen($mail)>0){
-            $errors[] = "Email is required";
-        }
-        elseif(!filter_var($mail,FILTER_VALIDATE_EMAIL)){
-            $errors[] = "Invalid email";
-        }
+    public function validate_email_for_edit(string $mail): array{ // not static, for edit profile
+        $errors1=[];
+        $user = self::get_user_by_mail($mail);
+        if($user && $user->id != $this->id){ 
+            $errors1[] = "Email already used";
+        }        
+        $errors=(array_merge($errors1,$this::validate_email_format($mail)));
         return $errors;
     }
 
     public static function validate_password(string $password): array{
         $errors=[];
-        if(strlen($password)<8||strlen($password)>16){
+        if(strlen(trim($password))<8||strlen(trim($password))>16){
             $errors[] = "Password length must be between 8 and 16 characters";
         }
         if(!((preg_match("/[A-Z]/",$password))&&preg_match("/\d/",$password)&&preg_match("/['\";:,.\/?!\\-]/",$password))){
@@ -121,7 +120,7 @@ Class User extends Model{
 
     public static function validate_full_name(string $full_name): array{        
         $errors=[];
-        if(strlen($full_name)<3){
+        if(strlen(trim($full_name))<3){
             $errors[] = "Full name must be at least 3 characters long";
         }
         return $errors;
