@@ -269,7 +269,7 @@ class ControllerOperation extends Controller
                 $this->redirect("tricount");
             }
             $operation = Operation::get_operation_by_id($id);
-            if (!$operation ){
+            if (!$operation){
                 $this->redirect("tricount");
             }
             if($user->is_involved_in_operation($id)||$user->is_initiator_check($id)){ 

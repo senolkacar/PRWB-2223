@@ -45,10 +45,10 @@ Class Operation extends Model{
 
     public static function validate_title(?string $title): array{
         $errors=[];
-        if($title==null or strlen($title)==0 or $title==""){
+        if($title==null || strlen($title)==0 || $title==""){
             $errors[]= "Title is mandatory";
-        } elseif(strlen($title)<3){
-            $errors[]= "Title must have at least 3 characters";
+        } elseif(strlen($title)<3 || empty(trim($title))){
+            $errors[]= "Title must have at least 3 characters(excluding white spaces)";
         }
         return $errors;
     }
