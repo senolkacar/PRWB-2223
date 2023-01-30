@@ -23,29 +23,30 @@
 
         <div class="container-sm">
             <ul class="list-group"> 
-            <?php foreach ($tricounts as $tricount):  ?>
+            <?php foreach ($tricounts as $row):  ?>
+                <?php $tricount = $row[0]; $count=$row[1]; ?>
 
                 <li class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="ms-2 me-auto">
                         <div class="fw-bold">
-                            <a href='tricount/show_tricount/<?=$tricount['id']?>' class="stretched-link"  style="text-decoration:none ; color:inherit;">
-                             <?=$tricount['title']?></a>
+                            <a href='tricount/show_tricount/<?=$tricount->id?>' class="stretched-link" 
+                             style="text-decoration:none ; color:inherit;">
+                             <?=$tricount->title?></a>
                         </div> 
                        
-                        <?php if(!$tricount['description'] || $tricount['description'] == "NULL" ): ?>
+                        <?php if(!$tricount->description || $tricount->description == "NULL" ): ?>
                             No description
                         <?php else: ?>
-                            <?=$tricount['description'] ?>
+                            <?=$tricount->description ?>
                         <?php endif; ?>               
                     </div>
                     <span class="badge bg-transparent text-dark">
-                        <?php if( $tricount['subscription_count'] == 0): ?>
+                        <?php if( $count== 0): ?>
                           you are alone
                         <?php else: ?>
-                            <?php echo " with ". $tricount['subscription_count']." friends" ?>
+                            <?php echo " with ". $count." friends" ?>
                         <?php endif; ?>
                     </span>
-                    
             <?php endforeach; ?>
             
                 </li>

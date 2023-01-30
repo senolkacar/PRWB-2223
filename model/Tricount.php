@@ -14,16 +14,6 @@ Class Tricount extends Model{
         
     }
 
-    public static function get_tricounts(): array{
-        $query = self::execute("SELECT * FROM tricounts",[]);
-        $data = $query->fetchAll();
-        $tricounts = [];
-        foreach($data as $row){
-            $tricounts[] = new Tricount($row["title"],$row["description"],$row["created_at"],$row["creator"]);
-        }
-        return $tricounts;
-    }
-
     public static function get_tricount_by_id(int $id): Tricount|false{
         $query = self::execute("SELECT * FROM tricounts WHERE id = :id",[":id" => $id]);
         $data = $query->fetch();
@@ -31,16 +21,6 @@ Class Tricount extends Model{
             return false;
         }else{
             return new Tricount($data["title"],User::get_user_by_id($data["creator"]),$data["description"],$data["created_at"],$data["id"]);
-        }
-    }
-
-    public static function get_tricount_by_creator(int $creator): Tricount|false{
-        $query = self::execute("SELECT * FROM tricounts WHERE creator = :creator",[":creator" => $creator]);
-        $data = $query->fetch();
-        if($query->rowCount()==0){
-            return false;
-        }else{
-            return new Tricount($data["title"],$data["description"],$data["created_at"],$data["creator"]);
         }
     }
 
@@ -60,14 +40,9 @@ Class Tricount extends Model{
         return $errors;
     }
 
-    public function validate(): array{
-        $errors=[];
-        if(strlen($this->title)<3){
-            $errors[] = "Title must be at least 3 characters long";
-        }
-        if(strlen($this->description) >0 && strlen($this->description)<3){
-            $errors[] = "Description must be at least 3 characters long";
-        }
+    public function validate(): array{        
+        
+        $errors=(array_merge($this::validate_title($this->title),$this::validate_description($this->description))); 
 
         return $errors;
     }
@@ -108,27 +83,22 @@ Class Tricount extends Model{
         $query = self::execute("SELECT DISTINCT tricounts.*, (SELECT count(*) FROM subscriptions WHERE subscriptions.tricount = tricounts.id)
          as subscription_count  FROM tricounts LEFT JOIN subscriptions ON subscriptions.tricount = tricounts.id 
          where tricounts.creator = :user or subscriptions.user = :user ",["user"=>$user->id]);
-         
-        return $query->fetchAll();
+        
+        $data = $query->fetchAll();
+         $tricounts = [];
+         foreach($data as $row){
+             $tricounts[] = [new Tricount($row["title"],User::get_user_by_id($row["creator"]) ,$row["description"],$row["created_at"], $row["id"]),
+              $row["subscription_count"]];
+         }
+                 
+        return $tricounts;
 
     }
 
-    public function get_depenses() : array {
+    public function get_depenses() : array {//should return object
         $query = self::execute("SELECT * FROM operations where tricount =:tricount order by operation_date desc",["tricount" =>$this->id]);
         return $query->fetchAll();
     }
-
-
-    public static function get_tricount_by_name(string $name): Tricount|false{
-        $query = self::execute("SELECT * FROM tricounts WHERE title = :title",["title" => $name]);
-        $data = $query->fetch();
-        if($query->rowCount()==0){
-            return false;
-        }else{
-            return new Tricount($data["title"],User::get_user_by_id($data["creator"]),$data["description"],$data["created_at"],$data["id"]);
-        }
-    }
-
 
     public function get_nb_participants(): int{
         $query = self::execute("SELECT count(*) FROM subscriptions WHERE tricount = :tricount",["tricount" => $this->id]);
@@ -137,9 +107,7 @@ Class Tricount extends Model{
     }
 
     public function get_nb_participants_including_creator(): int{
-        $query = self::execute("SELECT count(*) FROM subscriptions WHERE tricount = :tricount",["tricount" => $this->id]);
-        $data = $query->fetch();
-        return $data[0]+1;
+        return $this->get_nb_participants() +1;
     }
 
     public function get_users_including_creator(): array{
@@ -178,18 +146,13 @@ Class Tricount extends Model{
     }
 
     public function delete(User $user):Tricount|false{
-       
-            Repartition::delete($this);
-            if (Repartition::delete($this))
-                Operation::delete($this);
-                if(Operation::delete($this))
-                    Subscription::delete($this);
-                    if(Subscription::delete($this)){
-                        $this ->delete_repartition_templates();
-                        self::execute('DELETE FROM tricounts WHERE id=:id', ['id' => $this->id]);
-                        
+        if (Repartition::delete($this))
+            if(Operation::delete($this))
+               if(Subscription::delete($this)){
+                    $this ->delete_repartition_templates();
+                    self::execute('DELETE FROM tricounts WHERE id=:id', ['id' => $this->id]);                        
                     }
-             return $this;               
+        return $this;               
       
     }
     

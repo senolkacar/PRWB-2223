@@ -8,7 +8,7 @@ class ControllerUser extends Controller {
 
     public function index() : void {
         $user=$this->get_user_or_redirect();
-        $tricounts = Tricount::get_tricounts();
+        $tricounts =$user->get_tricounts_involved();
         (new View("list_tricount"))->show(["tricounts"=>$tricounts]);
     } 
 

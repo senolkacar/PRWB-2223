@@ -14,9 +14,6 @@ class ControllerTricount extends Controller {
     public function index() : void {
  
         $member=$this->get_user_or_redirect();
-        //var_dump($member);//why user id = null ?
-        //$member= User::get_user_by_mail($member->mail);
-        //var_dump($member);
         $tricounts =[];
 
         if(isset($_GET["param1"]) && $_GET["parame1"] !=="") { 
@@ -24,11 +21,8 @@ class ControllerTricount extends Controller {
             }
 
         $tricounts =$member->get_tricounts_involved();
-    
-        
         (new View("list_tricount"))->show([
             "tricounts" => $tricounts
-
             ]);
     } 
 
