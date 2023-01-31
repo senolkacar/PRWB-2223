@@ -218,9 +218,12 @@ public function show_balance():void{
                 $this->redirect("tricount");
             }
             $tricount = Tricount::get_tricount_by_id($id);
+            var_dump($user->id);
+            var_dump($tricount->title);
             
             if(isset($_POST["id_tricount"])){
-                    $tricount = Tricount::get_tricount_by_id($id);
+                    //$tricount = Tricount::get_tricount_by_id($id);
+                    $tricount = Tricount::get_tricount_by_id($_POST["id_tricount"]);
                     $tricount ->delete($user);
                     if ($tricount) {
                          $this->redirect("tricount", "index");

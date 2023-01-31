@@ -38,7 +38,6 @@ class Subscription extends Model {
     }
 
     public static function delete(Tricount $tricount) : bool {
-        //check if a members of the tricount?
         self::execute('DELETE FROM subscriptions WHERE tricount=:tricount', ['tricount' => $tricount->id]);    
         return true;
     }

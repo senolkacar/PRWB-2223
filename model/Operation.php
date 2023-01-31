@@ -169,8 +169,9 @@ Class Operation extends Model{
             }
     }
 
-    public static function delete(Tricount $tricount) {
-             self::execute('DELETE FROM operations WHERE tricount=:tricount', ['tricount' => $tricount->id]);    
+    public static function delete(Tricount $tricount): bool {
+             self::execute('DELETE FROM operations WHERE tricount=:tricount', ['tricount' => $tricount->id]); 
+             return true;   
     }
 
     public function get_users_by_operation_id(){
