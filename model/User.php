@@ -96,13 +96,21 @@ Class User extends Model{
 
     public static function validate_login(string $mail, string $password): array{
         $errors = [];
-        $user = User::get_user_by_mail($mail);
-        if($user){
-            if(!self::check_password($password,$user->hashed_password)){
-                $errors[] = "Wrong password. Please try again";
+        $mail_error = self::validate_email_format($mail);
+        foreach($mail_error as $error){
+            $errors[]=$error;
+        }
+        if(count($errors)==0){
+            $user = User::get_user_by_mail($mail);
+            if(!$user){
+                $errors[] = "Can't find user with this email '$mail'. Please sign up";
             }
-        }else{
-            $errors[] = "Can't find user with this email '$mail'. Please sign up";
+            if($password!=""&&!self::check_password($password,$user->hashed_password)){
+                     $errors[] = "Wrong password. Please try again";
+                 }
+        }
+        if($password==""){
+            $errors[]="Password cant be empty!";
         }
         return $errors;
     }
