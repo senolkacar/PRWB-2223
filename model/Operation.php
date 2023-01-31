@@ -144,7 +144,7 @@ Class Operation extends Model{
     }
 
 
-    public function persist():Operation {
+    public function persist() {
         if($this->id!==null){
             self::get_operation_by_id($this->id);
                 self::execute('UPDATE operations SET title=:title, tricount=:tricount, amount=:amount, initiator=:initiator, operation_date=:operation_date WHERE id=:id', 
@@ -167,13 +167,10 @@ Class Operation extends Model{
                 $this->id = $operation->id;
                 $this->created_at = $operation->created_at;
             }
-            return $this;
     }
 
-    public static function delete(Tricount $tricount) : bool {
-        //if ($user == $tricount->creator) 
-            self::execute('DELETE FROM operations WHERE tricount=:tricount', ['tricount' => $tricount->id]);    
-        return true;
+    public static function delete(Tricount $tricount) {
+             self::execute('DELETE FROM operations WHERE tricount=:tricount', ['tricount' => $tricount->id]);    
     }
 
     public function get_users_by_operation_id(){
