@@ -26,17 +26,6 @@ Class User extends Model{
         }
     }
 
-    public static function get_user_by_name(?string $full_name): User|false{ // If name isn't unique should avoid to use this method.
-        $query = self::execute("SELECT * FROM users WHERE full_name = :full_name",[":full_name" => $full_name]);
-        $data = $query->fetch();
-        if($query->rowCount()==0){
-            return false;
-        }else{
-            return new User($data["mail"],$data["hashed_password"],$data["full_name"],$data["role"],$data["iban"],$data["id"]);
-        }
-    }
-
-
     public function persist(){ 
         if($this->id == null){
             self::execute("INSERT INTO users (mail,hashed_password,full_name,role,iban) VALUES (:mail,:hashed_password,:full_name,:role,:iban)",["mail"=>$this->mail,"hashed_password"=>$this->hashed_password,"full_name"=>$this->full_name,"role"=>$this->role,"iban"=>$this->iban]);

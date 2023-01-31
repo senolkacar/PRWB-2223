@@ -175,7 +175,6 @@ class ControllerOperation extends Controller
             
             $errors = array_merge($errors_title, $errors_amount, $errors_checkbox, $errors_weights, $errors_date);
             if ((count($errors)) == 0 && (count($_POST) > 0)) {
-                var_dump($_POST["payer"]);
                 $operation = $this->add_depense($tricount, $operation);
                 $this->add_repartition($operation, $is_new_operation);
                 if ($operation_name == "edit") {
@@ -216,12 +215,12 @@ class ControllerOperation extends Controller
     public function add_depense(Tricount $tricount, ?Operation $operation): Operation|false
     {
         if ($operation == null) {
-            $operation = new Operation($_POST["title"], $tricount, $_POST["amount"], User::get_user_by_name($_POST["payer"]), $_POST["date"]);
+            $operation = new Operation($_POST["title"], $tricount, $_POST["amount"], User::get_user_by_id($_POST["payer"]), $_POST["date"]);
         }else{
         $operation->title = $_POST["title"];
         $operation->amount = $_POST["amount"];
         $operation->operation_date = $_POST["date"];
-        $operation->initiator = User::get_user_by_name($_POST["payer"]);
+        $operation->initiator = User::get_user_by_id($_POST["payer"]);
         }
         $operation->persist();
         return $operation;
