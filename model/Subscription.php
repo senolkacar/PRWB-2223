@@ -30,13 +30,11 @@ class Subscription extends Model {
 
     }
 
-    public static function persist(User $user, Tricount $tricount) : Subscription|array {
+    public static function persist(User $user, Tricount $tricount) {
         self::execute('INSERT INTO Subscriptions (tricount, user) VALUES (:tricount,:user)', 
                                ['tricount' => $tricount->id,
                                 'user' => $user->id
                                ]);
-        $subscription= self::get_subscription_by_tricount_and_user($tricount, $user);
-        return $subscription;
     }
 
     public static function delete(Tricount $tricount) : bool {
