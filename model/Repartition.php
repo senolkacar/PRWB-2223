@@ -79,15 +79,9 @@ class Repartition extends Model {
     }
    
     public static function delete(Tricount $tricount) : bool {
-        //if ($user == $tricount->creator) 
             self::execute('DELETE FROM repartitions WHERE operation in 
             (select id from operations where tricount=:tricount)', ['tricount' => $tricount->id]);
     
-        return true;
-    }
-
-    public function delete_repartition() : bool {
-        self::execute('DELETE FROM repartitions WHERE operation=:operation', ['operation' => $this->operation->id]);
         return true;
     }
     
