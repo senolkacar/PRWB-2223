@@ -19,7 +19,7 @@ Class MyController extends Controller{
         $errors=[];
         if($title==null || strlen($title)==0 || $title==""){
             $errors[]= "Title is mandatory";
-        } elseif(strlen($title)<3 || empty(trim($title))){
+        } elseif(strlen(trim($title))<3 || empty(trim($title))){
             $errors[]= "Title must have at least 3 characters(excluding white spaces)";
         }
         return $errors;
@@ -45,12 +45,12 @@ Class MyController extends Controller{
 
     }
 
-    public function validate_email(string $mail): array{  //for new user (signup)
+    public function validate_email(string $mail): array{ 
         $errors1=[];
-        $userConnected = $this->get_user_or_false();
+        $user_connected = $this->get_user_or_false();
         $user = User::get_user_by_mail($mail);
-        if($userConnected){
-            if($user && $user->id != $userConnected->id){ 
+        if($user_connected){
+            if($user && $user->id != $user_connected->id){ 
                 $errors1[] = "Email already used";
             }  
         }else{
@@ -103,17 +103,35 @@ Class MyController extends Controller{
                      $errors[] = "Wrong password. Please try again";
                  }
         }
-        if($password==""){
+        if($password==""){//trim() not necessary
             $errors[]="Password cant be empty!";
         }
         return $errors;
     }
 
-    public function validate_full_name(string $full_name): array{   
+
+    public function validate_full_name_format(string $full_name): array{   
         $errors=[];
         if(strlen(trim($full_name))<3){
             $errors[] = "Full name must be at least 3 characters long";
         }
+        return $errors;
+    }
+
+    public function validate_full_name(string $full_name): array{   // make full_name unique
+        $errors1=[];
+        $user_connected = $this->get_user_or_false();
+        $user = User::get_user_by_name($full_name);
+        if($user_connected){
+            if($user && $user->id != $user_connected->id){ 
+                $errors1[] = "name already used";
+            }  
+        }else{
+            if($user){
+                $errors1[] = "name already used";
+            }
+        }
+        $errors=(array_merge($errors1,self::validate_full_name_format($full_name)));
         return $errors;
     }
 

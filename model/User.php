@@ -26,6 +26,16 @@ Class User extends Model{
         }
     }
 
+    public static function get_user_by_name(?string $full_name): User|false{ // avoid to use this method if name isn't unique 
+        $query = self::execute("SELECT * FROM users WHERE full_name = :full_name",[":full_name" => $full_name]);
+        $data = $query->fetch();
+        if($query->rowCount()==0){
+            return false;
+        }else{
+            return new User($data["mail"],$data["hashed_password"],$data["full_name"],$data["role"],$data["iban"],$data["id"]);
+        }
+    }
+
     public function persist(){ 
         if($this->id == null){
             self::execute("INSERT INTO users (mail,hashed_password,full_name,role,iban) VALUES (:mail,:hashed_password,:full_name,:role,:iban)",["mail"=>$this->mail,"hashed_password"=>$this->hashed_password,"full_name"=>$this->full_name,"role"=>$this->role,"iban"=>$this->iban]);
@@ -35,8 +45,6 @@ Class User extends Model{
             self::execute("UPDATE users SET hashed_password = :hashed_password, full_name = :full_name, role = :role, iban = :iban WHERE mail = :mail",["hashed_password"=>$this->hashed_password,"full_name"=>$this->full_name,"role"=>$this->role,"iban"=>$this->iban,"mail"=>$this->mail]);
         }
     }
-
-
 
     public function get_tricounts_involved(): array{
         return Tricount::get_tricounts_involved($this);
@@ -55,7 +63,6 @@ Class User extends Model{
             $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
         }
         return $users;
-
     }
 
     public static function get_users_by_tricount(Tricount $tricount): array {
@@ -67,7 +74,6 @@ Class User extends Model{
             $users[] = new User($row["mail"],$row["hashed_password"],$row["full_name"],$row["role"],$row["iban"],$row["id"]);
         }
         return $users;
-
     }
 
     public function has_operation(Tricount $tricount) : bool {
