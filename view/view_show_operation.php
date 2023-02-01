@@ -29,9 +29,9 @@
            
 
             <?php if(Repartition::include_user($user,$operation)): ?>
-                <?php echo " For ". $operation->tricount->get_nb_participants_including_creator()." participants, including <b> me </b>" ?>
+                <?php echo " For ". $operation->get_nb_participants()." participants, including <b> me </b>" ?>
             <?php else: ?>
-                <?php echo " For ". $operation->tricount->get_nb_participants_including_creator()." participants" ?>
+                <?php echo " For ". $operation->get_nb_participants()." participants" ?>
             <?php endif; ?>
           
             <ul  class="list-group mt-3">

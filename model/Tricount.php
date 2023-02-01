@@ -111,9 +111,6 @@ Class Tricount extends Model{
         return $data[0];
     }
 
-    public function get_nb_participants_including_creator(): int{
-        return $this->get_nb_participants() +1;
-    }
 
     public function get_users_including_creator(): array{
         $query = self::execute("SELECT * FROM users WHERE id = :creator UNION SELECT users.* FROM users INNER JOIN subscriptions 

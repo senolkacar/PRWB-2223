@@ -30,7 +30,13 @@ Class Operation extends Model{
         $row["amount"],User::get_user_by_id($row["initiator"]) ,$row["operation_date"],$row["created_at"]);
     return $operations;
     }
-}
+    }
+
+    public function get_nb_participants(): int{
+        $query = self::execute("SELECT count(*) FROM repartitions WHERE operation = :operation",["operation" => $this->id]);
+        $data = $query->fetch();
+        return $data[0];
+    }
 
     public static function get_operation_by_id(int $id): Operation|false{
         $query = self::execute("SELECT * FROM operations WHERE id = :id",["id" => $id]);
