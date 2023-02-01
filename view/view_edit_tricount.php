@@ -59,7 +59,7 @@
             </form>
 
 
-            <form method='post' action='tricount/delete_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form2">
+           
                 <h2>Subscriptions</h2>                    
                 <ul class="list-group" >
                         <?php foreach ($subscriptions as $subscription): ?>
@@ -67,14 +67,16 @@
                             <?php if($subscription->id == $tricount->creator->id): ?>
                                 (creator)                                                      
                                 <?php elseif(!($subscription->has_operation($tricount)) && !($subscription->is_initiator($tricount))): ?>
+                                    <form method='post' action='tricount/delete_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form2">
                                     <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>                                    
-                                    <button type='submit'  class="btn_delete"><span class="badge bg-white text-dark"><i class="bi bi-trash"></i> </span> </button>                                   
+                                    <button type='submit'  class="btn_delete"><span class="badge bg-white text-dark"><i class="bi bi-trash"></i> </span> </button>  
+                                    </form> 
                                    
                             <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
                 </ul> 
-            </form>                   
+                              
                 
             <br>
 
