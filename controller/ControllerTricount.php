@@ -210,11 +210,8 @@ public function show_balance():void{
     public function delete() : void {
         $user=$this->get_user_or_redirect();
         $errors = [];
-        if(isset($_GET["param1"]) && $_GET["param1"] !==""){
+        if(isset($_GET["param1"]) && is_numeric($_GET["param1"])){
             $id = $_GET["param1"];
-            if(!is_numeric($id)){
-                $this->redirect("tricount");
-            }
             if(!$user->is_involved($id)&&!$user->is_creator($id)){
                 $this->redirect("tricount");
             }
@@ -230,7 +227,8 @@ public function show_balance():void{
                         //throw new Exception("Wrong/missing ID or action no permited");
                      }                
             }
-        }
+        }else
+            $this->redirect("tricount");
 
         (new View("delete_tricount"))->show(["tricount"=>$tricount, "errors"=>$errors]);
 
