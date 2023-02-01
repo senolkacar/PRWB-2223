@@ -25,7 +25,7 @@
                 <div class="h2">Edit your profile</div>
                 <div class="mb-3 mt-3">
                     <label for='mail'> Mail : </label>
-                    <textarea class="form-control" name='mail' id='mail' cols='30' rows='1'><?= $mail ?></textarea>
+                    <input class="form-control" name='mail' id='mail' cols='30' rows='1'><?= $mail ?></input>
                 </div>
 
                     <?php if (count($errors_mail) != 0): ?>
@@ -40,7 +40,7 @@
 
                 <div class="mb-3 mt-3">
                     <label for='full_name'> Full name : </label>
-                    <textarea class="form-control" name='full_name' id='full_name' cols='30' rows='1'><?= $full_name ?></textarea> <br>
+                    <input class="form-control" name='full_name' id='full_name' cols='30' rows='1'><?= $full_name ?></input>
                 </div>
 
                     <?php if (count($errors_name) != 0): ?>
@@ -56,7 +56,7 @@
 
                 <div class="mb-3 mt-3">
                     <label for='iban'> Iban : </label>
-                    <textarea class="form-control" name='iban' id='iban' cols='30' rows='1'><?= $iban?></textarea> <br>
+                    <input class="form-control" name='iban' id='iban' cols='30' rows='1'><?= $iban?></input>
                 </div>
 
                     <?php if (count($errors_iban) != 0): ?>

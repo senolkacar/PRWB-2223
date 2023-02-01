@@ -24,7 +24,7 @@
             <h5 class="text-center"><?php echo round($operation->amount, 2)." €"; ?></h5>
             <div class="d-flex justify-content-between mb-2"> 
                 <p>Paid by <?=$operation->initiator->full_name; ?></p>
-                <p> <?=date('d-m-Y',strtotime($operation->operation_date)); ?></p>
+                <p> <?=date('d/m/Y',strtotime($operation->operation_date)); ?></p>
             </div>
            
 
