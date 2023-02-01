@@ -133,6 +133,12 @@ Class Operation extends Model{
         self::execute('DELETE FROM operations WHERE id=:id', ['id' => $this->id]);
     }
 
+    public function get_initiator_id(): int{
+        $query = self::execute("select initiator from operations where id=:id",["id"=>$this->id]);
+        $data = $query->fetch();
+        return $data[0];
+    }
+
 
 }
 ?>

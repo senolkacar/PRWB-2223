@@ -70,7 +70,7 @@
                 <label for="payer">Paid by:</label>
                             <select class="form-control mt-2" name="payer" id="payer">
                             <?php foreach ($subscriptions as $subscription): ?>  
-                            <option value="<?=$subscription->id; ?>"><?=$subscription->full_name; ?></option>  
+                            <option value="<?=$subscription->id; ?>" <?php echo $payer!=null && $subscription->id == $payer->id ? "selected" : ""?> ><?=$subscription->full_name; ?></option>  
                             <?php endforeach; ?>
                             </select>                           
                 <p class="mt-2">For whom ?(select at least one)</p>

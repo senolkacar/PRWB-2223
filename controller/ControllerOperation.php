@@ -84,6 +84,7 @@ class ControllerOperation extends MyController
         $subscriptions = [];
         $repartitions = [];
         $users=[];
+        $payer=null;
         $title= "";
         $amount = "";
         $date = date("Y-m-d");
@@ -110,6 +111,7 @@ class ControllerOperation extends MyController
 
                 $page_title = "Edit operation";
                 $is_new_operation = false;
+                $payer = User::get_user_by_id($operation->get_initiator_id());
                 $users = $operation->get_users_by_operation_id();
                 $repartitions = Repartition::get_repartitions_by_operation($operation);
                 $title = $operation->title;
@@ -133,6 +135,9 @@ class ControllerOperation extends MyController
             $nb_subscriptions = count($subscriptions);
 
             if(count($_POST)>0){
+                if(isset($_POST["payer"])){
+                    $payer = User::get_user_by_id($_POST["payer"]);
+                }
                 if(isset($_POST["title"])){
                     $errors_title = $this->validate_title($_POST["title"]);
                     $title = $_POST["title"];
@@ -193,6 +198,7 @@ class ControllerOperation extends MyController
 
         (new View("add_or_edit_operation"))->show([
             "tricount" => $tricount,
+            "payer" => $payer,
             "operation_name" => $operation_name,
             "header_title" => $header_title,
             "page_title" => $page_title,
