@@ -139,7 +139,7 @@ class ControllerTricount extends MyController {
 
     }
 
-    public function delete_subsription() :void {
+    public function delete_subscription() :void {
         $user=$this->get_user_or_redirect();
 
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
@@ -158,7 +158,7 @@ class ControllerTricount extends MyController {
 
     }
 
-    public function add_subsription() :void {
+    public function add_subscription() :void {
         $user=$this->get_user_or_redirect();
 
         if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 

@@ -67,7 +67,7 @@
                             <?php if($subscription->id == $tricount->creator->id): ?>
                                 (creator)                                                      
                                 <?php elseif(!($subscription->has_operation($tricount)) && !($subscription->is_initiator($tricount))): ?>
-                                    <form method='post' action='tricount/delete_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form2">
+                                    <form method='post' action='tricount/delete_subscription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form2">
                                     <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>                                    
                                     <button type='submit'  class="btn_delete"><span class="badge bg-white text-dark"><i class="bi bi-trash"></i> </span> </button>  
                                     </form> 
@@ -82,7 +82,7 @@
 
             <div class="container-sm">
             <?php if(count($other_users)!=0): ?>
-                <form method='post' action='tricount/add_subsription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
+                <form method='post' action='tricount/add_subscription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
                     <div class="input-group">              
                         <select class="form-select" aria-label="Example select with button addon"  name = "subscriber" id="subscriber" required>
                             <option value="">--Add a new subscriber--</option>

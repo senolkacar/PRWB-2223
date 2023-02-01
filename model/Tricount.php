@@ -116,7 +116,8 @@ Class Tricount extends Model{
     }
 
     public function get_users_including_creator(): array{
-        $query = self::execute("SELECT * FROM users WHERE id = :creator UNION SELECT users.* FROM users INNER JOIN subscriptions ON subscriptions.user = users.id WHERE subscriptions.tricount = :tricount",["creator" => $this->creator->id, "tricount" => $this->id]);
+        $query = self::execute("SELECT * FROM users WHERE id = :creator UNION SELECT users.* FROM users INNER JOIN subscriptions 
+        ON subscriptions.user = users.id WHERE subscriptions.tricount = :tricount ORDER BY full_name ASC",["creator" => $this->creator->id, "tricount" => $this->id]);
         $data = $query->fetchAll();
         $users = [];
         foreach($data as $row){
