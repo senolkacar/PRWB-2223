@@ -104,7 +104,7 @@ Class User extends Model{
             $user = User::get_user_by_mail($mail);
             if(!$user){
                 $errors[] = "Can't find user with this email '$mail'. Please sign up";
-            }
+            }else
             if($password!=""&&!self::check_password($password,$user->hashed_password)){
                      $errors[] = "Wrong password. Please try again";
                  }

@@ -58,13 +58,15 @@ Class Operation extends Model{
         $errors=[];
         if($amount==null){
             $errors[] = "Amount is mandatory";
+        }else if(!is_numeric(trim($amount))){
+            $errors[]="Amount must be a valid number";
+            
         }else{
             $amount = floatval($amount);
             if($amount<=0){
                 $errors[] = "Amount must be positive";
             }
-        }
-       
+        } 
         return $errors;
     }
 
@@ -73,7 +75,7 @@ Class Operation extends Model{
         $total_weight = 0;
         foreach($weights as $weight){
             $total_weight += $weight;
-            if(!is_numeric($weight)){
+            if(!is_numeric(trim($weight))){
                 $errors[] = "Invalid value for weight";
             }
             else{
@@ -93,8 +95,17 @@ Class Operation extends Model{
         $errors=[];
         if($date==null or strlen($date)==0 or $date=="0000-00-00"){
             $errors[]= "Date is mandatory";
+        }else{
+            if(!self::validateDate($date)){
+                $errors[]="Invalide date format";
+            }
         }
         return $errors;
+    }
+
+    function validateDate($date, $format = 'Y-m-d'){
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) === $date;
     }
 
     public function validate(): array{
