@@ -48,15 +48,18 @@ class ControllerOperation extends MyController
                 if ($operations[$i]->id == $id)
                     $current_page = $i;
             }
+            (new View("show_operation"))->show([
+                "operation" => $operation,
+                "user" => $user,
+                "repartitions" => $repartitions,
+                "operations" => $operations,
+                "pages" => $pages,
+                "current_page" => $current_page
+            ]);
+        }else{
+            $this->redirect("tricount");
         }
-        (new View("show_operation"))->show([
-            "operation" => $operation,
-            "user" => $user,
-            "repartitions" => $repartitions,
-            "operations" => $operations,
-            "pages" => $pages,
-            "current_page" => $current_page
-        ]);
+        
     }
 
     public function edit_operation(): void
@@ -232,8 +235,8 @@ class ControllerOperation extends MyController
     {
         if (!$is_new_operation) {
             $repartition = Repartition::get_repartitions_by_operation($operation);
-            foreach ($repartition as $repartition) {
-                $repartition->delete_repartition();
+            foreach ($repartition as $val) {
+                $val->delete_repartition();
             }
         } else {
             $repartition = [];
@@ -281,9 +284,12 @@ class ControllerOperation extends MyController
             }else{
                 $this->redirect("tricount");
             }
+            (new View("delete_operation"))->show(["operation"=>$operation, "errors"=>$errors]);
+        }else{
+            $this->redirect("tricount");
         }
 
-        (new View("delete_operation"))->show(["operation"=>$operation, "errors"=>$errors]);
+        
     }
 
 

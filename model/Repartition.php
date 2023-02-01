@@ -89,6 +89,9 @@ class Repartition extends Model {
         return ((int)$data[0])>0 ;
     }
 
+    public function delete_repartition(){
+        self::execute('DELETE FROM repartitions where operation=:operation',["operation"=>$this->operation->id]);
+    }
 
 
 }

@@ -24,7 +24,7 @@
             <h5 class="text-center"><?php echo round($operation->amount, 2)." €"; ?></h5>
             <div class="d-flex justify-content-between mb-2"> 
                 <p>Paid by <?=$operation->initiator->full_name; ?></p>
-                <p> <?=$operation->operation_date; ?></p>
+                <p> <?=date('d-m-Y',strtotime($operation->operation_date)); ?></p>
             </div>
            
 
@@ -33,17 +33,26 @@
             <?php else: ?>
                 <?php echo " For ". $operation->tricount->get_nb_participants_including_creator()." participants" ?>
             <?php endif; ?>
-            <br><br>
           
-            <ul  class="list-group">
+            <ul  class="list-group mt-3">
             <?php foreach ($repartitions as $repartition):  ?>
                 <li class="list-group-item">
-                    <div class="d-flex justify-content-between mb-2">                   
-                        <div> <?=$repartition->user->full_name; ?> 
+                    <div class="d-flex justify-content-between mb-2">                 
+                    <?php if($repartition->user==$user): ?>
+                        <div class="text fw-bold"> 
+                    <?php else:?>
+                        <div class="text">
+                    <?php endif;?>
+                            <?=$repartition->user->full_name; ?>
                             <?php if($repartition->user==$user): ?>
-                            (me)
-                            <?php endif; ?> </div>
-                        <div>
+                                (me)
+                            <?php endif; ?>
+                        </div>
+                            <?php if($repartition->user==$user):?>
+                            <div class="text fw-bold">
+                            <?php else: ?>
+                            <div class="text">
+                            <?php endif;?>
                         <?php echo Repartition::get_amount_by_user_and_operation($repartition->user, $repartition->operation)." €"; ?> 
                         </div>
                     </div>
