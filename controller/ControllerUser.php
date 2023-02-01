@@ -3,8 +3,9 @@ include_once 'framework/Controller.php';
 include_once 'model/User.php';
 include_once 'model/Tricount.php';
 include_once 'framework/View.php';
+include_once 'controller/MyController.php';
 
-class ControllerUser extends Controller {
+class ControllerUser extends MyController {
 
     public function index() : void {
         $user=$this->get_user_or_redirect();
@@ -33,12 +34,12 @@ class ControllerUser extends Controller {
             $mail = $_POST["mail"];
             $full_name=$_POST["full_name"];
 
-            $errors_mail = $user->validate_email_for_edit($mail);
-            $errors_name = User::validate_full_name($full_name);
+            $errors_mail = $this->validate_email($mail);
+            $errors_name = $this->validate_full_name($full_name);
 
             if(isset($_POST["iban"]) && strlen(trim($_POST["iban"]))>0){
                 $iban = $_POST["iban"];
-                $errors_iban = User::validate_iban($_POST["iban"]);          
+                $errors_iban = $this->validate_iban($_POST["iban"]);          
             }
 
             $errors = (array_merge($errors_mail,$errors_name,$errors_iban));
@@ -78,10 +79,10 @@ class ControllerUser extends Controller {
             $new_password_confirm = $_POST["new_password_confirm"];            
 
             $errors_old_password = [];
-            $errors_new_password = User::validate_password($_POST["new_password"]);
-            $errors_password_confirm = User::validate_passwords($_POST["new_password"],$_POST["new_password_confirm"]);
+            $errors_new_password = $this->validate_password($_POST["new_password"]);
+            $errors_password_confirm = $this->validate_passwords($_POST["new_password"],$_POST["new_password_confirm"]);
 
-            if(!User::check_password ($_POST["old_password"],$user->hashed_password)){
+            if(!$this->check_password ($_POST["old_password"],$user->hashed_password)){
                 $errors_old_password[] = "Wrong old password";
             }
             if($user->hashed_password == Tools::my_hash($new_password)){

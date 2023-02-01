@@ -43,82 +43,9 @@ Class Operation extends Model{
         }
     }
 
-    public static function validate_title(?string $title): array{
-        $errors=[];
-        if($title==null || strlen($title)==0 || $title==""){
-            $errors[]= "Title is mandatory";
-        } elseif(strlen($title)<3 || empty(trim($title))){
-            $errors[]= "Title must have at least 3 characters(excluding white spaces)";
-        }
-        return $errors;
-    }
-
-
-    public static function validate_amount(?string $amount): array{
-        $errors=[];
-        if($amount==null){
-            $errors[] = "Amount is mandatory";
-        }else if(!is_numeric(trim($amount))){
-            $errors[]="Amount must be a valid number";
-            
-        }else{
-            $amount = floatval($amount);
-            if($amount<=0){
-                $errors[] = "Amount must be positive";
-            }
-        } 
-        return $errors;
-    }
-
-    public static function validate_weights(?array $weights): array{
-        $errors=[];
-        $total_weight = 0;
-        foreach($weights as $weight){
-            $total_weight += $weight;
-            if(!is_numeric(trim($weight))){
-                $errors[] = "Invalid value for weight";
-            }
-            else{
-                $weight = floatval($weight);
-                if($weight<0){
-                    $errors[] = "Weight must be positive";
-                }
-            }
-        }
-        if($total_weight==0){
-            $errors[] = "You must specify at least one weight";
-        }
-        return $errors;
-    }
-
-    public static function validate_date(?string $date): array{
-        $errors=[];
-        if($date==null or strlen($date)==0 or $date=="0000-00-00"){
-            $errors[]= "Date is mandatory";
-        }else{
-            if(!self::validateDate($date)){
-                $errors[]="Invalide date format";
-            }
-        }
-        return $errors;
-    }
-
-    function validateDate($date, $format = 'Y-m-d'){
+    public static function validateDate($date, $format = 'Y-m-d'){
         $d = DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) === $date;
-    }
-
-    public function validate(): array{
-        $errors=[];
-        if($this->title==null or strlen($this->title)==0){
-            $errors[]= "Title is mandatory";
-        } elseif(strlen($this->title)<3){
-            $errors[] = "Title must have at least 3 characters";
-        }
-        if($this->amount<=0){
-            $errors[] = "Amount must be positive";
-        }
-        return $errors;
     }
 
     public static function get_operations_by_tricount(Tricount $tricount): array{

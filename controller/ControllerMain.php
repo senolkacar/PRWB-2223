@@ -2,8 +2,9 @@
 require_once 'model/User.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
+require_once 'controller/MyController.php';
 
-class ControllerMain extends Controller{
+class ControllerMain extends MyController{
 
     public function index(): void{
         if($this->user_logged()){
@@ -24,7 +25,7 @@ class ControllerMain extends Controller{
         if(isset($_POST["mail"])&&isset($_POST["password"])){
             $mail = $_POST["mail"];
             $password = $_POST["password"];
-            $errors = User::validate_login($mail,$password);
+            $errors = $this->validate_login($mail,$password);
             if(empty($errors)){
                 $this->log_user(User::get_user_by_mail($mail));
             }
@@ -54,11 +55,11 @@ class ControllerMain extends Controller{
             $password_confirm = $_POST["password_confirm"];
             //role definit par défaut à "user"
             $user = new User($mail,Tools::my_hash($password),$full_name,"user",$iban);
-            $errors_email = User::validate_email($mail);
-            $errors_full_name = User::validate_full_name($full_name);
-            $errors_iban = User::validate_iban($iban);
-            $errors_password = User::validate_password($password);
-            $errors_password_confirm = User::validate_passwords($password,$password_confirm);
+            $errors_email = $this->validate_email($mail);
+            $errors_full_name = $this->validate_full_name($full_name);
+            $errors_iban = $this->validate_iban($iban);
+            $errors_password = $this->validate_password($password);
+            $errors_password_confirm = $this->validate_passwords($password,$password_confirm);
 
             $errors = (array_merge($errors_email,$errors_full_name,$errors_iban,$errors_password,$errors_password_confirm));
 

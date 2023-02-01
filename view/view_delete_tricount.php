@@ -34,7 +34,7 @@
                         </div>
                         <br>
                         <a class="btn btn-secondary" href="tricount/edit_tricount/<?=$tricount->id;?>">
-                         Cancle </a>
+                         Cancel </a>
                         
                         <button type="submit" class="btn btn-danger" form="form1">Delete</button>                           
         

@@ -7,8 +7,9 @@ require_once 'model/Repartition.php';
 require_once 'model/Operation.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
+require_once 'controller/MyController.php';
 
-class ControllerOperation extends Controller
+class ControllerOperation extends MyController
 {
 
 
@@ -130,19 +131,19 @@ class ControllerOperation extends Controller
 
             if(count($_POST)>0){
                 if(isset($_POST["title"])){
-                    $errors_title = Operation::validate_title($_POST["title"]);
+                    $errors_title = $this->validate_title($_POST["title"]);
                     $title = $_POST["title"];
                 }
                 if(isset($_POST["amount"])){
-                    $errors_amount = Operation::validate_amount($_POST["amount"]);
+                    $errors_amount = $this->validate_amount($_POST["amount"]);
                     $amount = $_POST["amount"];
                 }
                 if(isset($_POST["weights"])){
-                    $errors_weights = Operation::validate_weights($_POST["weights"]);
+                    $errors_weights = $this->validate_weights($_POST["weights"]);
                     $weights = $_POST["weights"];
                 }
                 if(isset($_POST["date"])){
-                    $errors_date = Operation::validate_date($_POST["date"]);
+                    $errors_date = $this->validate_date($_POST["date"]);
                     $date = $_POST["date"];
                 } 
                 if(isset($_POST["ids"])){
@@ -165,7 +166,7 @@ class ControllerOperation extends Controller
                         }
                     }
                     if($weightsIndex!=$checkboxesIndex){
-                        $errors_checkbox[]= "Check your input";
+                        $errors_checkbox[]= "Ensure that you have correctly checked and fill the weight";
                     }
                 
                 }

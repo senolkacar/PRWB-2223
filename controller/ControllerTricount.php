@@ -5,10 +5,11 @@ require_once 'model/User.php';
 require_once 'model/Tricount.php';
 require_once 'model/Repartition.php';
 require_once 'model/Operation.php';
+require_once 'controller/MyController.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 
-class ControllerTricount extends Controller {
+class ControllerTricount extends MyController {
 
 
     public function index() : void { 
@@ -31,8 +32,8 @@ class ControllerTricount extends Controller {
         if(isset($_POST["title"])&&isset($_POST["description"])){  
             $title = $_POST["title"];
             $description = $_POST["description"];
-            $errors_title = Tricount::validate_title($title);
-            $errors_description=Tricount::validate_description($description);
+            $errors_title = $this->validate_title($title);
+            $errors_description=$this->validate_description($description);
             $errors=(array_merge($errors_description,$errors_title));            
            
             if(count($errors)==0){
@@ -104,8 +105,8 @@ class ControllerTricount extends Controller {
             if(isset($_POST["title"]) && isset($_POST["description"]) ) {
                         $title = $_POST["title"];
                         $description=$_POST["description"];
-                        $errors_title = Tricount::validate_title($_POST["title"]);//the new tricount could have the same name with the others
-                        $errors_description= Tricount::validate_description($_POST["description"]);
+                        $errors_title = $this->validate_title($_POST["title"]);//the new tricount could have the same name with the others
+                        $errors_description= $this->validate_description($_POST["description"]);
                         $errors=(array_merge($errors_description,$errors_title));
 
                         if(count($errors) == 0) {

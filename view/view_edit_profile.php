@@ -25,7 +25,7 @@
                 <div class="h2">Edit your profile</div>
                 <div class="mb-3 mt-3">
                     <label for='mail'> Mail : </label>
-                    <textarea class="form-control" name='mail' id='mail' cols='30' rows='1'><?= $mail ?></textarea> <br>
+                    <textarea class="form-control" name='mail' id='mail' cols='30' rows='1'><?= $mail ?></textarea>
                 </div>
 
                     <?php if (count($errors_mail) != 0): ?>

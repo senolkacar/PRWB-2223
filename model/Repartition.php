@@ -62,8 +62,6 @@ class Repartition extends Model {
     
     }
 
-    //fonction return for a tricount each user full_name and balance, balance is initialized at 0 
-    //calculated by subtracting every operation amount to the user balance and add the amount of the operation to the user balance if he is the initiator of the operation
     public static function get_balance_by_tricount(Tricount $tricount): array {
         $users = $tricount->get_users_including_creator();
         $operations = Operation::get_operations_by_tricount($tricount);
