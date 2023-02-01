@@ -59,7 +59,7 @@ Class User extends Model{
     }
 
     public static function get_users_by_tricount(Tricount $tricount): array {
-        $query = self::execute("SELECT * FROM users where id in(SELECT user FROM subscriptions WHERE tricount = :tricount) OR id in (SELECT creator from tricounts WHERE id = :tricount)",
+        $query = self::execute("SELECT * FROM users where id in(SELECT user FROM subscriptions WHERE tricount = :tricount) OR id in (SELECT creator from tricounts WHERE id = :tricount) ORDER BY full_name ASC",
           [ "tricount" =>$tricount->id]);
         $data = $query->fetchAll();
         $users = [];
