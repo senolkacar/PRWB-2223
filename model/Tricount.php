@@ -24,12 +24,28 @@ Class Tricount extends Model{
         }
     }
 
-    public static function validate_title(string $title): array{
+    public static function validate_title(User $user,string $title): array{
         $errors=[];
         if(strlen(trim($title))<3){
             $errors[] = "Title must be at least 3 characters long";
         }
+        if(self::title_creator_existe($user, $title) ){
+            $errors[]="title and creator should be unique";
+        }
         return $errors;
+    }
+
+    private static function title_creator_existe(User $user, String $title) : bool {
+        $query = self::execute("SELECT COUNT(*) FROM tricounts WHERE title=:title and creator=:creator", ["title"=>$title,"creator"=>$user->id]);
+        $data = $query->fetch();
+        return ((int)$data[0]) > 0;
+    }
+
+    public function follows(Member $followee) : bool {
+        $query = self::execute("SELECT count(*) FROM Follows where follower=:follower and followee=:followee", 
+                               ["follower"=>$this->pseudo, "followee"=>$followee->pseudo]);
+        $data = $query->fetch(); // un seul résultat au maximum
+        return ((int)$data[0]) > 0;
     }
 
     public static function validate_description(string $description): array{
@@ -40,16 +56,14 @@ Class Tricount extends Model{
         return $errors;
     }
 
-    public function validate(): array{        
-        
-        $errors=(array_merge($this::validate_title($this->title),$this::validate_description($this->description))); 
-
+    public function validate(User $user): array{        
+        $errors=(array_merge(self::validate_title($user,$this->title),$this::validate_description($this->description))); 
         return $errors;
     }
 
-    public function persist():Tricount {
+    public function persist(User $user):Tricount {
         if($this->id == NULL) {
-           $errors = $this->validate();
+           $errors = $this->validate($user);
             if(empty($errors)){
                 self::execute('INSERT INTO Tricounts (title, description, creator) VALUES (:title,:description,:creator)', 
                                ['title' => $this->title,
@@ -69,8 +83,8 @@ Class Tricount extends Model{
         }
     }
 
-    public function update():Tricount{
-        $errors = $this ->validate();
+    public function update(User $user):Tricount{
+        $errors = $this ->validate($u);
         if(empty($errors)){
            self:: execute("UPDATE tricounts SET title=:title, description=:description WHERE id=$this->id ", 
             ["title"=>$this->title, "description"=>$this->description]);

@@ -50,9 +50,9 @@ Class User extends Model{
         return Tricount::get_tricounts_involved($this);
 
     }
-    public function add_tricount(Tricount $tricount) : Tricount {
-        return $tricount -> persist();
-    }
+    //public function add_tricount(Tricount $tricount) : Tricount {// ?
+    //   return $tricount -> persist();
+    //}
 
     public static function get_users_not_subscriber_by_tricount(Tricount $tricount): array {
         $query = self::execute("SELECT * FROM users WHERE id <> :user and id not in 
