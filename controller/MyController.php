@@ -15,6 +15,16 @@ Class MyController extends Controller{
 
     }
 
+    public function validate_title(?string $title): array{
+        $errors = [];
+        if ($title == null || strlen($title) == 0 || $title == "") {
+            $errors[] = "Title is mandatory";
+        } elseif (strlen(trim($title)) < 3 || empty(trim($title))) {
+            $errors[] = "Title must have at least 3 characters(excluding white spaces)";
+        }
+        return $errors;
+    }
+
     private static function validate_email_format(string $mail):array{
         $errors=[];
         if(!strlen(trim($mail))>0){
