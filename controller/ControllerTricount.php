@@ -32,13 +32,13 @@ class ControllerTricount extends MyController {
         if(isset($_POST["title"])&&isset($_POST["description"])){  
             $title = $_POST["title"];
             $description = $_POST["description"];
-            $errors_title = $this->validate_title($title);
-            $errors_description=$this->validate_description($description);
+            $tricount = new Tricount($title,$user,$description);
+            $errors_title = Tricount::validate_title($user,$tricount);
+            $errors_description=Tricount::validate_description($description);
             $errors=(array_merge($errors_description,$errors_title));            
            
             if(count($errors)==0){
-               // $user= User::get_user_by_mail($user->mail);                
-                $tricount = new Tricount($title,$user,$description);
+               // $user= User::get_user_by_mail($user->mail);             
                 $tricount -> persist();
                 $this->redirect("tricount","index");     
             }
@@ -105,14 +105,21 @@ class ControllerTricount extends MyController {
             if(isset($_POST["title"]) && isset($_POST["description"]) ) {
                         $title = $_POST["title"];
                         $description=$_POST["description"];
-                        $errors_title = $this->validate_title($_POST["title"]);//the new tricount could have the same name with the others
-                        $errors_description= $this->validate_description($_POST["description"]);
+
+                        $original_title = $tricount->title;
+                        $tricount->title=$title;//in order to call validate_title(). if title isn't valid the value will be changed back to the original one
+
+                        $errors_title =Tricount::validate_title($user,$tricount);
+                        $errors_description= Tricount::validate_description($_POST["description"]);
+
                         $errors=(array_merge($errors_description,$errors_title));
 
                         if(count($errors) == 0) {
                         $tricount->title = $_POST["title"];
                         $tricount->description = $_POST["description"];
                         $tricount->update();
+                        }else{
+                            $tricount->title=$original_title;
                         }
     
                         if(count($_POST) > 0 && count($errors) == 0){

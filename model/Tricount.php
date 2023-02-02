@@ -15,7 +15,7 @@ Class Tricount extends Model{
     }
 
     public static function get_tricount_by_id(int $id): Tricount|false{
-        $query = self::execute("SELECT * FROM tricounts WHERE id = :id",[":id" => $id]);
+        $query = self::execute("SELECT * FROM tricounts WHERE id = :id",["id" => $id]);
         $data = $query->fetch();
         if($query->rowCount()==0){
             return false;
@@ -24,13 +24,16 @@ Class Tricount extends Model{
         }
     }
 
-    public static function validate_title(string $title): array{
-        $errors=[];
-        if(strlen(trim($title))<3){
-            $errors[] = "Title must be at least 3 characters long";
+    public static function get_tricount_by_title_creator(User $user,String $title): Tricount|false{
+        $query = self::execute("SELECT * FROM tricounts WHERE title=:title and creator=:creator",["title" => $title, "creator"=>$user->id]);
+        $data = $query->fetch();
+        if($query->rowCount()==0){
+            return false;
+        }else{
+            return new Tricount($data["title"],User::get_user_by_id($data["creator"]),$data["description"],$data["created_at"],$data["id"]);
         }
-        return $errors;
     }
+
 
     public static function validate_description(string $description): array{
         $errors=[];
@@ -39,42 +42,61 @@ Class Tricount extends Model{
         }
         return $errors;
     }
-
-    public function validate(): array{        
-        
-        $errors=(array_merge($this::validate_title($this->title),$this::validate_description($this->description))); 
-
+    private static function validate_title_format(?string $title): array{
+        $errors=[];
+        if($title==null || strlen($title)==0 || $title==""){
+            $errors[]= "Title is mandatory";
+        } elseif(strlen(trim($title))<3 || empty(trim($title))){
+            $errors[]= "Title must have at least 3 characters(excluding white spaces)";
+        }
         return $errors;
     }
 
-    public function persist():Tricount {
-        if($this->id == NULL) {
-           $errors = $this->validate();
-            if(empty($errors)){
+    public static function validate_title(User $user,Tricount $tricount): array{
+        $errors = [];
+        $errors=self::validate_title_format($tricount->title);
+        if(count($errors)==0){
+            if(self::title_creator_existe($user, $tricount->title) ){
+                if($tricount->id == NULL){
+                    $errors[]="title and creator should be unique";
+                }else{
+                    $tricount1=self::get_tricount_by_title_creator($user,$tricount->title);//new
+                    if($tricount1->id != $tricount->id) {
+                        $errors[]="title and creator should be unique";
+                    }
+                }           
+            }
+
+        }
+        return $errors;
+    }
+
+    private static function title_creator_existe(User $user, String $title) : bool {
+        $query = self::execute("SELECT COUNT(*) FROM tricounts WHERE title=:title and creator=:creator", ["title"=>$title,"creator"=>$user->id]);
+        $data = $query->fetch();
+        return ((int)$data[0]) > 0;
+    }
+
+    public function persist():Tricount {//validation done in the ControllerTricount
+        if($this->id == NULL) {           
                 self::execute('INSERT INTO Tricounts (title, description, creator) VALUES (:title,:description,:creator)', 
                                ['title' => $this->title,
                                 'description' => $this->description,
-                                'creator' => $this->creator->id// user ? int?
+                                'creator' => $this->creator->id
                                ]);
                 $tricount = self::get_tricount_by_id(self::lastInsertId());
                 $this->id = $tricount->id;
                $this->created_at = $tricount->created_at;
-                return $this;
-            } else {
-               return $errors; 
-            }
+                return $this;         
         } else {
             //on ne modifie jamais les messages : pas de "UPDATE" SQL.
             throw new Exception("Not Implemented.");
         }
     }
 
-    public function update():Tricount{
-        $errors = $this ->validate();
-        if(empty($errors)){
-           self:: execute("UPDATE tricounts SET title=:title, description=:description WHERE id=$this->id ", 
-            ["title"=>$this->title, "description"=>$this->description]);
-        }
+    public function update():Tricount{  //validation done in the ControllerTricount        
+        self:: execute("UPDATE tricounts SET title=:title, description=:description WHERE id=$this->id ", 
+            ["title"=>$this->title, "description"=>$this->description]);     
 
         return $this;        
     }
