@@ -92,7 +92,7 @@ Class MyController extends Controller{
     }
 
 
-    public function validate_full_name_format(string $full_name): array{   
+    private function validate_full_name_format(string $full_name): array{   
         $errors=[];
         if(strlen(trim($full_name))<3){
             $errors[] = "Full name must be at least 3 characters long";
