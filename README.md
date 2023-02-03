@@ -8,17 +8,19 @@
   * bepenelle@epfc.eu, password "Password1,", utilisateur
   * xapigeolet@epfc.eu, password "Password1,", utilisateur
   * mamichel@epfc.eu, password "Password1,", utilisateur
-  * A compléter...
+  * fff123@epfc.eu,password "Password1,", utilisateur
 
 ### Liste des bugs connus
 
-  * bug 1
-  * bug 2
-  * ...
+  * bug 1 view_balance:Si les montants sont très grandes ça peut causer des lègères incorfotabilité au niveau visuel de progressbar
+  * bug 2 edit_tricount: Si le user modifie le "title" ou "description" du tricount (sans appuyer sur "save") et puis modifie la partie "subscriptions", "add_subscription" et "delete_subscription" redirect ver "edit_tricount/id_tricount" et la view affiche le "title" et "description" de la base de donné mais pas ce que le user voulait modifier.
+  
 
 ### Liste des fonctionnalités supplémentaires
+  Il ne s'agit pas de fonctionnalités supplémentaires. Pour la "view" on a créé une seule "view" (view_add_or_edit_operation)  pour les pages "add_operation" et "edit_operation".
 
 ### Divers
+  none
 
 ## Notes de version itération 2
 
