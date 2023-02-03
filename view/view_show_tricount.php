@@ -54,7 +54,7 @@
                             </div>
                             <div class="text-end">
                                 <p class="fw-bold"><?=round($depense->amount,2)?>&euro;</p>
-                                <?=$depense->operation_date?>
+                                <?=date('d/m/Y',strtotime($depense->operation_date));?>
                             </div>
                         </li>
                     </ul>

@@ -177,11 +177,15 @@ Class MyController extends Controller{
 
     public function validate_date(?string $date): array{
         $errors=[];
+        $system_date = date("Y-m-d");
         if($date==null or strlen($date)==0 or $date=="0000-00-00"){
             $errors[]= "Date is mandatory";
         }else{
             if(!Operation::validateDate($date)){
                 $errors[]="Invalide date format";
+            }
+            if($system_date < $date){
+                $errors[]="Date cannot be in the future";
             }
         }
         return $errors;
