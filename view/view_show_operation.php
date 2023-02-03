@@ -69,6 +69,7 @@
                     <div class="d-flex justify-content-between mb-3"> 
                     <?php if($current_page == 0 && $pages==1): ?> 
                     <?php elseif($pages>1 && $current_page == 0 ): ?> 
+                        <div></div>
                         <a href="operation/show_operation/<?=$operations[$current_page+1]->id;?>" class="btn btn-primary btn-block">Next</a> 
                     <?php elseif( $pages>1 && $current_page == ($pages-1)): ?>
                         <a href="operation/show_operation/<?=$operations[$current_page-1]->id;?>" class="btn btn-primary btn-block">Previous</a> 
