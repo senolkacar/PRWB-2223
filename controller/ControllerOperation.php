@@ -41,7 +41,7 @@ class ControllerOperation extends MyController
             //var_dump(Repartition::include_user($user,$operation));   
             $repartitions = Repartition::get_repartitions_by_operation($operation);
             //var_dump($repartitions);
-            $operations = Operation::get_operations_by_tricount($operation->tricount);
+            $operations =  $tricount->get_operations_by_tricount();//
             $pages = count($operations);
             $current_page = 0;
             for ($i = 0; $i < $pages; ++$i) {
