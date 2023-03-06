@@ -149,17 +149,21 @@ class ControllerTricount extends MyController {
     public function delete_subscription() :void {
         $user=$this->get_user_or_redirect();
 
-        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+        if(isset($_GET["param1"]) &&is_numeric($_GET["param1"])) { 
             $id=(int)$_GET["param1"];            
             $tricount = Tricount::get_tricount_by_id($id);
 
-            if(isset($_POST["delete_member"]) ) {                   
+            if(isset($_POST["delete_member"]) && is_numeric($_POST["delete_member"])) {                   
                     $subscriber = User::get_user_by_id($_POST["delete_member"]);
                     if($subscriber) {
                         Subscription::delete_subscription($tricount, $subscriber);
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
                     }
-            } 
+            } else {
+                $this -> redirect("tricount", "edit_tricount", $tricount->id);
+            }
+        } else {
+            $this->redirect("tricount");
         }
 
 
@@ -168,18 +172,24 @@ class ControllerTricount extends MyController {
     public function add_subscription() :void {
         $user=$this->get_user_or_redirect();
 
-        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+        if(isset($_GET["param1"]) && is_numeric($_GET["param1"])) { 
             $id= (int)$_GET["param1"];           
             $tricount = Tricount::get_tricount_by_id($id);
 
-            if(isset($_POST["subscriber"]) ) {                           
+            if(isset($_POST["subscriber"]) && is_numeric($_POST["subscriber"])) {                           
                     $subscriber = User::get_user_by_id($_POST["subscriber"]);//name not unique for users. use user id instead of full name to get user
                     if($subscriber ) {
                         Subscription::persist($subscriber, $tricount);
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
-                    }
+                    }                    
+
+            } else{
+                $this -> redirect("tricount", "edit_tricount", $tricount->id);
             }  
+        } else {
+            $this->redirect("tricount");
         }
+        
     
     }
     
