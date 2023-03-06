@@ -104,7 +104,7 @@ Class Tricount extends Model{
     public static function get_tricounts_involved(User $user): array{    
         $query = self::execute("SELECT DISTINCT tricounts.*, (SELECT count(*) FROM subscriptions WHERE subscriptions.tricount = tricounts.id)
          as subscription_count  FROM tricounts LEFT JOIN subscriptions ON subscriptions.tricount = tricounts.id 
-         where tricounts.creator = :user or subscriptions.user = :user ",["user"=>$user->id]);
+         where tricounts.creator = :user or subscriptions.user = :user order by created_at desc",["user"=>$user->id]);
         
         $data = $query->fetchAll();
          $tricounts = [];

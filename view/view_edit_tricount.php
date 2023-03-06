@@ -108,7 +108,7 @@
         <br><br>                    
         <footer class="footer mt-auto">   
             <div class="container-sm">                
-                <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
+                <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='get' >
                 <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-danger">Delete this tricount</button>
                     </div>
