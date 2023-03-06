@@ -158,7 +158,7 @@ Class Tricount extends Model{
         return Operation::get_operations_by_tricount($this);
     }
 
-    public function get_balance_by_tricount(): array {
+    public function get_balance_by_tricount(): array {//could be deleted ?
         return Repartition::get_balance_by_tricount($this);
     }
     
