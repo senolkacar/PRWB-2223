@@ -78,7 +78,6 @@ class ControllerTricount extends MyController {
         $description="";
         $errors_title=[];
         $errors_description=[];
-        $depenses=[];
         $errors=[];
         $error="";
 
@@ -134,9 +133,6 @@ class ControllerTricount extends MyController {
                                             "description"=>$description,
                                             "errors_description"=>$errors_description,
                                             "errors_title"=>$errors_title,
-                                            "subscriptions"=>$subscriptions,
-                                            "depenses"=>$depenses,
-                                            "other_users"=>$other_users,
                                             "error"=>$error,
                                             "errors"=>$errors]);       
 
