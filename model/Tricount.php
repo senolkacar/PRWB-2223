@@ -181,9 +181,35 @@ Class Tricount extends Model{
       
     }
     
+    public function get_total(){
+        return Operation::get_total($this);
+    }
 
-    
+    public function get_my_total(User $user){
+        return Operation::get_my_total($this,$user);
+    }
 
+    public function get_max_balance(){
+       $balance = $this->get_balance_by_tricount();
+        $max = 0;
+        foreach($balance as $amount){
+                if(abs($amount)>$max){
+                    $max = abs($amount);
+                }
+            }
+        return $max = round($max,2);
+    }
+
+    public static function get_current_page(Operation $operation):int{
+        $operations = $operation->tricount->get_depenses();
+        $current_page = 0;
+        $pages = count($operations);
+        for ($i = 0; $i < $pages; ++$i){
+            if ($operations[$i]->id == $operation->id)
+                $current_page = $i;
+            }
+        return $current_page;
+    }
 }
 
 

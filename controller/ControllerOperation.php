@@ -38,24 +38,11 @@ class ControllerOperation extends MyController
                 $this->redirect("tricount");
             }           
             
-            $repartitions = Repartition::get_repartitions_by_operation($operation);
-            
-            $operations =  $tricount->get_depenses();
-            $pages = count($operations);
-            $current_page = 0;
-            for ($i = 0; $i < $pages; ++$i) {
-                //var_dump($operations[$i]->title);
-                //echo "<br>";
-                if ($operations[$i]->id == $id)
-                    $current_page = $i;
-            }
+
             (new View("show_operation"))->show([
                 "operation" => $operation,
                 "user" => $user,
-                "repartitions" => $repartitions,
-                "operations" => $operations,
-                "pages" => $pages,
-                "current_page" => $current_page
+                "tricount" => $tricount
             ]);
         }else{
             $this->redirect("tricount");

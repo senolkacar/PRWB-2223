@@ -62,6 +62,7 @@
            
                 <h2>Subscriptions</h2>                    
                 <ul class="list-group" >
+                    <?php $subscriptions = $tricount->get_users_including_creator(); ?>
                         <?php foreach ($subscriptions as $subscription): ?>
                             <li class="list-group-item d-flex justify-content-between align-items-center"><?= $subscription->full_name ?>
                             <?php if($subscription->id == $tricount->creator->id): ?>
@@ -81,6 +82,7 @@
             <br>
 
             <div class="container-sm">
+            <?php $other_users = $tricount->get_users_not_subscriber(); ?>
             <?php if(count($other_users)!=0): ?>
                 <form method='post' action='tricount/add_subscription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
                     <div class="input-group">              

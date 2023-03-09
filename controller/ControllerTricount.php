@@ -65,11 +65,7 @@ class ControllerTricount extends MyController {
             if($tricount==null){
                 $this->redirect("tricount");
             }
-            $nb_participants = $tricount->get_nb_participants();
-            $depenses = $tricount->get_depenses();
-            $total = Operation::get_total($tricount);
-            $mytotal = Operation::get_my_total($tricount,$user);
-            (new View("show_tricount"))->show(["tricount"=>$tricount,"nb_participants"=>$nb_participants,"depenses"=>$depenses,"total"=>$total,"mytotal"=>$mytotal]);
+            (new View("show_tricount"))->show(["tricount"=>$tricount,"user"=>$user]);
         }else{
                 $this->redirect("tricount");
             }
@@ -82,7 +78,6 @@ class ControllerTricount extends MyController {
         $description="";
         $errors_title=[];
         $errors_description=[];
-        $depenses=[];
         $errors=[];
         $error="";
 
@@ -99,9 +94,6 @@ class ControllerTricount extends MyController {
 
             $title=$tricount->title;
             $description=$tricount->description;
-            $subscriptions =$tricount->get_users_including_creator();  
-            $other_users = $tricount->get_users_not_subscriber();        
-          
             if(isset($_POST["title"]) && isset($_POST["description"]) ) {
                         $title = $_POST["title"];
                         $description=$_POST["description"];
@@ -138,9 +130,6 @@ class ControllerTricount extends MyController {
                                             "description"=>$description,
                                             "errors_description"=>$errors_description,
                                             "errors_title"=>$errors_title,
-                                            "subscriptions"=>$subscriptions,
-                                            "depenses"=>$depenses,
-                                            "other_users"=>$other_users,
                                             "error"=>$error,
                                             "errors"=>$errors]);       
 
@@ -207,17 +196,8 @@ public function show_balance():void{
         if($tricount==null){
             $this->redirect("tricount");
         }
-        $balance = $tricount->get_balance_by_tricount();
-        $max = 0;
-        foreach($balance as $amount){
-            if(abs($amount)>$max){
-                $max = abs($amount);
-            }
-        }
-        $user_name = $user->full_name;
-        $max = round($max,2);
         
-        (new View("show_balance"))->show(["tricount"=>$tricount,"balance"=>$balance,"user"=>$user_name,"id"=>$id,"max"=>$max]);
+        (new View("show_balance"))->show(["tricount"=>$tricount,"user"=>$user]);
     }else{
         $this->redirect("tricount");
     }

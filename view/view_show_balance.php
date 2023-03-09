@@ -21,6 +21,8 @@
         </header>
         <div class="container-sm">
             <ul class="list-group w-100">
+                <?php $balance = $tricount->get_balance_by_tricount();?>
+                <?php $max = $tricount ->get_max_balance();?>
                 <?php foreach($balance as $full_name => $amount): ?>
                 <?php if($amount!=0):?>
                 <?php if($amount<0):?>
