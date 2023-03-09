@@ -65,11 +65,7 @@ class ControllerTricount extends MyController {
             if($tricount==null){
                 $this->redirect("tricount");
             }
-            $nb_participants = $tricount->get_nb_participants();
-            $depenses = $tricount->get_depenses();
-            $total = Operation::get_total($tricount);
-            $mytotal = Operation::get_my_total($tricount,$user);
-            (new View("show_tricount"))->show(["tricount"=>$tricount,"nb_participants"=>$nb_participants,"depenses"=>$depenses,"total"=>$total,"mytotal"=>$mytotal]);
+            (new View("show_tricount"))->show(["tricount"=>$tricount,"user"=>$user]);
         }else{
                 $this->redirect("tricount");
             }

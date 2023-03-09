@@ -181,6 +181,13 @@ Class Tricount extends Model{
       
     }
     
+    public function get_total(){
+        return Operation::get_total($this);
+    }
+
+    public function get_my_total(User $user){
+        return Operation::get_my_total($this,$user);
+    }
 
     
 

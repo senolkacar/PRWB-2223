@@ -20,7 +20,7 @@
         </div>
         </header>
         <div class="container-sm">      
-                    <?php if($nb_participants == 0): ?>
+                    <?php if($tricount->get_nb_participants() == 0): ?>
             <ul class="list-group list-unstyled align-items-center">
                         <li class="m-3 border w-100 rounded">
                         <div class="text-center">
@@ -30,7 +30,7 @@
                         </div>
                     </li>
             </ul>
-                        <?php elseif(!$depenses): ?>
+                        <?php elseif(!$tricount->get_depenses()): ?>
             <ul class="list-group list-unstyled align-items-center">
                         <li class="m-3 border border-secondary w-100 rounded">
                         <div class="text-center">
@@ -42,6 +42,7 @@
             </ul>
                         <?php else: ?>
                         <a class="btn btn-success w-100 mb-3 p-2" href="tricount/show_balance/<?=$tricount->id; ?>"><i class="bi bi-arrow-left-right"></i> View Balance</a>   
+                        <?php $depenses = $tricount->get_depenses(); ?>
                         <?php foreach ($depenses as $depense):  ?>
                         <ul class="list-group w-100">
                         <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -71,11 +72,11 @@
                     <div class="d-flex p-1 justify-content-beetween w-100">
                         <div class="me-auto">
                             <div class="text">MY TOTAL</div>
-                            <div class="fw-bold"><?=$mytotal." &euro;"?></div>
+                            <div class="fw-bold"><?=$tricount->get_my_total($user)." &euro;"?></div>
                         </div>
                         <div class="text-end">
                             <div class="text">TOTAL EXPENSES</div>
-                            <div class="fw-bold"><?=$total."&euro;"?></div>
+                            <div class="fw-bold"><?=$tricount->get_total()."&euro;"?></div>
                         </div>
                     </div>
         </div>
