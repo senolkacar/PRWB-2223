@@ -189,6 +189,17 @@ Class Tricount extends Model{
         return Operation::get_my_total($this,$user);
     }
 
+    public function get_max_balance(){
+       $balance = $this->get_balance_by_tricount();
+        $max = 0;
+        foreach($balance as $amount){
+                if(abs($amount)>$max){
+                    $max = abs($amount);
+                }
+            }
+        return $max = round($max,2);
+    }
+
     
 
 }
