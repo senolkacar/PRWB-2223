@@ -94,9 +94,6 @@ class ControllerTricount extends MyController {
 
             $title=$tricount->title;
             $description=$tricount->description;
-            $subscriptions =$tricount->get_users_including_creator();  
-            $other_users = $tricount->get_users_not_subscriber();        
-          
             if(isset($_POST["title"]) && isset($_POST["description"]) ) {
                         $title = $_POST["title"];
                         $description=$_POST["description"];

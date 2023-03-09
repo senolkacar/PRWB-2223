@@ -35,6 +35,7 @@
             <?php endif; ?>
           
             <ul  class="list-group mt-3">
+            <?php $repartitions = $operation->get_repartitions(); ?>
             <?php foreach ($repartitions as $repartition):  ?>
                 <li class="list-group-item">
                     <div class="d-flex justify-content-between mb-2">                 
@@ -67,6 +68,9 @@
              <footer class="footer mt-auto fixed-bottom">   
                 <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
                     <div class="d-flex justify-content-between mb-3"> 
+                    <?php $operations = $tricount->get_depenses(); ?>
+                    <?php $current_page = $operation->get_current_page(); ?>
+                    <?php $pages = count($operations); ?>
                     <?php if($current_page == 0 && $pages==1): ?> 
                     <?php elseif($pages>1 && $current_page == 0 ): ?> 
                         <div></div>

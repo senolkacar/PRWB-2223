@@ -200,8 +200,16 @@ Class Tricount extends Model{
         return $max = round($max,2);
     }
 
-    
-
+    public static function get_current_page(Operation $operation):int{
+        $operations = $operation->tricount->get_depenses();
+        $current_page = 0;
+        $pages = count($operations);
+        for ($i = 0; $i < $pages; ++$i){
+            if ($operations[$i]->id == $operation->id)
+                $current_page = $i;
+            }
+        return $current_page;
+    }
 }
 
 

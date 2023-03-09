@@ -139,6 +139,16 @@ Class Operation extends Model{
         return $data[0];
     }
 
+    public function get_repartitions(){
+        return Repartition::get_repartitions_by_operation($this);
+    }
+
+    public function get_current_page(): int{
+        return Tricount::get_current_page($this);
+    }
+
+
+
 
 }
 ?>
