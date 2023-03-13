@@ -12,41 +12,27 @@
     <script>
         $(function() {
             var expenses = $('.list-group');
+            $('#sort-by').show();
+            $('#sort_title').show();
             $('#sort-by').change(function() {
                 var selected = $(this).val();
                 expenses.sort(function(a, b) {
-                    if (selected == "amount-asc") {
+                    if (selected == "amount-asc" || selected=="amount-desc") {
                         valA = parseFloat($(a).find('#amount').text());
                         valB = parseFloat($(b).find('#amount').text());
-                        return valA - valB;
-                    } else if (selected == "amount-desc") {
-                        valA = parseFloat($(a).find('#amount').text());
-                        valB = parseFloat($(b).find('#amount').text());
-                        return valB - valA;
-                    } else if (selected == "date-asc") {
+                        return selected == "amount-asc" ? valA - valB : valB - valA;
+                    } else if (selected == "date-asc" || selected == "date-desc") {
                         valA = new Date($(a).find('#date').text().split('/').reverse().join('-'));
                         valB = new Date($(b).find('#date').text().split('/').reverse().join('-'));
-                        return valA - valB;
-                    } else if (selected == "date-desc") {
-                        valA = new Date($(a).find('#date').text().split('/').reverse().join('-'));
-                        valB = new Date($(b).find('#date').text().split('/').reverse().join('-'));
-                        return valB - valA;
-                    } else if (selected == "initiator-asc") {
+                        return selected == "date-asc" ? valA - valB : valB - valA;
+                    } else if (selected == "initiator-asc" || selected == "initiator-desc") {
                         valA = $(a).find('#initiator').text();
                         valB = $(b).find('#initiator').text();
-                        return valA.localeCompare(valB);
-                    } else if (selected == "initiator-desc") {
-                        valA = $(a).find('#initiator').text();
-                        valB = $(b).find('#initiator').text();
-                        return valB.localeCompare(valA);
-                    } else if (selected == "title-asc") {
+                        return selected == "initiator-asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                    } else if (selected == "title-asc"||selected=="title-desc") {
                         valA = $(a).find('#title').text();
                         valB = $(b).find('#title').text();
-                        return valA.localeCompare(valB);
-                    } else if (selected == "title-desc") {
-                        valA = $(a).find('#title').text();
-                        valB = $(b).find('#title').text();
-                        return valB.localeCompare(valA);
+                        return selected == "title-asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
                     }
                 })
 
@@ -54,6 +40,7 @@
             });
         });
     </script>
+
 </head>
 
 <body>
@@ -89,8 +76,8 @@
             </ul>
         <?php else : ?>
             <a class="btn btn-success w-100 mb-3 p-2" href="tricount/show_balance/<?= $tricount->id; ?>"><i class="bi bi-arrow-left-right"></i> View Balance</a>
-            <div class="text">Order expenses by :</div>
-            <select id="sort-by" class="form-select mb-2">
+            <div class="text" id="sort_title" style="display:none">Order expenses by :</div>
+            <select id="sort-by" class="form-select mb-2" style="display:none;">
                 <option value="amount-asc">Amount &#9650;</option>
                 <option value="amount-desc">Amount &#9660;</option>
                 <option value="date-asc">Date &#9650;</option>

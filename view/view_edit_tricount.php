@@ -86,7 +86,7 @@
             <?php if(count($other_users)!=0): ?>
                 <form method='post' action='tricount/add_subscription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
                     <div class="input-group">              
-                        <select class="form-select" aria-label="Example select with button addon"  name = "subscriber" id="subscriber" required>
+                        <select class="form-select" name = "subscriber" id="subscriber" required>
                             <option value="">--Add a new subscriber--</option>
                             <?php foreach ($other_users as $other_user): ?>  
                             <option value="<?=$other_user->id; ?>"><?=$other_user->full_name; ?></option>                             
