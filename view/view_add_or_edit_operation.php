@@ -8,9 +8,46 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+        <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
         <script>
+            let subscriptionAmount, totalAmount,totalWeight, weight;           
+
+            $(function(){
             
-            </script>
+                console.log(parseFloat($('#amount').val()));
+
+                if(parseFloat($('#amount').val()) > 0) {
+
+            function updateTotalWeight() {
+                totalWeight = 0;
+                $('input[type="checkbox"]:checked').each(function() {
+                let weight = parseFloat($(this).siblings('input[name="weights[]"]').val());
+                totalWeight += weight;
+                });
+                $('#total-weight').val(totalWeight.toFixed(2));
+                updateAmounts();
+            }
+            $('input[type="checkbox"]').on('change', updateTotalWeight);
+
+            function updateAmounts() {
+                totalAmount = parseFloat($('#amount').val());
+                $('input[type="checkbox"]:checked').each(function() {
+                weight = parseFloat($(this).siblings('input[name="weights[]"]').val());
+                subscriptionAmount = totalAmount/totalWeight*weight;
+                $(this).siblings('input[name="amount[]"]').val(subscriptionAmount.toFixed(2));
+                });
+            }
+            $('#amount, #total-weight').on('input', updateAmounts);
+            console.log($('#total-weight').val());//""
+            console.log(totalWeight);//undefined
+
+            }          
+            
+            
+            
+             });          
+            
+        </script>
     </head>
     <body>
     <header>
@@ -77,6 +114,9 @@
                             <?php endforeach; ?>
                             </select>                           
                 <p class="mt-2">For whom ?(select at least one)</p>
+
+                <input type="text" id="total-weight" class="form-control" value="" >
+
                     <?php foreach ($subscriptions as $subscription): ?>
                         <div class='input-group input-group-lg'>  
                         <div class="input-group-text mb-3">
@@ -92,7 +132,7 @@
                                 <?php $weight = $weights[$i]; ?>
                             <?php endif; ?>
                         <?php endfor; ?>
-                        <input type="number" step="0.01" class="form-control mb-3" name ="amount[]" value= "">
+                        <input type="number" step="0.01" id="subscription-amount" class="form-control mb-3" name ="amount[]" value= "0">
                         <input type="number" class="form-control mb-3" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
                         <input type="hidden" name="ids[]" value="<?=$subscription->id?>">
                         </div>
