@@ -14,7 +14,7 @@
         <header>
         <div class="container p-2 mb-3 text-dark" style="background-color:#E3F2FD">
         <div class="d-flex justify-content-between">
-        <a class="btn btn-outline-danger btn-block" href="tricount/show_tricount/<?=$id?>">Back</a>
+        <a class="btn btn-outline-danger btn-block" href="tricount/show_tricount/<?=$tricount->id?>">Back</a>
         <div class="text-secondary fw-bold mt-2"><?=$tricount->title?>&#32;<i class="bi bi-caret-right-fill"></i> &#32; Balance </div>
         </div>
         </div>
