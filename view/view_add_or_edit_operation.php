@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
         <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
         <script>
-            let subscriptionAmount, totalAmount,totalWeight, weight;           
+            let subscriptionAmount, totalAmount,totalWeight =0;           
 
             $(function(){
             
@@ -21,23 +21,26 @@
             function updateTotalWeight() {
                 totalWeight = 0;
                 $('input[type="checkbox"]:checked').each(function() {
-                let weight = parseFloat($(this).siblings('input[name="weights[]"]').val());
+               let weight = parseFloat($(this).siblings('input[name="weights[]"]').val());
+               console.log("weight " + weight);
                 totalWeight += weight;
                 });
                 $('#total-weight').val(totalWeight.toFixed(2));
                 updateAmounts();
+                
             }
             $('input[type="checkbox"]').on('change', updateTotalWeight);
 
             function updateAmounts() {
                 totalAmount = parseFloat($('#amount').val());
                 $('input[type="checkbox"]:checked').each(function() {
-                weight = parseFloat($(this).siblings('input[name="weights[]"]').val());
+               let weight = parseFloat($(this).siblings('input[name="weights[]"]').val());
                 subscriptionAmount = totalAmount/totalWeight*weight;
                 $(this).siblings('input[name="amount[]"]').val(subscriptionAmount.toFixed(2));
                 });
             }
             $('#amount, #total-weight').on('input', updateAmounts);
+
             console.log($('#total-weight').val());//""
             console.log(totalWeight);//undefined
 
@@ -133,7 +136,7 @@
                             <?php endif; ?>
                         <?php endfor; ?>
                         <input type="number" step="0.01" id="subscription-amount" class="form-control mb-3" name ="amount[]" value= "0">
-                        <input type="number" class="form-control mb-3" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
+                        <input type="number" class="form-control mb-3" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>" onchange="console.log('weight=' + this.value);">
                         <input type="hidden" name="ids[]" value="<?=$subscription->id?>">
                         </div>
                     <?php endforeach; ?>                 
