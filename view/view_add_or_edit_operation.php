@@ -13,9 +13,18 @@
             
             let totalAmount, totalWeight;
             $(function(){
-                totalAmount = getTotalAmount();
+
+                $('form').submit(function() {
+                    $('input[name="amount[]"]').prop('disabled', true);
+                    return true;
+                });
+
+                //$("#subscription-amount").show(); doesn't work with attr 'readonly'
+                $('input[name="amount[]"]').each(function(index){
+                    $(this). removeAttr("hidden");
+                });
                 
-                console.log("js total amount "+ totalAmount);
+                totalAmount = getTotalAmount();
                 
                 weight = getTotalWeight();               
 
@@ -105,7 +114,7 @@
                     }                    
                 });
 
-                console.log("js total weight " +totalWeight );
+               // console.log("js total weight " +totalWeight );
                 return totalWeight;
              }    
 
@@ -116,20 +125,17 @@
                         return parseFloat($(this).val());
                     }                    
                 }).get();
-                 console.log("js total weight array" + weightValues );
 
                 function calculateRatio(weight) {
                     if(totalWeight >0) {
                         return totalAmount/totalWeight*weight;
                     } else {
                         return 0;
-                    }
-                    
+                    }                    
                 }
 
                 var ratios = $.map(weightValues, calculateRatio);
                     return ratios;
-
              }   
             
         </script>
@@ -216,7 +222,7 @@
                                 <?php $weight = $weights[$i]; ?>
                             <?php endif; ?>
                         <?php endfor; ?>
-                        <input type="number" step="0.01" id="subscription-amount" class="form-control mb-3" name ="amount[]" value= "0" readonly>
+                        <input type="number" step="0.01" id="subscription-amount" class="form-control mb-3" name ="amount[]" value= "0" readonly hidden>
                         <input type="number" class="form-control mb-3" id="weights" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>" onchange="console.log('html weight=' + this.value);">
                         <input type="hidden" name="ids[]" value="<?=$subscription->id?>">
                         </div>
