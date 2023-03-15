@@ -8,9 +8,137 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+        <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
         <script>
             
-            </script>
+            let totalAmount, totalWeight;
+            $(function(){
+
+                $('form').submit(function() {
+                    $('input[name="amount[]"]').prop('disabled', true);
+                    return true;
+                });
+
+                //$("#subscription-amount").show(); doesn't work with attr 'readonly'
+                $('input[name="amount[]"]').each(function(index){
+                    $(this). removeAttr("hidden");
+                });
+                
+                totalAmount = getTotalAmount();
+                
+                weight = getTotalWeight();               
+
+                var ratios = getRatio();
+
+                var $amounts = $('input[name="amount[]"]');//generate an array of amount
+
+                $amounts.each(function(index) {
+                    var ratio = ratios[index];
+                    var value = ratio.toFixed(2);
+                    $(this).val(value);
+                });        
+
+                $('#amount').on('change',function() {
+                    totalAmount = getTotalAmount();
+                    weight = getTotalWeight();          
+                    var ratios = getRatio();
+
+                    $amounts.each(function(index) {
+                        var ratio = ratios[index];
+                        var value = ratio.toFixed(2);
+                        $(this).val(value);
+                    });  
+
+                });
+
+                $('input[name="checkboxes[]"]').on('change', function() {
+                    var checkboxes = $('input[name="checkboxes[]"]');
+                    var weights = $('input[name="weights[]"]');
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if (!$(checkboxes[i]).prop('checked')) {
+                            $(weights[i]).val(0);
+                        }
+                    }
+                    totalAmount = getTotalAmount();
+                    weight = getTotalWeight();              
+                    var ratios = getRatio();
+
+                    $amounts.each(function(index) {
+                        var ratio = ratios[index];
+                        var value = ratio.toFixed(2);
+                        $(this).val(value);
+                    });  
+
+                });
+
+                $('input[name="weights[]"]').on('change', function() {
+                    var checkboxes = $('input[name="checkboxes[]"]');
+                    var weights = $('input[name="weights[]"]');
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if ($(weights[i]).val() == 0) {
+                            $(checkboxes[i]).prop('checked', false);
+                        }
+                        if ($(weights[i]).val() > 0) {
+                            $(checkboxes[i]).prop('checked', true);
+                        }
+                    }
+                    totalAmount = getTotalAmount();
+                    weight = getTotalWeight();               
+                    var ratios = getRatio();
+
+                    $amounts.each(function(index) {
+                        var ratio = ratios[index];
+                        var value = ratio.toFixed(2);
+                        $(this).val(value);
+                    });  
+
+                });   
+
+            
+             });   
+
+             function getTotalAmount() {
+                if ($('#amount').val()!==""){
+                    totalAmount = parseFloat($('#amount').val());
+                } else totalAmount = 0;
+
+                return totalAmount;
+             }
+
+             function getTotalWeight() {
+                totalWeight = 0;
+                $('input[name="weights[]"]').each(function() {
+                    var val = $(this).val();
+                    if(val !== ""){
+                        totalWeight += parseFloat(val);
+                    }                    
+                });
+
+               // console.log("js total weight " +totalWeight );
+                return totalWeight;
+             }    
+
+             function getRatio() {
+                var weightValues = $('input[name="weights[]"]').map(function(){
+                    var val =$(this).val();
+                    if(val !=='') {
+                        return parseFloat($(this).val());
+                    }                    
+                }).get();
+
+                function calculateRatio(weight) {
+                    if(totalWeight >0) {
+                        return totalAmount/totalWeight*weight;
+                    } else {
+                        return 0;
+                    }                    
+                }
+
+                var ratios = $.map(weightValues, calculateRatio);
+                    return ratios;
+             }   
+            
+        </script>
     </head>
     <body>
     <header>
@@ -47,7 +175,8 @@
                 </div>
                 <?php endif; ?>
                 <div class="input-group mb-3">
-                <input type="number" class="form-control<?php echo count($errors_amount)!=0 ? ' is-invalid' : ''?>" step="0.01" name='amount' id='amount' value="<?=$amount?>" placeholder="Amount">
+                <input type="number" class="form-control<?php echo count($errors_amount)!=0 ? ' is-invalid' : ''?>" step="0.01" name='amount' id='amount' value="<?=$amount?>" placeholder="Amount" 
+                onchange="console.log('html total amount ' + this.value);" >
                 <span class="input-group-text">EUR</span>            
                 </div>
                 <?php if (count($errors_amount) != 0): ?>
@@ -77,11 +206,12 @@
                             <?php endforeach; ?>
                             </select>                           
                 <p class="mt-2">For whom ?(select at least one)</p>
+
                     <?php foreach ($subscriptions as $subscription): ?>
                         <div class='input-group input-group-lg'>  
                         <div class="input-group-text mb-3">
-                        <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?=$subscription->id?>"
-                        <?php if (in_array($subscription->id, $checkboxes)) { echo 'checked'; } ?>>
+                        <input type="checkbox" id="checkboxes" class="form-check-input" name="checkboxes[]" value="<?=$subscription->id?>"
+                            <?php if (in_array($subscription->id, $checkboxes)) { echo 'checked'; } ?>>
                         </div>
                         <div class="input-group-text mb-3 w-50">
                         <span class="text"><?=$subscription->full_name;?></span>
@@ -92,8 +222,8 @@
                                 <?php $weight = $weights[$i]; ?>
                             <?php endif; ?>
                         <?php endfor; ?>
-                        <input type="number" step="0.01" class="form-control mb-3" name ="amount[]" value= "">
-                        <input type="number" class="form-control mb-3" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>">
+                        <input type="number" step="0.01" id="subscription-amount" class="form-control mb-3" name ="amount[]" value= "0" readonly hidden>
+                        <input type="number" class="form-control mb-3" id="weights" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>" onchange="console.log('html weight=' + this.value);">
                         <input type="hidden" name="ids[]" value="<?=$subscription->id?>">
                         </div>
                     <?php endforeach; ?>                 
