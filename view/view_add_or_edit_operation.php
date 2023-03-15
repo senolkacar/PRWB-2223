@@ -14,47 +14,87 @@
             let totalAmount, totalWeight;
             $(function(){
                 totalAmount = parseFloat($('#amount').val());
-
                 console.log("js total amount "+parseFloat($('#amount').val()));
+                weight = getTotalWeight();               
 
-                if(totalAmount > 0) {
-                    totalWeight = 0;
-                    $('input[name="weights[]"]').each(function() {
-                        totalWeight += parseFloat($(this).val());
-                    });
+                var ratios = getRatio();
 
-                    console.log("js total weight " +totalWeight );
-
-                    var weightValues = $('input[name="weights[]"]').map(function(){
-                        return parseFloat($(this).val());
-                    }).get();
-
-                    console.log("js total weight array" + weightValues );
-
-
-                    function calculateRatio(weight) {
-                        return totalAmount/totalWeight*weight;
-                    }
-
-                    var ratios = $.map(weightValues, calculateRatio);
-
-                    console.log("ratios "+ratios);
-
-                    var $amounts = $('input[name="amount[]"]');
+                var $amounts = $('input[name="amount[]"]');
 
                     $amounts.each(function(index) {
                         var ratio = ratios[index];
                         var value = ratio.toFixed(2);
                         $(this).val(value);
-                    });
+                    });        
 
+                $('input[name="checkboxes[]"]').on('change', function() {
+                    var checkboxes = $('input[name="checkboxes[]"]');
+                    var weights = $('input[name="weights[]"]');
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if (!$(checkboxes[i]).prop('checked')) {
+                            $(weights[i]).val(0);
+                        }
+                    }
+                    weight = getTotalWeight();               
 
+                    var ratios = getRatio();
 
+                    $amounts.each(function(index) {
+                        var ratio = ratios[index];
+                        var value = ratio.toFixed(2);
+                        $(this).val(value);
+                    });  
+
+                });
+
+                $('input[name="weights[]"]').on('change', function() {
+                    var checkboxes = $('input[name="checkboxes[]"]');
+                    var weights = $('input[name="weights[]"]');
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if ($(weights[i]).val() == 0) {
+                            $(checkboxes[i]).prop('checked', false);
+                        }
+                    }
+
+                    weight = getTotalWeight();               
+
+                    var ratios = getRatio();
+
+                    $amounts.each(function(index) {
+                        var ratio = ratios[index];
+                        var value = ratio.toFixed(2);
+                        $(this).val(value);
+                    });  
+
+                });   
+
+            
+             });   
+
+             function getTotalWeight() {
+                totalWeight = 0;
+                $('input[name="weights[]"]').each(function() {
+                    totalWeight += parseFloat($(this).val());
+                });
+
+                console.log("js total weight " +totalWeight );
+                return totalWeight;
+             }    
+
+             function getRatio() {
+                var weightValues = $('input[name="weights[]"]').map(function(){
+                    return parseFloat($(this).val());
+                }).get();
+                 console.log("js total weight array" + weightValues );
+
+                function calculateRatio(weight) {
+                    return totalAmount/totalWeight*weight;
                 }
-            
 
-            
-             });          
+                var ratios = $.map(weightValues, calculateRatio);
+                    return ratios;
+
+             }   
             
         </script>
     </head>
