@@ -71,7 +71,7 @@ Class Tricount extends Model{
         return $errors;
     }
 
-    private static function title_creator_existe(User $user, String $title) : bool {
+    public static function title_creator_existe(User $user, String $title) : bool {
         $query = self::execute("SELECT COUNT(*) FROM tricounts WHERE title=:title and creator=:creator", ["title"=>$title,"creator"=>$user->id]);
         $data = $query->fetch();
         return ((int)$data[0]) > 0;
