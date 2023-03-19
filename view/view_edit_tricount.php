@@ -9,6 +9,11 @@
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
         <link rel="stylesheet" href="css/edit_tricount_style.css" type="text/css">
+        <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
+        <script>
+
+        
+        </script>
    
     </head>
     <body>
@@ -61,7 +66,7 @@
 
            
                 <h2>Subscriptions</h2>                    
-                <ul class="list-group" >
+                <ul class="list-group" id="participant-list">
                     <?php $subscriptions = $tricount->get_users_including_creator(); ?>
                         <?php foreach ($subscriptions as $subscription): ?>
                             <li class="list-group-item d-flex justify-content-between align-items-center"><?= $subscription->full_name ?>
@@ -70,7 +75,7 @@
                                 <?php elseif(!($subscription->has_operation($tricount)) && !($subscription->is_initiator($tricount))): ?>
                                     <form method='post' action='tricount/delete_subscription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form2">
                                     <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>                                    
-                                    <button type='submit'  class="btn_delete"><span class="badge bg-white text-dark"><i class="bi bi-trash"></i> </span> </button>  
+                                    <button type='submit'  class="btn_delete" data-participant-id="<?= $subscription->id ?>"><span class="badge bg-white text-dark"><i class="bi bi-trash"></i> </span> </button>  
                                     </form> 
                                    
                             <?php endif; ?>
