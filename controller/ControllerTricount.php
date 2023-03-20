@@ -23,11 +23,15 @@ class ControllerTricount extends MyController {
 
     public function tricount_exists_service(): void{
         $res = "false";
-        if(isset($_GET["param1"]) && $_GET["param1"]!=="" && isset($_GET["param2"]) && $_GET["param2"]!==""){
-            if(Tricount::title_creator_existe(User::get_user_by_id($_GET["param1"]),$_GET["param2"]))
+        $id = $_POST["creator"];
+        $title = $_POST["title"];
+        
+        if(isset(($id)) && isset($title)){
+            if(Tricount::title_creator_existe(User::get_user_by_id($id),$title)){
                 $res = "true";
         }
         echo $res; 
+    }
     }
 
     public function add_tricount():void {
