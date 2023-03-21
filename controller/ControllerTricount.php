@@ -145,7 +145,50 @@ class ControllerTricount extends MyController {
 
     }
 
-    public function delete_subscription() :void {
+
+
+    public function add_subscription_service(): void {
+        $user = $this->get_user_or_redirect();
+
+    }
+
+    private function add_sub(Tricount $tricount, User $user) : bool {
+        $errors = [];
+
+        return $errors;
+
+    }
+
+    public function delete_subscription_service(): void {
+        $subscriber = $this->remove_subscription();
+        $row = [];
+        $row["id"] = $subscriber->id;
+        $row["full_name"] = $subscriber->full_name;
+        echo json_encode($row);
+
+    }
+
+    private function remove_subscription() :User|false {
+        $user = $this->get_user_or_redirect();
+        if(isset($_GET["param1"]) &&is_numeric($_GET["param1"])) { 
+            $id=(int)$_GET["param1"];            
+            $tricount = Tricount::get_tricount_by_id($id);
+
+            if(isset($_POST["delete_member"]) && is_numeric($_POST["delete_member"])) {                   
+                $subscriber = User::get_user_by_id($_POST["delete_member"]);
+                if($subscriber) {
+                    Subscription::delete_subscription($tricount, $subscriber);
+                    return $subscriber;
+                }
+            }
+        }
+
+        return false;
+        
+    }
+
+
+    public function delete_subscription() :void { // refactoring 
         $user=$this->get_user_or_redirect();
 
         if(isset($_GET["param1"]) &&is_numeric($_GET["param1"])) { 
@@ -169,6 +212,7 @@ class ControllerTricount extends MyController {
     }
 
     public function add_subscription() :void {
+
         $user=$this->get_user_or_redirect();
 
         if(isset($_GET["param1"]) && is_numeric($_GET["param1"])) { 

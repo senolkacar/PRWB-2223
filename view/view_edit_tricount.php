@@ -11,6 +11,46 @@
         <link rel="stylesheet" href="css/edit_tricount_style.css" type="text/css">
         <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
         <script>
+            
+            const tricountId = <?= $tricount->id ?>;
+
+            $(function(){
+     
+                $('.btn_delete').on('click', function(event){
+                    event.preventDefault();                    
+
+                    var participantId = $(this).data('participant-id');
+                    console.log("ajax participantId " +participantId );
+
+                    console.log("ajax tricountId " +tricountId);
+
+                    $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": participantId})
+                        .done(function(response){
+                            console.log("delete response " + response );
+                            $('#participant-list li').each(function() {
+                            if ($(this).find('.btn_delete').data('participant-id') == participantId) {
+                                $(this).remove();
+                                var participantName = response.full_name;
+                                var participantId = respons.id;
+                                
+                                //reload addList; sort
+
+                                var optionHtml = '<option value="' + participantId + '">' + participantName + '</option>';
+                                $('#form3').append(optionHtml);
+
+
+                                }
+                            });    
+                        })
+                        .fail(function(xhr, status, error) {
+                            console.error('Failed to delete participant:', error);
+                        });
+                    });
+
+                    
+
+            });
+
 
         
         </script>
