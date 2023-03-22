@@ -15,32 +15,39 @@
             const tricountId = <?= $tricount->id ?>;
 
             $(function(){
+
+                let subscriber = $('#subscriber');
      
                 $('.btn_delete').on('click', function(event){
-                    event.preventDefault();                    
+                    event.preventDefault();                 
 
+                    var li = $(this).parent().parent();
                     var participantId = $(this).data('participant-id');
                     console.log("ajax participantId " +participantId );
-
                     console.log("ajax tricountId " +tricountId);
 
-                    $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": participantId})
+                    $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": participantId}, null, 'json')
                         .done(function(response){
                             console.log("delete response " + response );
-                            $('#participant-list li').each(function() {
-                            if ($(this).find('.btn_delete').data('participant-id') == participantId) {
-                                $(this).remove();
-                                var participantName = response.full_name;
-                                var participantId = respons.id;
-                                
-                                //reload addList; sort
-
-                                var optionHtml = '<option value="' + participantId + '">' + participantName + '</option>';
-                                $('#form3').append(optionHtml);
-
-
-                                }
-                            });    
+                            console.log($(this));
+                            li.remove();
+                            // $('#participant-list li').each(function(index, element) {
+                            //     console.log(element)
+                            //     console.log($(this).find('.btn_delete').data('participant-id') == participantId)
+                            //     if ($(element).find('.btn_delete').data('participant-id') == participantId) {
+                            //         $(element).remove();
+                            //         console.log('xxx')
+                            //     }
+                            // });    
+                            console.log(response)
+                            var participantName = response.full_name;
+                            var participantId = response.id;                                  
+                            var optionHtml = '<option value="' + participantId + '">' + participantName + '</option>';
+                            console.log(optionHtml)
+                            console.log(subscriber);
+                            subscriber.append(optionHtml);
+                            // if there is no subscriber it is not possible to do 'append'
+                            //reload addList; sort
                         })
                         .fail(function(xhr, status, error) {
                             console.error('Failed to delete participant:', error);

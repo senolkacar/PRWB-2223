@@ -152,12 +152,7 @@ class ControllerTricount extends MyController {
 
     }
 
-    private function add_sub(Tricount $tricount, User $user) : bool {
-        $errors = [];
-
-        return $errors;
-
-    }
+ 
 
     public function delete_subscription_service(): void {
         $subscriber = $this->remove_subscription();
