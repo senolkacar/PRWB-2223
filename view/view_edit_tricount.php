@@ -10,55 +10,77 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
         <link rel="stylesheet" href="css/edit_tricount_style.css" type="text/css">
         <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
-        <script>
-            
+        <script>    
+                 
             const tricountId = <?= $tricount->id ?>;
-
+            let subscribers = <?=$subscribers_json ?>;
+            let subscribersList;
+            let sortColumn = 'full_name';
+            
             $(function(){
-
-                let subscriber = $('#subscriber');
-     
-                $('.btn_delete').on('click', function(event){
-                    event.preventDefault();                 
-
-                    var li = $(this).parent().parent();
-                    var participantId = $(this).data('participant-id');
-                    console.log("ajax participantId " +participantId );
-                    console.log("ajax tricountId " +tricountId);
-
-                    $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": participantId}, null, 'json')
-                        .done(function(response){
-                            console.log("delete response " + response );
-                            console.log($(this));
-                            li.remove();
-                            // $('#participant-list li').each(function(index, element) {
-                            //     console.log(element)
-                            //     console.log($(this).find('.btn_delete').data('participant-id') == participantId)
-                            //     if ($(element).find('.btn_delete').data('participant-id') == participantId) {
-                            //         $(element).remove();
-                            //         console.log('xxx')
-                            //     }
-                            // });    
-                            console.log(response)
-                            var participantName = response.full_name;
-                            var participantId = response.id;                                  
-                            var optionHtml = '<option value="' + participantId + '">' + participantName + '</option>';
-                            console.log(optionHtml)
-                            console.log(subscriber);
-                            subscriber.append(optionHtml);
-                            // if there is no subscriber it is not possible to do 'append'
-                            //reload addList; sort
-                        })
-                        .fail(function(xhr, status, error) {
-                            console.error('Failed to delete participant:', error);
-                        });
-                    });
-
-                    
+                
+                subscribersList = $('#participant-list');
+                subscribersList.html("<li>loading ...</li>");
+                getSubscribers();                   
 
             });
 
+            async function getSubscribers(){
 
+                try {
+                    subscribers = await $.getJSON("tricount/get_tricount_subscrier_service/" + tricountId);
+                    console.log("0 tricountId " +tricountId );
+                    sortSubscribers();
+                    console.log("1 tricountId " +tricountId );
+                    displaySubscribers();
+                } catch(e) {
+                    subscribersList.html("<li>1 Error encountered while retrieving the subscribers!</li>");
+                }
+
+            }
+
+            async function deleteSubscriber(id){ // to test
+                const idx = subscribers.findIndex(function (el, idx, arr) {
+                    return el.id === id;
+                });
+                subscribers.splice(idx, 1);
+                displaySubscribers();
+                
+                try {
+                    await $.post("tricount/delete_subscription_service/" + tricount, {"delete_member": id}); 
+                    getSubscribers();
+                } catch(e) {
+                    subscribersList.html("<li>2 Error encountered while retrieving the subscribers!</li>");
+                }
+            }
+
+            function sortSubscribers() {
+                subscribers.sort(function(a, b) {
+                    if (a[sortColumn] < b[sortColumn]) {
+                    return -1;
+                    } else if (a[sortColumn] > b[sortColumn]) {
+                    return 1;
+                    } else {
+                    return 0;
+                    }
+                });
+            }
+
+            function displaySubscribers() {
+                let html ="";
+                for (let s of subscribers) {
+                    html += "<li>";
+		            html += s.full_name;
+                    html +=  (s.is_creator ? "(creator)" : "");
+                    html += "...";
+                    html += "<a href='javascript:deleteSubscriber(" + s.id + ")'>delete</a>" ;
+                   // html +=  (!(m.has_operation ||m.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'>delete</a>" : "") ; // why doesn't work
+                   //html +=  (m.has_operation||m.is_initiator ? "" : "<a href='javascript:deleteSubscriber(" + s.id + ")'>delete</a>") ;
+                    html += "</tr>";
+                    html += "</li>";
+                }
+                subscribersList.html(html);
+            }
         
         </script>
    
@@ -133,7 +155,7 @@
                 
             <br>
 
-            <div class="container-sm">
+            <div class="container-sm" id = "other_users_list">
             <?php $other_users = $tricount->get_users_not_subscriber(); ?>
             <?php if(count($other_users)!=0): ?>
                 <form method='post' action='tricount/add_subscription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">

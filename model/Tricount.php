@@ -210,6 +210,42 @@ Class Tricount extends Model{
             }
         return $current_page;
     }
+
+
+    public function  get_tricount_subscribers_as_json(User $user) : string {
+        $subscribers = $this->get_users_including_creator();
+        $table = [];
+        foreach($subscribers as $subscriber) {
+            $is_creator = $subscriber->id == $this->creator->id;
+            $has_operation = $subscriber->has_operation($this);
+            $is_initiator = $subscriber->is_initiator($this);
+            $row = [];
+            $row["id"] = $subscriber->id;
+            $row["full_name"] = $subscriber->full_name;
+            $row["is_creator"] = $is_creator;
+            $row["has_operation"] = $has_operation;
+            $row["is_initiator"] = $is_initiator;
+            $table[] = $row;          
+        }
+        return json_encode($table);
+    }
+
+    public function  get_users_not_tricount_subscribers_as_json(User $user) : string {
+        $other_users = $this->get_users_not_subscriber();
+        $table = [];
+        foreach($other_users as $other_user) {
+            $row = [];
+            $row["id"] = $other_user->id;
+            $row["full_name"] = $other_user->full_name;
+            $table[] = $row;          
+        }
+        return json_encode($table);
+    }
+
+
+
+
+
 }
 
 

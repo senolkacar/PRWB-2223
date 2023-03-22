@@ -90,17 +90,21 @@ class ControllerTricount extends MyController {
         $errors_description=[];
         $errors=[];
         $error="";
+        $subscribers_json;
 
         if(isset($_GET["param1"]) && is_numeric($_GET["param1"]) ) { 
             $id= (int)$_GET["param1"];                             
             $tricount = Tricount::get_tricount_by_id($id);
+
             if($tricount){
                 if(!in_array($user,$tricount->get_users_including_creator())) {
                     $this->redirect("tricount");
                 }
             }else {// if $tricount doesn't exist
                 $this->redirect("tricount");
-            }            
+            } 
+            
+            $subscribers_json = $tricount ->get_tricount_subscribers_as_json($user);// to do !!!
 
             $title=$tricount->title;
             $description=$tricount->description;
@@ -141,25 +145,34 @@ class ControllerTricount extends MyController {
                                             "errors_description"=>$errors_description,
                                             "errors_title"=>$errors_title,
                                             "error"=>$error,
+                                            "subscribers_json"=>$subscribers_json,
                                             "errors"=>$errors]);       
 
     }
 
+    public function get_tricount_subscrier_service() : void {
+        $user = $this->get_user_or_redirect();
+        $tricount = $this->get_tricount($user);
+        $subscribers_json = $tricount ->get_tricount_subscribers_as_json($user);
+        echo $subscribers_json;
+    }  
 
+    private function get_tricount(User $user) : Tricount {
+        if(isset($_GET["param1"]) && is_numeric($_GET["param1"]) ) { 
+            $id= (int)$_GET["param1"];                             
+            $tricount = Tricount::get_tricount_by_id($id);
+            return $tricount;
+        }
+    }
 
     public function add_subscription_service(): void {
         $user = $this->get_user_or_redirect();
-
+        echo $user;
     }
 
- 
-
-    public function delete_subscription_service(): void {
+     public function delete_subscription_service(): void {
         $subscriber = $this->remove_subscription();
-        $row = [];
-        $row["id"] = $subscriber->id;
-        $row["full_name"] = $subscriber->full_name;
-        echo json_encode($row);
+        echo $subscriber ? "true" : "false";
 
     }
 
