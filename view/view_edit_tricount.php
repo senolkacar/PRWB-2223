@@ -99,25 +99,13 @@
 
             function sortSubscribers() {//doesn't work
                 subscribers.sort(function(a, b) {
-                    if (a[sortColumn] < b[sortColumn]) {
-                    return -1;
-                    } else if (a[sortColumn] > b[sortColumn]) {
-                    return 1;
-                    } else {
-                    return 0;
-                    }
+                    return a[sortColumn] - b[sortColumn];                    
                 });
             }
 
             function sortOtherUsers() {//doesn't work
                 otherUsers.sort(function(a, b) {
-                    if (a[sortColumn] < b[sortColumn]) {
-                    return -1;
-                    } else if (a[sortColumn] > b[sortColumn]) {
-                    return 1;
-                    } else {
-                    return 0;
-                    }
+                    return a[sortColumn] - b[sortColumn]; 
                 });
             }
 
