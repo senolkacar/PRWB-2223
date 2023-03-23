@@ -62,7 +62,7 @@
                 subscribers.splice(idx, 1);           
                 
                 try {
-                   // console.log("1 delete id " + id );
+                   // console.log("delete id " + id );
                     await $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": id});       
                     getSubscribers();
                     sortSubscribers()
@@ -85,7 +85,7 @@
                 otherUsers.splice(idx, 1);           
                 
                 try {
-                    await $.post("tricount/add_subscription_service/" + tricountId, {"subscriber": id});  //              
+                    await $.post("tricount/add_subscription_service/" + tricountId, {"subscriber": id});              
                     getOtherUsers();
                     sortOtherUsers();
                     displayOtherUsers();
@@ -97,13 +97,13 @@
                 }
             }
 
-            function sortSubscribers() {//doesn't work
+            function sortSubscribers() {
                 subscribers.sort(function(a, b) {
                     return a[sortColumn] - b[sortColumn];                    
                 });
             }
 
-            function sortOtherUsers() {//doesn't work
+            function sortOtherUsers() {
                 otherUsers.sort(function(a, b) {
                     return a[sortColumn] - b[sortColumn]; 
                 });
@@ -116,10 +116,10 @@
 		            html += s.full_name;
                     html +=  (s.is_creator ? "(creator)" : "");
                     html += "...";
-                    html += "<a href='javascript:deleteSubscriber(" + s.id + ")'>delete</a>" ;
+                    html += "<a href='javascript:deleteSubscriber(" + s.id + ")'>&#128465;</a>" ;
+                    //html += `${!(m.has_operation || m.is_initiator) ? `<a href='javascript:deleteSubscriber(${s.id})'>delete</a>` : ""}</li>`;
                    // html +=  (!(m.has_operation ||m.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'>delete</a>" : "") ; // why doesn't work
                    //html +=  (m.has_operation||m.is_initiator ? "" : "<a href='javascript:deleteSubscriber(" + s.id + ")'>delete</a>") ;
-                    html += "</tr>";
                     html += "</li>";
                 }
                 subscribersList.html(html);
