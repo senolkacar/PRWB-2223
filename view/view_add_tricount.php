@@ -20,37 +20,49 @@
             errDescription = $("#errDescription");
             $("#title").blur(function() {
                 errTitle.val("");
-                if (!(/^[^\s].{1,}[^\s]$/).test($("#title").val())) {
-                    errTitle.val("Title must be at least 3 characters");
+                if (!(/(\s*\w\s*){3}/).test($("#title").val())) {
+                    errTitle.text("Title must be at least 3 characters");
+                    updateView();
                 } else {
-                    checkTricountExists();
+                    check_tricount_exists().then(function(data) {
+                        if (data.trim() === "true") {
+                            errTitle.text("Title already exists for this user");
+                            updateView();
+                        } else {
+                            errTitle.text("");
+                            updateView();
+                        }
+                    });
                 }
 
-                async function checkTricountExists() {
-                    const data = await $.getJSON("tricount/tricount_exists_service/" + userID + "/" + $("#title").val());
-                    if (data) {
-                        errTitle.html('Tricount already exists for this creator');
-                        $("#successTitle").hide();
-                        $("title").attr("class", "form-control is-invalid");
-                    }
+                async function check_tricount_exists() {
+                    let res = await $.post("tricount/tricount_exists_service/", {
+                        'creator': userID,
+                        'title': $("#title").val()
+                    }).then(function(data) {
+                        return data;
+                    });
+                    updateView();
+                    return res;
                 }
+            });
 
-                if (errTitle.val() == "") {
+            function updateView(){
+                if (errTitle.text() == "") {
                     $("#errTitle").html("");
                     $("#successTitle").show();
                     $("#title").attr("class", "form-control is-valid");
                 } else {
                     $("#successTitle").hide();
-                    $("#errTitle").html(errTitle.val());
+                    $("#errTitle").html(errTitle.text());
                     $("#title").attr("class", "form-control is-invalid");
-                    
-                }
 
-            });
+                }
+            }
 
             $("#description").blur(function() {
                 errDescription.val("");
-                if ($("#description").val().length > 0 && !(/^[^\s].{1,}[^\s]$/).test($("#description").val())) {
+                if ($("#description").val().length > 0 && !(/(\s*\w\s*){3}/).test($("#description").val())) {
                     errDescription.val("If description is not empty, it must contain at least 3 characters");
                 }
 
@@ -86,8 +98,8 @@
                 <label for='title'> Title : </label>
                 <input type="text" class="form-control" name='title' id='title' value="<?= $title; ?>">
                 <div id="jsTitleError">
-                <span class="text-danger" id="errTitle"> </span>
-                <span class="text-success" id="successTitle" style="display: none;">Looks good!</span>
+                    <span class="text-danger" id="errTitle"> </span>
+                    <span class="text-success" id="successTitle" style="display: none;">Looks good!</span>
                 </div>
             </div>
 
@@ -105,8 +117,8 @@
                 <label for='description'> Descripton (optional) : </label>
                 <textarea class="form-control" name='description' id='description' rows='3'><?= $description; ?></textarea> <br>
                 <div id="jsDescriptionError">
-                <span class="text-danger" id="errDescription"> </span>
-                <span class="text-success" id="successDescription" style="display: none;">Looks good!</span>
+                    <span class="text-danger" id="errDescription"> </span>
+                    <span class="text-success" id="successDescription" style="display: none;">Looks good!</span>
                 </div>
             </div>
 
