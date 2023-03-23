@@ -112,21 +112,18 @@
             function displaySubscribers() {
                 let html ="";
                 for (let s of subscribers) {
-                    html += "<li>";
+                    html += '<li class="list-group-item d-flex justify-content-between align-items-center">';
 		            html += s.full_name;
                     html +=  (s.is_creator ? "(creator)" : "");
-                    html += "...";
-                    html += "<a href='javascript:deleteSubscriber(" + s.id + ")'>&#128465;</a>" ;
-                    //html += `${!(m.has_operation || m.is_initiator) ? `<a href='javascript:deleteSubscriber(${s.id})'>delete</a>` : ""}</li>`;
-                   // html +=  (!(m.has_operation ||m.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'>delete</a>" : "") ; // why doesn't work
-                   //html +=  (m.has_operation||m.is_initiator ? "" : "<a href='javascript:deleteSubscriber(" + s.id + ")'>delete</a>") ;
+                    html +=  (!(s.has_operation ||s.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'>&#128465;</a>" : "") ; 
                     html += "</li>";
                 }
                 subscribersList.html(html);
             }
 
             function displayOtherUsers() {
-                let html ="<select id='other-users-select'>";
+                let html = "<div class='input-group'>";
+                html +="<select class='form-select' id='other-users-select'>";
                 html += '<option value="">--Add a new subscriber--</option>';
                 for (let o of otherUsers) {
                     html += '<option value="' + o.id + '">';
@@ -135,7 +132,8 @@
                 }
 
                 html += "</select>";
-                html += "<button type='button' id='add-btn'>add</button> ";
+                html += "<button type='button' id='add-btn' class='btn btn-primary' style='width: auto'>add</button> ";
+                html += "</div>";
 
                 otherUsersList.html(html);
 
