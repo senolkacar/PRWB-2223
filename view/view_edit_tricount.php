@@ -16,12 +16,18 @@
             let subscribers = <?=$subscribers_json ?>;
             let subscribersList;
             let sortColumn = 'full_name';
+            let otherUsersList;
+            let otherUsers = <?=$other_users_json ?>
             
             $(function(){
                 
                 subscribersList = $('#participant-list');
                 subscribersList.html("<li>loading ...</li>");
-                getSubscribers();                   
+                getSubscribers(); 
+
+                otherUsersList = $('#other_users_list');
+                otherUsersList.html("loading ...");
+                getOtherUsers();                                 
 
             });
 
@@ -29,33 +35,82 @@
 
                 try {
                     subscribers = await $.getJSON("tricount/get_tricount_subscrier_service/" + tricountId);
-                    console.log("0 tricountId " +tricountId );
                     sortSubscribers();
-                    console.log("1 tricountId " +tricountId );
                     displaySubscribers();
                 } catch(e) {
                     subscribersList.html("<li>1 Error encountered while retrieving the subscribers!</li>");
                 }
-
             }
 
-            async function deleteSubscriber(id){ // to test
-                const idx = subscribers.findIndex(function (el, idx, arr) {
-                    return el.id === id;
-                });
-                subscribers.splice(idx, 1);
-                displaySubscribers();
-                
+            async function getOtherUsers(){
+
                 try {
-                    await $.post("tricount/delete_subscription_service/" + tricount, {"delete_member": id}); 
-                    getSubscribers();
+                    otherUsers = await $.getJSON("tricount/get_user_not_tricount_subscrier_service/" + tricountId);                    
+                    sortOtherUsers(); 
+                    displayOtherUsers();
                 } catch(e) {
-                    subscribersList.html("<li>2 Error encountered while retrieving the subscribers!</li>");
+                    otherUsersList.html(" Error encountered while retrieving other users!");  
                 }
             }
 
-            function sortSubscribers() {
+            async function deleteSubscriber(id){ 
+                
+                const idx = subscribers.findIndex(function (el, idx, arr) {                    
+                    return el.id === id;
+                });
+
+                subscribers.splice(idx, 1);           
+                
+                try {
+                   // console.log("1 delete id " + id );
+                    await $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": id});       
+                    getSubscribers();
+                    sortSubscribers()
+                    displaySubscribers();
+                    getOtherUsers();
+                    sortOtherUsers();
+                    displayOtherUsers();            
+   
+                } catch(e) {
+                    subscribersList.html(" Error encountered while deleting the subscriber!");
+                }
+            }
+
+            async function addSubscriber(id){ 
+                
+                const idx = otherUsers.findIndex(function (el, idx, arr) {                    
+                    return el.id === id;
+                });
+
+                otherUsers.splice(idx, 1);           
+                
+                try {
+                    await $.post("tricount/add_subscription_service/" + tricountId, {"subscriber": id});  //              
+                    getOtherUsers();
+                    sortOtherUsers();
+                    displayOtherUsers();
+                    getSubscribers();
+                    sortSubscribers();
+                    displaySubscribers();
+                } catch(e) {
+                    otherUsersList.html("Error encountered while adding the subscriber!");
+                }
+            }
+
+            function sortSubscribers() {//doesn't work
                 subscribers.sort(function(a, b) {
+                    if (a[sortColumn] < b[sortColumn]) {
+                    return -1;
+                    } else if (a[sortColumn] > b[sortColumn]) {
+                    return 1;
+                    } else {
+                    return 0;
+                    }
+                });
+            }
+
+            function sortOtherUsers() {//doesn't work
+                otherUsers.sort(function(a, b) {
                     if (a[sortColumn] < b[sortColumn]) {
                     return -1;
                     } else if (a[sortColumn] > b[sortColumn]) {
@@ -80,6 +135,33 @@
                     html += "</li>";
                 }
                 subscribersList.html(html);
+            }
+
+            function displayOtherUsers() {
+                let html ="<select id='other-users-select'>";
+                html += '<option value="">--Add a new subscriber--</option>';
+                for (let o of otherUsers) {
+                    html += '<option value="' + o.id + '">';
+		            html += o.full_name;
+                    html += "</option>"
+                }
+
+                html += "</select>";
+                html += "<button type='button' id='add-btn'>add</button> ";
+
+                otherUsersList.html(html);
+
+                $('#add-btn').click(function() {
+                    const selectedId = $('#other-users-select').val();
+                    addSubscriber(selectedId);
+                });              
+
+                if ($('#other-users-select option').length === 1) {
+                    $('#other-users-select').hide();
+                    $('#add-btn').hide();
+
+                }
+
             }
         
         </script>
