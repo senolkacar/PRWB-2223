@@ -115,7 +115,7 @@
                     html += '<li class="list-group-item d-flex justify-content-between align-items-center">';
 		            html += s.full_name;
                     html +=  (s.is_creator ? "(creator)" : "");
-                    html +=  (!(s.has_operation ||s.is_creator||s.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'>&#128465;</a>" : "") ; 
+                    html +=  (!(s.has_operation ||s.is_creator||s.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'><i class='bi bi-trash'></i></a>" : "") ; 
                     html += "</li>";
                 }
                 subscribersList.html(html);
