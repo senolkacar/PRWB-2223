@@ -21,12 +21,16 @@
 
                 //$("#subscription-amount").show(); doesn't work with attr 'readonly'
                 $('input[name="amount[]"]').each(function(index){
-                    $(this). removeAttr("hidden");
+                    $(this).removeAttr("hidden");
                 });
+
+                $('#floating-amount').show();
                 
                 totalAmount = getTotalAmount();
                 
-                weight = getTotalWeight();               
+                weight = getTotalWeight();
+                
+                
 
                 var ratios = getRatio();
 
@@ -139,6 +143,13 @@
              }   
             
         </script>
+        <noscript>
+  <style>
+    #floating-amount {
+      display: none;
+    }
+  </style>
+</noscript>
     </head>
     <body>
     <header>
@@ -222,9 +233,15 @@
                                 <?php $weight = $weights[$i]; ?>
                             <?php endif; ?>
                         <?php endfor; ?>
-                        <input type="number" step="0.01" id="subscription-amount" class="form-control mb-3" name ="amount[]" value= "0" readonly hidden>
+                        <div class="form-floating" id="floating-amount">
+                        <input type="number" step="0.01" id="subscription-amount" class="form-control mb-3" name="amount[]" value= "0" readonly hidden>
+                        <label for="subscription-amount">Amount</label>
+                        </div>
+                        <div class="form-floating" id="floating-weight">
                         <input type="number" class="form-control mb-3" id="weights" name="weights[]" min="0" max="<?=$nb_subscriptions?>" value="<?=$weight?>" onchange="console.log('html weight=' + this.value);">
-                        <input type="hidden" name="ids[]" value="<?=$subscription->id?>">
+                        <label for="weights">Weight</label>
+                        </div>
+                        <input type="hidden" name="ids[]" value="<?=$subscription->id?>"> 
                         </div>
                     <?php endforeach; ?>                 
                     <?php if(count($errors_checkbox)!=0) : ?>
