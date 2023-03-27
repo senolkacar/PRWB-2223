@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-    <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
+    <script src="lib/jquery-3.6.4.min.js"></script>
     <script>
         $(function() {
             var expenses = $('.list-group');
@@ -18,20 +18,20 @@
                 var selected = $(this).val();
                 expenses.sort(function(a, b) {
                     if (selected == "amount-asc" || selected=="amount-desc") {
-                        valA = parseFloat($(a).find('#amount').text());
-                        valB = parseFloat($(b).find('#amount').text());
+                        valA = parseFloat($(a).find('.amount').text());
+                        valB = parseFloat($(b).find('.amount').text());
                         return selected == "amount-asc" ? valA - valB : valB - valA;
                     } else if (selected == "date-asc" || selected == "date-desc") {
-                        valA = new Date($(a).find('#date').text().split('/').reverse().join('-'));
-                        valB = new Date($(b).find('#date').text().split('/').reverse().join('-'));
+                        valA = new Date($(a).find('.date').text().split('/').reverse().join('-'));
+                        valB = new Date($(b).find('.date').text().split('/').reverse().join('-'));
                         return selected == "date-asc" ? valA - valB : valB - valA;
                     } else if (selected == "initiator-asc" || selected == "initiator-desc") {
-                        valA = $(a).find('#initiator').text();
-                        valB = $(b).find('#initiator').text();
+                        valA = $(a).find('.initiator').text();
+                        valB = $(b).find('.initiator').text();
                         return selected == "initiator-asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
                     } else if (selected == "title-asc"||selected=="title-desc") {
-                        valA = $(a).find('#title').text();
-                        valB = $(b).find('#title').text();
+                        valA = $(a).find('.title').text();
+                        valB = $(b).find('.title').text();
                         return selected == "title-asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
                     }
                 })
@@ -94,13 +94,13 @@
                         <div class="ms-2 me-auto">
                             <div class="text">
                                 <a href='operation/show_operation/<?= $depense->id; ?>' class="stretched-link" style='text-decoration:none ; color:inherit'></a>
-                                <p class="fw-bold" id="title"><?= $depense->title ?></p>
-                                <span class="text" id="initiator"><?php echo "Paid by " . $depense->initiator->full_name ?></span>
+                                <p class="title"><span class="fw-bold"><?= $depense->title ?></span></p>
+                                <span class="initiator"><?php echo "Paid by " . $depense->initiator->full_name ?></span>
                             </div>
                         </div>
                         <div class="text-end">
-                            <p class="fw-bold" id="amount"><?= round($depense->amount, 2) ?>&euro;</p>
-                            <span class="text" id="date"><?= date('d/m/Y', strtotime($depense->operation_date)); ?></span>
+                            <p class="amount"><span class="fw-bold"><?= round($depense->amount, 2) ?>&euro;</span></p>
+                            <span class="date"><?= date('d/m/Y', strtotime($depense->operation_date)); ?></span>
                         </div>
                     </li>
                 </ul>
