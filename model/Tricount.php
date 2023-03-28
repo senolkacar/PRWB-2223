@@ -71,7 +71,7 @@ Class Tricount extends Model{
         return $errors;
     }
 
-    private static function title_creator_existe(User $user, String $title) : bool {
+    public static function title_creator_existe(User $user, String $title) : bool {
         $query = self::execute("SELECT COUNT(*) FROM tricounts WHERE title=:title and creator=:creator", ["title"=>$title,"creator"=>$user->id]);
         $data = $query->fetch();
         return ((int)$data[0]) > 0;
@@ -104,7 +104,7 @@ Class Tricount extends Model{
     public static function get_tricounts_involved(User $user): array{    
         $query = self::execute("SELECT DISTINCT tricounts.*, (SELECT count(*) FROM subscriptions WHERE subscriptions.tricount = tricounts.id)
          as subscription_count  FROM tricounts LEFT JOIN subscriptions ON subscriptions.tricount = tricounts.id 
-         where tricounts.creator = :user or subscriptions.user = :user ",["user"=>$user->id]);
+         where tricounts.creator = :user or subscriptions.user = :user order by created_at desc",["user"=>$user->id]);
         
         $data = $query->fetchAll();
          $tricounts = [];
@@ -158,7 +158,7 @@ Class Tricount extends Model{
         return Operation::get_operations_by_tricount($this);
     }
 
-    public function get_balance_by_tricount(): array {
+    public function get_balance_by_tricount(): array {//could be deleted ?
         return Repartition::get_balance_by_tricount($this);
     }
     
@@ -181,8 +181,70 @@ Class Tricount extends Model{
       
     }
     
+    public function get_total(){
+        return Operation::get_total($this);
+    }
 
-    
+    public function get_my_total(User $user){
+        return Operation::get_my_total($this,$user);
+    }
+
+    public function get_max_balance(){
+       $balance = $this->get_balance_by_tricount();
+        $max = 0;
+        foreach($balance as $amount){
+                if(abs($amount)>$max){
+                    $max = abs($amount);
+                }
+            }
+        return $max = round($max,2);
+    }
+
+    public static function get_current_page(Operation $operation):int{
+        $operations = $operation->tricount->get_depenses();
+        $current_page = 0;
+        $pages = count($operations);
+        for ($i = 0; $i < $pages; ++$i){
+            if ($operations[$i]->id == $operation->id)
+                $current_page = $i;
+            }
+        return $current_page;
+    }
+
+
+    public function  get_tricount_subscribers_as_json(User $user) : string {
+        $subscribers = $this->get_users_including_creator();
+        $table = [];
+        foreach($subscribers as $subscriber) {
+            $is_creator = $subscriber->id == $this->creator->id;
+            $has_operation = $subscriber->has_operation($this);
+            $is_initiator = $subscriber->is_initiator($this);
+            $row = [];
+            $row["id"] = $subscriber->id;
+            $row["full_name"] = $subscriber->full_name;
+            $row["is_creator"] = $is_creator;
+            $row["has_operation"] = $has_operation;
+            $row["is_initiator"] = $is_initiator;
+            $table[] = $row;          
+        }
+        return json_encode($table);
+    }
+
+    public function  get_users_not_tricount_subscribers_as_json(User $user) : string {
+        $other_users = $this->get_users_not_subscriber();
+        $table = [];
+        foreach($other_users as $other_user) {
+            $row = [];
+            $row["id"] = $other_user->id;
+            $row["full_name"] = $other_user->full_name;
+            $table[] = $row;          
+        }
+        return json_encode($table);
+    }
+
+
+
+
 
 }
 

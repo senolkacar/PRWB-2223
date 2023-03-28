@@ -54,8 +54,8 @@ Class Operation extends Model{
         return $d && $d->format($format) === $date;
     }
 
-    public static function get_operations_by_tricount(Tricount $tricount): array{
-        $query = self::execute("SELECT * FROM operations WHERE tricount = :tricount order by created_at",["tricount" => $tricount->id]);
+    public static function get_operations_by_tricount(Tricount $tricount): array{ //could be deleted?
+        $query = self::execute("SELECT * FROM operations WHERE tricount = :tricount order by operation_date desc",["tricount" => $tricount->id]);
         $data = $query->fetchAll();
         $operations = [];
         foreach($data as $row){
@@ -138,6 +138,16 @@ Class Operation extends Model{
         $data = $query->fetch();
         return $data[0];
     }
+
+    public function get_repartitions(){
+        return Repartition::get_repartitions_by_operation($this);
+    }
+
+    public function get_current_page(): int{
+        return Tricount::get_current_page($this);
+    }
+
+
 
 
 }

@@ -38,23 +38,11 @@ class ControllerOperation extends MyController
                 $this->redirect("tricount");
             }           
             
-            //var_dump(Repartition::include_user($user,$operation));   
-            $repartitions = Repartition::get_repartitions_by_operation($operation);
-            //var_dump($repartitions);
-            $operations = Operation::get_operations_by_tricount($operation->tricount);
-            $pages = count($operations);
-            $current_page = 0;
-            for ($i = 0; $i < $pages; ++$i) {
-                if ($operations[$i]->id == $id)
-                    $current_page = $i;
-            }
+
             (new View("show_operation"))->show([
                 "operation" => $operation,
                 "user" => $user,
-                "repartitions" => $repartitions,
-                "operations" => $operations,
-                "pages" => $pages,
-                "current_page" => $current_page
+                "tricount" => $tricount
             ]);
         }else{
             $this->redirect("tricount");
@@ -142,9 +130,9 @@ class ControllerOperation extends MyController
                     $errors_title = $this->validate_title($_POST["title"]);
                     $title = $_POST["title"];
                 }
-                if(isset($_POST["amount"])){
-                    $errors_amount = $this->validate_amount($_POST["amount"]);
-                    $amount = $_POST["amount"];
+                if(isset($_POST["amount-total"])){
+                    $errors_amount = $this->validate_amount($_POST["amount-total"]);
+                    $amount = $_POST["amount-total"];
                 }
                 if(isset($_POST["weights"])){
                     $errors_weights = $this->validate_weights($_POST["weights"]);
@@ -225,10 +213,10 @@ class ControllerOperation extends MyController
     public function add_depense(Tricount $tricount, ?Operation $operation): Operation|false
     {
         if ($operation == null) {
-            $operation = new Operation($_POST["title"], $tricount, $_POST["amount"], User::get_user_by_id($_POST["payer"]), $_POST["date"]);
+            $operation = new Operation($_POST["title"], $tricount, $_POST["amount-total"], User::get_user_by_id($_POST["payer"]), $_POST["date"]);
         }else{
         $operation->title = $_POST["title"];
-        $operation->amount = $_POST["amount"];
+        $operation->amount = $_POST["amount-total"];
         $operation->operation_date = $_POST["date"];
         $operation->initiator = User::get_user_by_id($_POST["payer"]);
         }

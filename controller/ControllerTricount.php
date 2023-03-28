@@ -21,6 +21,19 @@ class ControllerTricount extends MyController {
             ]);
     } 
 
+    public function tricount_exists_service(): void{
+        $res = "false";
+        $id = $_POST["creator"];
+        $title = $_POST["title"];
+        
+        if(isset(($id)) && isset($title)){
+            if(Tricount::title_creator_existe(User::get_user_by_id($id),$title)){
+                $res = "true";
+        }
+        echo $res; 
+    }
+    }
+
     public function add_tricount():void {
         $user=$this->get_user_or_redirect();
         //var_dump($user);
@@ -45,6 +58,7 @@ class ControllerTricount extends MyController {
         }
 
         (new View("add_tricount")) ->show([
+            "user"=>$user,
             "title"=>$title,
             "description"=>$description,
             "errors_title"=>$errors_title,
@@ -65,11 +79,7 @@ class ControllerTricount extends MyController {
             if($tricount==null){
                 $this->redirect("tricount");
             }
-            $nb_participants = $tricount->get_nb_participants();
-            $depenses = $tricount->get_depenses();
-            $total = Operation::get_total($tricount);
-            $mytotal = Operation::get_my_total($tricount,$user);
-            (new View("show_tricount"))->show(["tricount"=>$tricount,"nb_participants"=>$nb_participants,"depenses"=>$depenses,"total"=>$total,"mytotal"=>$mytotal]);
+            (new View("show_tricount"))->show(["tricount"=>$tricount,"user"=>$user]);
         }else{
                 $this->redirect("tricount");
             }
@@ -82,26 +92,28 @@ class ControllerTricount extends MyController {
         $description="";
         $errors_title=[];
         $errors_description=[];
-        $depenses=[];
         $errors=[];
         $error="";
+        $subscribers_json;
+        $other_users_json;
 
         if(isset($_GET["param1"]) && is_numeric($_GET["param1"]) ) { 
             $id= (int)$_GET["param1"];                             
             $tricount = Tricount::get_tricount_by_id($id);
+
             if($tricount){
                 if(!in_array($user,$tricount->get_users_including_creator())) {
                     $this->redirect("tricount");
                 }
             }else {// if $tricount doesn't exist
                 $this->redirect("tricount");
-            }            
+            } 
+            
+            $subscribers_json = $tricount ->get_tricount_subscribers_as_json($user);
+            $other_users_json = $tricount ->get_users_not_tricount_subscribers_as_json($user);
 
             $title=$tricount->title;
             $description=$tricount->description;
-            $subscriptions =$tricount->get_users_including_creator();  
-            $other_users = $tricount->get_users_not_subscriber();        
-          
             if(isset($_POST["title"]) && isset($_POST["description"]) ) {
                         $title = $_POST["title"];
                         $description=$_POST["description"];
@@ -138,48 +150,130 @@ class ControllerTricount extends MyController {
                                             "description"=>$description,
                                             "errors_description"=>$errors_description,
                                             "errors_title"=>$errors_title,
-                                            "subscriptions"=>$subscriptions,
-                                            "depenses"=>$depenses,
-                                            "other_users"=>$other_users,
                                             "error"=>$error,
+                                            "subscribers_json"=>$subscribers_json,
+                                            "other_users_json"=>$other_users_json,
                                             "errors"=>$errors]);       
 
     }
 
-    public function delete_subscription() :void {
-        $user=$this->get_user_or_redirect();
+    public function get_tricount_subscrier_service() : void {
+        $user = $this->get_user_or_redirect();
+        $tricount = $this->get_tricount($user);
+        $subscribers_json = $tricount ->get_tricount_subscribers_as_json($user);
+        echo $subscribers_json;
+    }  
 
-        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+    public function get_user_not_tricount_subscrier_service() : void {
+        $user = $this->get_user_or_redirect();
+        $tricount = $this->get_tricount($user);
+        $other_users_json = $tricount ->get_users_not_tricount_subscribers_as_json($user);
+        echo $other_users_json;
+    }  
+
+    private function get_tricount(User $user) : Tricount {
+        if(isset($_GET["param1"]) && is_numeric($_GET["param1"]) ) { 
+            $id= (int)$_GET["param1"];                             
+            $tricount = Tricount::get_tricount_by_id($id);
+            return $tricount;
+        }
+    }
+
+    public function add_subscription_service(): void {
+        $subscriber = $this->new_subscription();
+        echo $subscriber ? "true" : "false";
+    }
+
+     public function delete_subscription_service(): void {
+        $subscriber = $this->remove_subscription();
+        echo $subscriber ? "true" : "false";
+
+    }
+
+    private function remove_subscription() :User|false {
+        $user = $this->get_user_or_redirect();
+        if(isset($_GET["param1"]) &&is_numeric($_GET["param1"])) { 
             $id=(int)$_GET["param1"];            
             $tricount = Tricount::get_tricount_by_id($id);
 
-            if(isset($_POST["delete_member"]) ) {                   
+            if(isset($_POST["delete_member"]) && is_numeric($_POST["delete_member"])) {                   
+                $subscriber = User::get_user_by_id($_POST["delete_member"]);
+                if($subscriber) {
+                    Subscription::delete_subscription($tricount, $subscriber);
+                    return $subscriber;
+                }
+            }
+        }
+
+        return false;
+        
+    }
+
+    private function new_subscription() :User|false {
+        $user = $this->get_user_or_redirect();
+        if(isset($_GET["param1"]) &&is_numeric($_GET["param1"])) { 
+            $id=(int)$_GET["param1"];            
+            $tricount = Tricount::get_tricount_by_id($id);
+
+            if(isset($_POST["subscriber"]) && is_numeric($_POST["subscriber"])) {                   
+                $subscriber = User::get_user_by_id($_POST["subscriber"]);
+                if($subscriber) {
+                    Subscription::persist($subscriber, $tricount);
+                    return $subscriber;
+                }
+            }
+        }
+
+        return false;
+        
+    }
+
+
+    public function delete_subscription() :void { // refactoring 
+        $user=$this->get_user_or_redirect();
+
+        if(isset($_GET["param1"]) &&is_numeric($_GET["param1"])) { 
+            $id=(int)$_GET["param1"];            
+            $tricount = Tricount::get_tricount_by_id($id);
+
+            if(isset($_POST["delete_member"]) && is_numeric($_POST["delete_member"])) {                   
                     $subscriber = User::get_user_by_id($_POST["delete_member"]);
                     if($subscriber) {
                         Subscription::delete_subscription($tricount, $subscriber);
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
                     }
-            } 
+            } else {
+                $this -> redirect("tricount", "edit_tricount", $tricount->id);
+            }
+        } else {
+            $this->redirect("tricount");
         }
 
 
     }
 
     public function add_subscription() :void {
+
         $user=$this->get_user_or_redirect();
 
-        if(isset($_GET["param1"]) && $_GET["param1"] !=="") { 
+        if(isset($_GET["param1"]) && is_numeric($_GET["param1"])) { 
             $id= (int)$_GET["param1"];           
             $tricount = Tricount::get_tricount_by_id($id);
 
-            if(isset($_POST["subscriber"]) ) {                           
+            if(isset($_POST["subscriber"]) && is_numeric($_POST["subscriber"])) {                           
                     $subscriber = User::get_user_by_id($_POST["subscriber"]);//name not unique for users. use user id instead of full name to get user
                     if($subscriber ) {
                         Subscription::persist($subscriber, $tricount);
                         $this -> redirect("tricount", "edit_tricount", $tricount->id);
-                    }
+                    }                    
+
+            } else{
+                $this -> redirect("tricount", "edit_tricount", $tricount->id);
             }  
+        } else {
+            $this->redirect("tricount");
         }
+        
     
     }
     
@@ -197,17 +291,8 @@ public function show_balance():void{
         if($tricount==null){
             $this->redirect("tricount");
         }
-        $balance = $tricount->get_balance_by_tricount();
-        $max = 0;
-        foreach($balance as $amount){
-            if(abs($amount)>$max){
-                $max = abs($amount);
-            }
-        }
-        $user_name = $user->full_name;
-        $max = round($max,2);
         
-        (new View("show_balance"))->show(["tricount"=>$tricount,"balance"=>$balance,"user"=>$user_name,"id"=>$id,"max"=>$max]);
+        (new View("show_balance"))->show(["tricount"=>$tricount,"user"=>$user]);
     }else{
         $this->redirect("tricount");
     }

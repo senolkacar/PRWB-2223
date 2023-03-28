@@ -9,6 +9,148 @@
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
         <link rel="stylesheet" href="css/edit_tricount_style.css" type="text/css">
+        <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
+        <script>    
+                 
+            const tricountId = <?= $tricount->id ?>;
+            let subscribers = <?=$subscribers_json ?>;
+            let subscribersList;
+            let sortColumn = 'full_name';
+            let otherUsersList;
+            let otherUsers = <?=$other_users_json ?>
+            
+            $(function(){
+                
+                subscribersList = $('#participant-list');
+                subscribersList.html("<li>loading ...</li>");
+                getSubscribers(); 
+
+                otherUsersList = $('#other_users_list');
+                otherUsersList.html("loading ...");
+                getOtherUsers();                                 
+
+            });
+
+            async function getSubscribers(){
+
+                try {
+                    subscribers = await $.getJSON("tricount/get_tricount_subscrier_service/" + tricountId);
+                    sortSubscribers();
+                    displaySubscribers();
+                } catch(e) {
+                    subscribersList.html("<li>1 Error encountered while retrieving the subscribers!</li>");
+                }
+            }
+
+            async function getOtherUsers(){
+
+                try {
+                    otherUsers = await $.getJSON("tricount/get_user_not_tricount_subscrier_service/" + tricountId);                    
+                    sortOtherUsers(); 
+                    displayOtherUsers();
+                } catch(e) {
+                    otherUsersList.html(" Error encountered while retrieving other users!");  
+                }
+            }
+
+            async function deleteSubscriber(id){ 
+                
+                const idx = subscribers.findIndex(function (el, idx, arr) {                    
+                    return el.id === id;
+                });
+
+                subscribers.splice(idx, 1);           
+                
+                try {
+                   // console.log("delete id " + id );
+                    await $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": id});       
+                    getSubscribers();
+                    sortSubscribers()
+                    displaySubscribers();
+                    getOtherUsers();
+                    sortOtherUsers();
+                    displayOtherUsers();            
+   
+                } catch(e) {
+                    subscribersList.html(" Error encountered while deleting the subscriber!");
+                }
+            }
+
+            async function addSubscriber(id){ 
+                
+                const idx = otherUsers.findIndex(function (el, idx, arr) {                    
+                    return el.id === id;
+                });
+
+                otherUsers.splice(idx, 1);           
+                
+                try {
+                    await $.post("tricount/add_subscription_service/" + tricountId, {"subscriber": id});              
+                    getOtherUsers();
+                    sortOtherUsers();
+                    displayOtherUsers();
+                    getSubscribers();
+                    sortSubscribers();
+                    displaySubscribers();
+                } catch(e) {
+                    otherUsersList.html("Error encountered while adding the subscriber!");
+                }
+            }
+
+            function sortSubscribers() {
+                subscribers.sort(function(a, b) {
+                    return a[sortColumn] - b[sortColumn];                    
+                });
+            }
+
+            function sortOtherUsers() {
+                otherUsers.sort(function(a, b) {
+                    return a[sortColumn] - b[sortColumn]; 
+                });
+            }
+
+            function displaySubscribers() {
+                let html ="";
+                for (let s of subscribers) {
+                    html += '<li class="list-group-item d-flex justify-content-between align-items-center">';
+		            html += s.full_name;
+                    html +=  (s.is_creator ? "(creator)" : "");
+                    html +=  (!(s.has_operation ||s.is_creator||s.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'><i class='bi bi-trash'></i></a>" : "") ; 
+                    html += "</li>";
+                }
+                subscribersList.html(html);
+            }
+
+            function displayOtherUsers() {
+                let html = "<div class='input-group'>";
+                html +="<select class='form-select' id='other-users-select'>";
+                html += '<option value="">--Add a new subscriber--</option>';
+                for (let o of otherUsers) {
+                    html += '<option value="' + o.id + '">';
+		            html += o.full_name;
+                    html += "</option>"
+                }
+
+                html += "</select>";
+                html += "<button type='button' id='add-btn' class='btn btn-primary' style='width: auto'>add</button> ";
+                html += "</div>";
+
+                otherUsersList.html(html);
+
+                $('#add-btn').click(function() {
+                    const selectedId = $('#other-users-select').val();
+                    addSubscriber(selectedId);
+                });              
+
+                if ($('#other-users-select option').length === 1) {
+                    $('#other-users-select').hide();
+                    $('#add-btn').hide();
+
+                }
+
+            }
+        
+        </script>
    
     </head>
     <body>
@@ -61,7 +203,8 @@
 
            
                 <h2>Subscriptions</h2>                    
-                <ul class="list-group" >
+                <ul class="list-group" id="participant-list">
+                    <?php $subscriptions = $tricount->get_users_including_creator(); ?>
                         <?php foreach ($subscriptions as $subscription): ?>
                             <li class="list-group-item d-flex justify-content-between align-items-center"><?= $subscription->full_name ?>
                             <?php if($subscription->id == $tricount->creator->id): ?>
@@ -69,7 +212,7 @@
                                 <?php elseif(!($subscription->has_operation($tricount)) && !($subscription->is_initiator($tricount))): ?>
                                     <form method='post' action='tricount/delete_subscription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form2">
                                     <input type='text' name='delete_member' value='<?= $subscription->id ?>' hidden>                                    
-                                    <button type='submit'  class="btn_delete"><span class="badge bg-white text-dark"><i class="bi bi-trash"></i> </span> </button>  
+                                    <button type='submit'  class="btn_delete" data-participant-id="<?= $subscription->id ?>"><span class="badge bg-white text-dark"><i class="bi bi-trash"></i> </span> </button>  
                                     </form> 
                                    
                             <?php endif; ?>
@@ -80,11 +223,12 @@
                 
             <br>
 
-            <div class="container-sm">
+            <div class="container-sm" id = "other_users_list">
+            <?php $other_users = $tricount->get_users_not_subscriber(); ?>
             <?php if(count($other_users)!=0): ?>
                 <form method='post' action='tricount/add_subscription/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form3">
                     <div class="input-group">              
-                        <select class="form-select" aria-label="Example select with button addon"  name = "subscriber" id="subscriber" required>
+                        <select class="form-select" name = "subscriber" id="subscriber" required>
                             <option value="">--Add a new subscriber--</option>
                             <?php foreach ($other_users as $other_user): ?>  
                             <option value="<?=$other_user->id; ?>"><?=$other_user->full_name; ?></option>                             
@@ -108,7 +252,7 @@
         <br><br>                    
         <footer class="footer mt-auto">   
             <div class="container-sm">                
-                <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='post' >
+                <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='get' >
                 <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-danger">Delete this tricount</button>
                     </div>
