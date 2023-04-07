@@ -42,7 +42,11 @@
             });
 
             $('#amount-total').on('change', function() {
+                if( parseFloat($('#amount-total').val()) < 0)
+                    $('#amount-total').val(0);
+
                 totalAmount = getTotalAmount();
+                
                 weight = getTotalWeight();
                 var ratios = getRatio();
 
@@ -101,7 +105,7 @@
         });
 
         function getTotalAmount() {
-            if ($('#amount-total').val() !== "") {
+            if ($('#amount-total').val() !== "" ) {
                 totalAmount = parseFloat($('#amount-total').val());
             } else totalAmount = 0;
 
