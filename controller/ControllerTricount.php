@@ -42,6 +42,7 @@ class ControllerTricount extends MyController {
         $errors_title=[];
         $errors_description = [];
         $errors=[];
+        $justvalidate = $this->isJustValidateOn();
         if(isset($_POST["title"])&&isset($_POST["description"])){  
             $title = $_POST["title"];
             $description = $_POST["description"];
@@ -60,6 +61,7 @@ class ControllerTricount extends MyController {
         (new View("add_tricount")) ->show([
             "user"=>$user,
             "title"=>$title,
+            "justvalidate"=>$justvalidate,
             "description"=>$description,
             "errors_title"=>$errors_title,
             "errors_description"=>$errors_description]);
