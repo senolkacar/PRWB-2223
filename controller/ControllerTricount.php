@@ -202,13 +202,12 @@ class ControllerTricount extends MyController {
         $user = $this->get_user_or_redirect();
         if(isset($_GET["param1"]) && is_numeric($_GET["param1"])){
             $id = $_GET["param1"];
-            $tricount = Tricount::get_tricount_by_id($id);            
-            if(isset($_POST["id_tricount"])){
-                    $tricount ->delete($user);
-                    if ($tricount) {
-                        return $tricount;
-                     }              
-            }
+            $tricount = Tricount::get_tricount_by_id($id);         
+            $tricount ->delete($user);
+            if ($tricount) {
+                return $tricount;
+            }              
+            
         }
         return false;
 
