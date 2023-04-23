@@ -19,6 +19,7 @@
             let sortColumn = 'full_name';
             let otherUsersList;
             let otherUsers = <?=$other_users_json ?>
+            let formChanged = false; 
             
             $(function(){
                 
@@ -59,10 +60,52 @@
                     });
                 });
 
+                $('#settingsForm').on('change', function() {
+                    formChanged = true;
+                });
 
+                $('#saveBtn').on('click', function() {
+                    formChanged = false;
+                });
+
+                $('a.btn-outline-danger').on('click', function(e) {//'#backBtn'
+                    console.log("formChanged " + formChanged);
+                    if (formChanged) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'You have unsaved changes. Do you want to leave the page without saving?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Leave',
+                            cancelButtonText: 'Stay',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = $(this).attr('href');
+
+                            }
+                        });
+                    }
+                });
 
 
             });
+
+                /*$('#saveBtn').on('click', function() {
+                    var formData = {
+                        title: $('#title').val(),
+                        description: $('#description').val()
+                    };
+
+                    $.post("tricount/edit_tricount_service/" + tricountId, formData, function(response) {
+                        console.log("saved " );
+                        //formChanged = false;
+                    })
+                    .fail(function(xhr, status, error) {
+                        console.error(error);
+                    });
+                });
+                */
 
             async function getSubscribers(){
 
@@ -207,9 +250,9 @@
         <header>
             <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
                 <div class="d-flex justify-content-between mb-3">   
-                    <a href="tricount/index" class="btn btn-outline-danger"> Back </a>
+                    <a href="tricount/index" id="backBtn" class="btn btn-outline-danger"> Back </a>
                     <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32; <i class="bi bi-caret-right-fill"></i> &#32; Edit </div>
-                    <div ><button type='submit' class="btn btn-primary" form ="settingsForm"> Save</button></div>
+                    <div ><button type='submit' id="saveBtn" class="btn btn-primary" form ="settingsForm"> Save</button></div>
                 </div>
             </div>
         </header>
