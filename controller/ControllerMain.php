@@ -6,14 +6,26 @@ require_once 'controller/MyController.php';
 
 class ControllerMain extends MyController{
 
+    public function email_exists_service(): void{
+       if(isset($_POST["mail"])){
+           $mail = $_POST["mail"];
+           $user = User::get_user_by_mail($mail);
+           if($user){
+              echo "true";
+           }else{
+              echo "false";
+           }
+    }}
+
     public function index(): void{
         if($this->user_logged()){
             $this->redirect("tricount","index");
         }else{
+            $justvalidate = $this->isJustValidateOn();
             $mail ='';
             $password = '';
             $errors = [];
-            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors));
+            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors,"justvalidate"=>$justvalidate));
         }
 
     }
@@ -22,6 +34,7 @@ class ControllerMain extends MyController{
         $mail ='';
         $password = '';
         $errors = [];
+        $justvalidate = $this->isJustValidateOn();
         $user =$this->get_user_or_false();
         if($user){
             $this->redirect("tricount");
@@ -34,7 +47,7 @@ class ControllerMain extends MyController{
                     $this->log_user(User::get_user_by_mail($mail));
                 }
             }
-            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors));
+            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors,"justvalidate"=>$justvalidate));
 
         }
         
