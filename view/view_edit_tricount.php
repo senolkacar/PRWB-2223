@@ -36,7 +36,10 @@
                     //var form = this;
                     Swal.fire({
                         title: 'Are you sure?',
-                        text: 'Do you really want to delete this tricount?',
+                        html: 
+                            'Do you really want to delete tricount <b> "<?=$tricount->title?>" </b> and all of its dependencies ?' +
+                            '<br>' +
+                            'This process cannot be undone.',
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Yes, delete it!',
@@ -55,6 +58,8 @@
                         }
                     });
                 });
+
+
 
 
             });
@@ -137,13 +142,29 @@
                 });
             }
 
+            function showDeleteSbscriberConfirmation(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Do you really want to delete this subscriber?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteSubscriber(id);
+                    }
+                });
+            }
+
             function displaySubscribers() {
                 let html ="";
                 for (let s of subscribers) {
                     html += '<li class="list-group-item d-flex justify-content-between align-items-center">';
 		            html += s.full_name;
                     html +=  (s.is_creator ? "(creator)" : "");
-                    html +=  (!(s.has_operation ||s.is_creator||s.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'><i class='bi bi-trash'></i></a>" : "") ; 
+                    html +=  (!(s.has_operation ||s.is_creator||s.is_initiator) ? "<a href='javascript:showDeleteSbscriberConfirmation(" + s.id + ")'><i class='bi bi-trash'></i></a>" : "") ; 
                     html += "</li>";
                 }
                 subscribersList.html(html);
