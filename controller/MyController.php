@@ -191,7 +191,14 @@ Class MyController extends Controller{
         return $errors;
     }
 
+    public function isJustValidateOn(): bool{
+        if(Configuration::get("just_validate")){
+            return true;
+        }else{
+            return false;
+        }
 
+    }
 
 }
 
