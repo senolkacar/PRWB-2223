@@ -196,7 +196,7 @@
             <?php endif; ?>
 
             <div class="mb-3 mt-3">
-                <label for='description'> Descripton (optional) : </label>
+                <label for='description'> Description (optional) : </label>
                 <textarea class="form-control" name='description' id='description' rows='3'><?= $description; ?></textarea> <br>
                 <div id="jsDescriptionError" style="<?php $justvalidate ? "display: none;" : "" ?>">
                     <span class="text-danger" id="errDescription"> </span>
