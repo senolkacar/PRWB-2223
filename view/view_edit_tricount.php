@@ -89,7 +89,7 @@
                 try {
                     await $.post("tricount/delete_tricount_service/" + tricountId, null);
                    
-                    await handleDeleteSuccess(); // Call the function to handle success
+                    await handleDeleteSuccess();
                 } catch (e) {
                     // Handle error if needed
                 }
