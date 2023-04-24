@@ -31,8 +31,7 @@
                 otherUsersList.html("loading ...");
                 getOtherUsers();   
                 
-                $('#delete-tricount').on('click', function() { 
-                    
+                $('#delete-tricount').on('click', function() {                     
                     event.preventDefault();
                     //var form = this;
                     Swal.fire({
@@ -45,7 +44,9 @@
                         showCancelButton: true,
                         confirmButtonText: 'Yes, delete it!',
                         cancelButtonText: 'Cancel',
-                        reverseButtons: true
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        //reverseButtons: true//swap position of buttons
                     }).then((result) => {
                         if (result.isConfirmed) {
                         try {                               
@@ -60,9 +61,8 @@
                     });
                 });
 
-                $('textarea').on('change', function() {//'input'
+                $('textarea').on('change', function() {// or 'input'
                     formChanged = true;
-                   // console.log("formChanged " + formChanged);
                 });
 
                 $('#save-button').on('click', function() {
@@ -73,12 +73,13 @@
                     if (formChanged) {
                         e.preventDefault();
                         Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'You have unsaved changes. Do you want to leave the page without saving?',
+                            title: 'Unsaved changes !',
+                            text: 'Are you sure you want to leave this form ? Changes you made will not be saved.',
                             icon: 'warning',
                             showCancelButton: true,
-                            confirmButtonText: 'Leave',
-                            cancelButtonText: 'Stay',
+                            confirmButtonText: 'Leave Page',
+                            cancelButtonText: 'Cancel',
+                            confirmButtonColor: '#d33',
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href = $(this).attr('href');
@@ -91,21 +92,6 @@
 
             });
 
-                /*$('#saveBtn').on('click', function() {
-                    var formData = {
-                        title: $('#title').val(),
-                        description: $('#description').val()
-                    };
-
-                    $.post("tricount/edit_tricount_service/" + tricountId, formData, function(response) {
-                        console.log("saved " );
-                        //formChanged = false;
-                    })
-                    .fail(function(xhr, status, error) {
-                        console.error(error);
-                    });
-                });
-                */
 
             async function getSubscribers(){
 
@@ -194,7 +180,7 @@
                     showCancelButton: true,
                     confirmButtonText: 'Yes, delete it!',
                     cancelButtonText: 'Cancel',
-                    reverseButtons: true
+                    //reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
                         deleteSubscriber(id);
