@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
         <link rel="stylesheet" href="css/edit_tricount_style.css" type="text/css">
         <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
+        <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
         <script>    
                  
             const tricountId = <?= $tricount->id ?>;
@@ -27,7 +28,39 @@
 
                 otherUsersList = $('#other_users_list');
                 otherUsersList.html("loading ...");
-                getOtherUsers();                                 
+                getOtherUsers();   
+                
+                $('#delete-tricount').on('click', function() { 
+                    
+                    event.preventDefault();
+                    //var form = this;
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        html: 
+                            'Do you really want to delete tricount <b> "<?=$tricount->title?>" </b> and all of its dependencies ?' +
+                            '<br>' +
+                            'This process cannot be undone.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                        try {                               
+                            $.post("tricount/delete_tricount_service/" + tricountId, null);
+                            console.log("deleteTricount " + tricountId );
+                            window.location.href = "tricount/index";
+
+                        } catch(e) {
+                                subscribersList.html(" Error encountered while deleting the tricount!");
+                                }                            
+                        }
+                    });
+                });
+
+
+
 
             });
 
@@ -109,13 +142,29 @@
                 });
             }
 
+            function showDeleteSbscriberConfirmation(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Do you really want to delete this subscriber?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteSubscriber(id);
+                    }
+                });
+            }
+
             function displaySubscribers() {
                 let html ="";
                 for (let s of subscribers) {
                     html += '<li class="list-group-item d-flex justify-content-between align-items-center">';
 		            html += s.full_name;
                     html +=  (s.is_creator ? "(creator)" : "");
-                    html +=  (!(s.has_operation ||s.is_creator||s.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'><i class='bi bi-trash'></i></a>" : "") ; 
+                    html +=  (!(s.has_operation ||s.is_creator||s.is_initiator) ? "<a href='javascript:showDeleteSbscriberConfirmation(" + s.id + ")'><i class='bi bi-trash'></i></a>" : "") ; 
                     html += "</li>";
                 }
                 subscribersList.html(html);
@@ -160,13 +209,13 @@
                 <div class="d-flex justify-content-between mb-3">   
                     <a href="tricount/index" class="btn btn-outline-danger"> Back </a>
                     <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32; <i class="bi bi-caret-right-fill"></i> &#32; Edit </div>
-                    <div ><button type='submit' class="btn btn-primary" form ="form1"> Save</button></div>
+                    <div ><button type='submit' class="btn btn-primary" form ="settingsForm"> Save</button></div>
                 </div>
             </div>
         </header>
 
         <div class="container-sm">
-            <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form1">
+            <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="settingsForm">
                <h2>Settings</h2>
                <div class="mb-3 mt-3 has-validation">
                     <label for='title'> Title : </label>
@@ -252,11 +301,7 @@
         <br><br>                    
         <footer class="footer mt-auto">   
             <div class="container-sm">                
-                <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='get' >
-                <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-danger">Delete this tricount</button>
-                    </div>
-                </form>
+            <a href='tricount/delete/<?=$tricount->id; ?>' id="delete-tricount" class="btn btn-danger w-100"> Delete this tricount </a>
             </div>
         </footer >
 
