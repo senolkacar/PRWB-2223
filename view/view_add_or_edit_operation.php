@@ -272,7 +272,7 @@
                             <label for="subscription-amount<?= $subscription->id ?>">Amount</label>
                         </div>
                         <div class="form-floating">
-                            <input type="number" id="weights<?=$subscription->id?>" class="form-control mb-3" name="weights[]" min="0" max="<?= $nb_subscriptions ?>" value="<?= $weight ?>">
+                            <input type="number" id="weights<?=$subscription->id?>" class="form-control mb-3" name="weights[]" min="0" value="<?= $weight ?>">
                             <label for="weights<?=$subscription->id?>">Weight</label>
                         </div>
                         <input type="hidden" name="ids[]" value="<?= $subscription->id ?>">
