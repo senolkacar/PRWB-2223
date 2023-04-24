@@ -49,14 +49,7 @@
                         //reverseButtons: true//swap position of buttons
                     }).then((result) => {
                         if (result.isConfirmed) {
-                        try {                               
-                            $.post("tricount/delete_tricount_service/" + tricountId, null);
-                            console.log("deleteTricount " + tricountId );
-                            window.location.href = "tricount/index";
-
-                        } catch(e) {
-                                subscribersList.html(" Error encountered while deleting the tricount!");
-                                }                            
+                            deleteTricount();                   
                         }
                     });
                 });
@@ -92,6 +85,15 @@
 
             });
 
+            async function deleteTricount(){
+                try {                               
+                            await $.post("tricount/delete_tricount_service/" + tricountId, null);
+                            window.location.href = "tricount/index";
+
+                        } catch(e) {
+                                
+                                }    
+            }
 
             async function getSubscribers(){
 

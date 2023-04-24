@@ -10,9 +10,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <script src="lib/jquery-3.6.4.min.js"></script>
     <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
+    <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
     <script>
         let totalAmount, totalWeight;
-        const operation = <?= $operation ?>;
+        
         $(function() {
 
             $('form').submit(function() {
@@ -103,8 +104,7 @@
 
             });
 
-            $('#delete-operation-button').on('click', function() { 
-                    
+         $('#delete-operation-button').on('click', function() {                     
                     event.preventDefault();                  
                     Swal.fire({
                         title: 'Are you sure?',
@@ -116,23 +116,25 @@
                         showCancelButton: true,
                         confirmButtonText: 'Yes, delete it!',
                         cancelButtonText: 'Cancel',
-                        reverseButtons: true
                     }).then((result) => {
                         if (result.isConfirmed) {
-                        try {                               
-                            $.post("tricount/delete_operation_service/" + <?= $operation->id ?>, null);
-                            console.log("delete operation " + operationId );
-                            window.location.href = "tricount/index";//"tricount/show_tricount/<?=$operation->tricount->id ?>";
-
-                        } catch(e) {
-                               
-                                }                            
+                            deleteOperation();                          
                         }
                     });
                 });
 
 
         });
+
+        async function deleteOperation() {
+            try {                               
+                    await $.post("operation/delete_operation_service/" + <?= $operation->id ?>, null);
+                    window.location.href = "tricount/show_tricount/<?=$operation->tricount->id ?>";
+
+                } catch(e) {
+                               
+                    }    
+        }
 
         function getTotalAmount() {
             if ($('#amount-total').val() !== "" ) {

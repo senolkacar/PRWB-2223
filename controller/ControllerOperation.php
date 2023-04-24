@@ -287,7 +287,22 @@ class ControllerOperation extends MyController
     }
 
 
+    public function delete_operation_service():void {
+        $operation = $this->remove_operation();
+        echo $operation ? "ture" : "false";
 
+    }
+
+    private function remove_operation():Operation | false{
+        if(isset($_GET["param1"]) && is_numeric($_GET["param1"])){
+            $id = $_GET["param1"];
+            $operation = Operation::get_operation_by_id($id);
+            $operation->delete_operation();
+            return $operation;
+        }
+        return false;
+
+    }
 
 
 
