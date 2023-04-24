@@ -85,15 +85,28 @@
 
             });
 
-            async function deleteTricount(){
-                try {                               
-                            await $.post("tricount/delete_tricount_service/" + tricountId, null);
-                            window.location.href = "tricount/index";
-
-                        } catch(e) {
-                                
-                                }    
+            async function deleteTricount() {
+                try {
+                    await $.post("tricount/delete_tricount_service/" + tricountId, null);
+                   
+                    await handleDeleteSuccess(); // Call the function to handle success
+                } catch (e) {
+                    // Handle error if needed
+                }
             }
+
+            async function handleDeleteSuccess() {
+                await Swal.fire({
+                    title: 'Deleted!',
+                    text: 'This tricount has been deleted.',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6',
+                });
+                window.location.href = "tricount/index";
+            }
+
 
             async function getSubscribers(){
 

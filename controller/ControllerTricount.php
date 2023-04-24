@@ -231,7 +231,7 @@ class ControllerTricount extends MyController {
     }
 
     private function delete_tricount():Tricount|false{ //to modify delete()
-        //$user = $this->get_user_or_false();
+        $user = $this->get_user_or_false();
         if(isset($_GET["param1"]) && is_numeric($_GET["param1"])){
             $id = $_GET["param1"];
             $tricount = Tricount::get_tricount_by_id($id);         
