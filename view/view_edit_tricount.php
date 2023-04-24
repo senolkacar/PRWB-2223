@@ -68,7 +68,7 @@
                     formChanged = false;
                 });
 
-                $('a.btn-outline-danger').on('click', function(e) {//'#backBtn'
+                $('a.btn-outline-danger').on('click', function(e) {//'#save-button'
                     console.log("formChanged " + formChanged);
                     if (formChanged) {
                         e.preventDefault();
@@ -252,7 +252,7 @@
                 <div class="d-flex justify-content-between mb-3">   
                     <a href="tricount/index" id="backBtn" class="btn btn-outline-danger"> Back </a>
                     <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32; <i class="bi bi-caret-right-fill"></i> &#32; Edit </div>
-                    <div ><button type='submit' id="saveBtn" class="btn btn-primary" form ="settingsForm"> Save</button></div>
+                    <div ><button type='submit' id="save-button" class="btn btn-primary" form ="settingsForm"> Save</button></div>
                 </div>
             </div>
         </header>
