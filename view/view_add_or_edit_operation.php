@@ -12,6 +12,7 @@
     <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
     <script>
         let totalAmount, totalWeight;
+        const operation = <?= $operation ?>;
         $(function() {
 
             $('form').submit(function() {
@@ -101,6 +102,34 @@
                 });
 
             });
+
+            $('#delete-operation-button').on('click', function() { 
+                    
+                    event.preventDefault();                  
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        html: 
+                            'Do you really want to delete this operation ?' +
+                            '<br>' +
+                            'This process cannot be undone.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                        try {                               
+                            $.post("tricount/delete_operation_service/" + <?= $operation->id ?>, null);
+                            console.log("delete operation " + operationId );
+                            window.location.href = "tricount/index";//"tricount/show_tricount/<?=$operation->tricount->id ?>";
+
+                        } catch(e) {
+                               
+                                }                            
+                        }
+                    });
+                });
 
 
         });
@@ -271,7 +300,7 @@
         </div>
         <?php if ($operation_name == "edit") { ?>
             <footer class="footer mt-auto w-100">
-                <a class="btn btn-danger w-100" href="operation/delete_operation/<?= $operation->id; ?>">Delete</a>
+                <a class="btn btn-danger w-100" id="delete-operation-button"  href="operation/delete_operation/<?= $operation->id; ?>">Delete</a>
             </footer>
         <?php }; ?>
     </div>

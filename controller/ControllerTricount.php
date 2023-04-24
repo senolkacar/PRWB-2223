@@ -159,6 +159,38 @@ class ControllerTricount extends MyController {
 
     }
 
+    private function save_edit_tricount(int $id, string $title, string $description): bool {//to delete
+        $user = $this->get_user_or_redirect();
+        $tricount = Tricount::get_tricount_by_id($id);
+
+        if ($tricount) {
+            if (!in_array($user, $tricount->get_users_including_creator())) {
+                return false; 
+            } else {
+                $original_title = $tricount->title;
+                $tricount->title = $title; // in order to call validate_title(). If title isn't valid, the value will be changed back to the original one
+    
+                $errors_title = Tricount::validate_title($user, $tricount);
+                $errors_description = Tricount::validate_description($description);
+    
+                $errors = (array_merge($errors_description, $errors_title));
+    
+                if (count($errors) == 0) {
+                    $tricount->title = $title;
+                    $tricount->description = $description;
+                    $tricount->update();
+                } else {
+                    $tricount->title = $original_title;
+                    return false; // Error occurred during processing
+                }
+    
+                return true; // Successfully completed
+            }
+        } else { // if $tricount doesn't exist
+            return false; 
+        }
+    }
+
     public function get_tricount_subscrier_service() : void {
         $user = $this->get_user_or_redirect();
         $tricount = $this->get_tricount($user);

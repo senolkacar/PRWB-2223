@@ -37,7 +37,7 @@ class ControllerUser extends MyController {
             $errors_mail = $this->validate_email($mail);
             $errors_name = $this->validate_full_name($full_name);
 
-            if(isset($_POST["iban"]) && strlen(trim($_POST["iban"]))>0){
+            if(isset($_POST["iban"])){
                 $iban = $_POST["iban"];
                 $errors_iban = $this->validate_iban($_POST["iban"]);          
             }
