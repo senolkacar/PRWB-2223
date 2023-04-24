@@ -120,7 +120,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                         try {                               
-                            $.post("tricount/delete_operation_service/" + operationId, null);
+                            $.post("tricount/delete_operation_service/" + <?= $operation->id ?>, null);
                             console.log("delete operation " + operationId );
                             window.location.href = "tricount/index";//"tricount/show_tricount/<?=$operation->tricount->id ?>";
 

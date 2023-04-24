@@ -18,7 +18,7 @@
             let subscribersList;
             let sortColumn = 'full_name';
             let otherUsersList;
-            let otherUsers = <?=$other_users_json ?>
+            let otherUsers = <?=$other_users_json ?>;
             let formChanged = false; 
             
             $(function(){
@@ -60,16 +60,16 @@
                     });
                 });
 
-                $('#settingsForm').on('change', function() {
+                $('textarea').on('change', function() {//'input'
                     formChanged = true;
+                   // console.log("formChanged " + formChanged);
                 });
 
-                $('#saveBtn').on('click', function() {
+                $('#save-button').on('click', function() {
                     formChanged = false;
                 });
 
-                $('a.btn-outline-danger').on('click', function(e) {//'#save-button'
-                    console.log("formChanged " + formChanged);
+                $('#back-button').on('click', function(e) {                    
                     if (formChanged) {
                         e.preventDefault();
                         Swal.fire({
@@ -139,7 +139,8 @@
                 
                 try {
                    // console.log("delete id " + id );
-                    await $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": id});       
+                    const res=await $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": id}, null, 'json');       
+                    //console.log(res === true);//without ", null, 'json'" res="true" but not boolean
                     getSubscribers();
                     sortSubscribers()
                     displaySubscribers();
@@ -250,15 +251,15 @@
         <header>
             <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
                 <div class="d-flex justify-content-between mb-3">   
-                    <a href="tricount/index" id="backBtn" class="btn btn-outline-danger"> Back </a>
+                    <a href="tricount/index" id="back-button" class="btn btn-outline-danger"> Back </a>
                     <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32; <i class="bi bi-caret-right-fill"></i> &#32; Edit </div>
-                    <div ><button type='submit' id="save-button" class="btn btn-primary" form ="settingsForm"> Save</button></div>
+                    <div ><button type='submit' id="save-button" class="btn btn-primary" form ="settings-form"> Save</button></div>
                 </div>
             </div>
         </header>
 
         <div class="container-sm">
-            <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="settingsForm">
+            <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="settings-form">
                <h2>Settings</h2>
                <div class="mb-3 mt-3 has-validation">
                     <label for='title'> Title : </label>

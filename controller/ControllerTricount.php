@@ -159,19 +159,6 @@ class ControllerTricount extends MyController {
 
     }
 
-    public function edit_tricount_service():bool{ //to delete
-        $user = $this->get_user_or_redirect();
-        //$tricount = $this->get_tricount($user);
-        if(isset($_GET["param1"]) && is_numeric($_GET["param1"]) )
-            $id= (int)$_GET["param1"];
-        $title = isset($_POST["title"]) ? $_POST["title"] : "";
-        $description = isset($_POST["description"]) ? $_POST["description"] : "";
-
-        $result = $this->save_edit_tricount($id, $title, $description);
-
-        return $result;
-    }
-
     private function save_edit_tricount(int $id, string $title, string $description): bool {//to delete
         $user = $this->get_user_or_redirect();
         $tricount = Tricount::get_tricount_by_id($id);
