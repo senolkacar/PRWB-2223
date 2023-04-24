@@ -56,6 +56,7 @@ class ControllerMain extends MyController{
     public function signup(){
         $mail ='';
         $full_name = '';
+        $justvalidate = $this->isJustValidateOn();
         $iban = null;
         $password = '';
         $password_confirm = '';
@@ -98,6 +99,7 @@ class ControllerMain extends MyController{
                 "iban"=>$iban,
                 "password"=>$password,
                 "password_confirm"=>$password_confirm,
+                "justvalidate"=>$justvalidate,
                 "errors"=>$errors,
                 "errors_email"=>$errors_email,
                 "errors_full_name"=>$errors_full_name,
