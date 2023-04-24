@@ -157,8 +157,14 @@ Class MyController extends Controller{
     public function validate_weights(?array $weights): array{
         $errors=[];
         $total_weight = 0;
+        
         foreach($weights as $weight){
-            $total_weight += $weight;
+            if(is_numeric(trim($weight))){
+                $total_weight += floatval($weight);
+            }
+            if($weight==null || $weight==""){
+                $errors[] = "Weight is mandatory";
+            }
             if(!is_numeric(trim($weight))){
                 $errors[] = "Invalid value for weight";
             }
