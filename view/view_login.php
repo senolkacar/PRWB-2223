@@ -29,11 +29,10 @@
                     validateBeforeSubmitting: true,
                     lockForm: false,
                     focusInvalidField: false,
-                    errorsContainer: document.querySelector('#jsmailerror'),
                     errorFieldCssClass: 'is-invalid',
                     successFieldCssClass: 'is-valid',
-                    successLabelCssClass: "text-success",
-                    errorLabelCssClass: "text-danger",
+                    successLabelCssClass: 'valid-feedback',
+                    errorLabelCssClass: 'invalid-feedback',
                 });
             
                 validation
@@ -115,14 +114,16 @@
         <div class="container-sm border rounded">
             <form id="loginform" action="main/login" method="post">
                 <h2 class="text-center mt-3 pb-3 border-bottom">Sign In</h2>
-                <div class="input-group mt-3">
+                <div class="mt-3">
+                <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
                     <input type="email" class="form-control <?php echo count($errors) != 0 ? 'is-invalid' : '' ?>" placeholder="Email" name="mail" id="mail" value="<?= $mail ?>">
                 </div>
-                <div class="text-danger" id="jsmailerror"></div>
-                <div class="input-group mt-3">
+                <div class="mt-3">
+                <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                     <input type="password" class="form-control <?php echo count($errors) != 0 ? 'is-invalid' : '' ?>" placeholder="Password" name="password" id="password" value="<?= $password ?>">
+                </div>
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <button type="submit" class="btn btn-primary btn-block w-100">Log in</button>

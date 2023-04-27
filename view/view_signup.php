@@ -31,8 +31,8 @@
                     focusInvalidField: false,
                     errorFieldCssClass: 'is-invalid',
                     successFieldCssClass: 'is-valid',
-                    successLabelCssClass: "text-success",
-                    errorLabelCssClass: "text-danger",
+                    successLabelCssClass: 'valid-feedback',
+                    errorLabelCssClass: 'invalid-feedback',
                 });
                 validation
                     .addField('#mail',
@@ -162,9 +162,11 @@
         <div class="container-sm border rounded">
             <form id="signupform" action="main/signup" method="post">
                 <h2 class="text-center mb-3 mt-3 pb-3 border-bottom">Sign up</h2>
-                <div class="input-group mt-3">
+                <div class="mt-3">
+                <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
                     <input type="email" class="form-control <?php echo count($errors_email) != 0 ? 'is-invalid' : '' ?>" placeholder="Email" name="mail" id="mail" value="<?= $mail ?>">
+                </div>
                 </div>
                 <?php if (count($errors_email) != 0) : ?>
                     <div class='errors'>
@@ -175,9 +177,11 @@
                         </ul>
                     </div>
                 <?php endif; ?>
-                <div class="input-group mt-3">
+                <div class="mt-3">
+                <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                     <input type="text" class="form-control <?php echo count($errors_full_name) != 0 ? 'is-invalid' : '' ?>" name="full_name" placeholder="Full Name" id="full_name" value="<?= $full_name ?>">
+                </div>
                 </div>
                 <?php if (count($errors_full_name) != 0) : ?>
                     <div class='errors'>
@@ -188,9 +192,11 @@
                         </ul>
                     </div>
                 <?php endif; ?>
-                <div class="input-group mt-3">
+                <div class="mt-3">
+                <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-credit-card"></i></span>
                     <input type="text" class="form-control <?php echo count($errors_iban) != 0 ? 'is-invalid' : '' ?>" name="iban" placeholder="IBAN" id="iban" value="<?= $iban ?>">
+                </div>
                 </div>
                 <?php if (count($errors_iban) != 0) : ?>
                     <div class='errors'>
@@ -201,9 +207,11 @@
                         </ul>
                     </div>
                 <?php endif; ?>
-                <div class="input-group mt-3">
+                <div class="mt-3">
+                <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                     <input type="password" class="form-control <?php echo count($errors_password) != 0 ? 'is-invalid' : '' ?>" placeholder="Password" name="password" id="password" value="<?= $password ?>">
+                </div>
                 </div>
                 <?php if (count($errors_password) != 0) : ?>
                     <div class='errors'>
@@ -214,9 +222,11 @@
                         </ul>
                     </div>
                 <?php endif; ?>
-                <div class="input-group mt-3">
+                <div class="mt-3">
+                <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                     <input type="password" class="form-control <?php echo count($errors_password_confirm) != 0 ? 'is-invalid' : '' ?>" placeholder="Confirm your password" name="password_confirm" id="password_confirm" value="<?= $password_confirm ?>">
+                </div>
                 </div>
                 <?php if (count($errors_password_confirm) != 0) : ?>
                     <div class='errors'>
