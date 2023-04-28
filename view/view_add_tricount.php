@@ -139,6 +139,7 @@
                             $("#title").attr("class", "form-control is-invalid");
 
                         }
+                        setDisableButton();
                     }
 
                     $("#description").blur(function() {
@@ -156,7 +157,16 @@
                             $("#errDescription").html(errDescription.val());
                             $("#description").attr("class", "form-control is-invalid");
                         }
+                        setDisableButton();
                     });
+
+                    function setDisableButton() {
+                        if ($("#description").hasClass("form-control is-invalid") || $("#title").hasClass("form-control is-invalid")) {
+                            $("#save-button").prop("disabled", true);
+                        } else {
+                            $("#save-button").prop("disabled", false);
+                        }
+                    }
 
                 });
             <?php } ?>

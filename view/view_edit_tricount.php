@@ -11,8 +11,84 @@
         <link rel="stylesheet" href="css/edit_tricount_style.css" type="text/css">
         <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
         <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
-        <script>    
-                 
+        <script>
+             let title, description, errTitle, errDescription;
+             let userID = <?= $user->id ?>;
+
+$(function() {
+    title = $("#title");
+    errTitle = $("#errTitle");
+    errDescription = $("#errDescription");
+    $("#title").blur(function() {
+        errTitle.val("");
+        if (!(/(\s*\w\s*){3}/).test($("#title").val())) {
+            errTitle.text("Title must be at least 3 characters");
+            updateView();
+        } else {
+            check_tricount_exists().then(function(data) {
+                if (data.trim() === "true") {
+                    errTitle.text("Title already exists for this user");
+                    updateView();
+                } else {
+                    errTitle.text("");
+                    updateView();
+                }
+            });
+        }
+
+        async function check_tricount_exists() {
+            let res = await $.post("tricount/tricount_exists_service/", {
+                'creator': userID,
+                'title': $("#title").val()
+            }).then(function(data) {
+                return data;
+            });
+            updateView();
+            return res;
+        }
+    });
+
+    function updateView() {
+        if (errTitle.text() == "") {
+            $("#errTitle").html("");
+            $("#successTitle").show();
+            $("#title").attr("class", "form-control is-valid");
+        } else {
+            $("#successTitle").hide();
+            $("#errTitle").html(errTitle.text());
+            $("#title").attr("class", "form-control is-invalid");
+
+        }
+        setDisableButton();
+    }
+
+    $("#description").blur(function() {
+        errDescription.val("");
+        if ($("#description").val().length > 0 && !(/(\s*\w\s*){3}/).test($("#description").val())) {
+            errDescription.val("If description is not empty, it must contain at least 3 characters");
+        }
+
+        if (errDescription.val() == "") {
+            $("#errDescription").html("");
+            $("#successDescription").show();
+            $("#description").attr("class", "form-control is-valid");
+        } else {
+            $("#successDescription").hide();
+            $("#errDescription").html(errDescription.val());
+            $("#description").attr("class", "form-control is-invalid");
+        }  
+        setDisableButton();
+});
+
+    function setDisableButton() {
+        if ($("#description").hasClass("form-control is-invalid") || $("#title").hasClass("form-control is-invalid")) {
+            $("#save-button").prop("disabled", true);
+        } else {
+            $("#save-button").prop("disabled", false);
+        }
+    }
+   
+});
             const tricountId = <?= $tricount->id ?>;
             let subscribers = <?=$subscribers_json ?>;
             let subscribersList;
@@ -265,7 +341,12 @@
                <div class="mb-3 mt-3 has-validation">
                     <label for='title'> Title : </label>
                     <textarea class="form-control <?php echo count($errors_title)!=0 ? 'is-invalid' : ''?>" name='title'  id='title' rows='1' ><?= $title; ?></textarea> 
-               </div>
+                    <div id="jsTitleError" style="<?php $justvalidate ? "display: none;" : "" ?>">
+                    <span class="text-danger" id="errTitle"> </span>
+                    <span class="text-success" id="successTitle" style="display: none;">Looks good!</span>
+                </div>
+                </div>
+               
 
                 <?php if (count($errors_title) != 0): ?>
                     <div class='errors'>
@@ -281,7 +362,11 @@
                <div class="mb-3 mt-3">
                     <label for='description'> Descripton (optional) :  </label>
                     <textarea class="form-control <?php echo count($errors_description)!=0 ? 'is-invalid' : ''?>" name='description' id='description'  rows='2' ><?= $description; ?></textarea> 
-               </div>
+                    <div id="jsDescriptionError" style="<?php $justvalidate ? "display: none;" : "" ?>">
+                    <span class="text-danger" id="errDescription"> </span>
+                    <span class="text-success" id="successDescription" style="display: none;">Looks good!</span>
+                </div>
+                </div>
 
                <?php if (count($errors_description) != 0): ?>
                     <div class='errors'>

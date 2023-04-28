@@ -91,6 +91,7 @@ class ControllerTricount extends MyController {
     public function edit_tricount():void {
         $user=$this->get_user_or_redirect();
         $title="";
+        $justvalidate = $this->isJustValidateOn();
         $description="";
         $errors_title=[];
         $errors_description=[];
@@ -149,10 +150,12 @@ class ControllerTricount extends MyController {
         (new View("edit_tricount")) -> show(["id"=>$id,
                                             "tricount"=>$tricount,
                                             "title"=>$title,
+                                            "user"=>$user,
                                             "description"=>$description,
                                             "errors_description"=>$errors_description,
                                             "errors_title"=>$errors_title,
                                             "error"=>$error,
+                                            "justvalidate"=>$justvalidate,
                                             "subscribers_json"=>$subscribers_json,
                                             "other_users_json"=>$other_users_json,
                                             "errors"=>$errors]);       
