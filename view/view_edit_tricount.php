@@ -11,10 +11,79 @@
         <link rel="stylesheet" href="css/edit_tricount_style.css" type="text/css">
         <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
         <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
+        <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
         <script>
              let title, description, errTitle, errDescription;
              let userID = <?= $user->id ?>;
+            <?php if ($justvalidate) { ?>
+                let titleExists = false;
 
+                function debounce(fn, time) {
+                    var timer;
+                    return function() {
+                        clearTimeout(timer);
+                        timer = setTimeout(() => {
+                            fn.apply(this, arguments);
+                        }, time);
+                    }
+                }
+
+                $(function() {
+                    const validation = new JustValidate('#settings-form', {
+                        validateBeforeSubmitting: true,
+                        lockForm: false,
+                        focusInvalidField: false,
+                        errorFieldCssClass: 'is-invalid',
+                        successFieldCssClass: 'is-valid',
+                        successLabelCssClass: "text-success",
+                        errorLabelCssClass: "text-danger",
+                    });
+                    validation
+                        .addField('#title', [{
+                                rule: 'required',
+                                errorMessage: 'Title is required'
+                            },
+                            {
+                                rule: 'minLength',
+                                value: 3,
+                                errorMessage: 'Title must be at least 3 characters'
+                            },
+                        ], {
+                            successMessage: "Looks good!",
+                        })
+                        .addField('#description', [{
+                            rule: 'minLength',
+                            value: 3,
+                            errorMessage: 'If description is not empty, it must contain at least 3 characters'
+                        }, ], {
+                            successMessage: "Looks good!"
+                        })
+                    validation.onValidate(debounce(async function(event) {
+                        titleExists = await $.post("tricount/tricount_exists_service/", {
+                            'creator': userID,
+                            'title': $("#title").val(),
+                            'mode': 'edit',
+                            'tricount': <?= $tricount->id ?>
+                        }).then(function(data) {
+                            return (data.trim() === "true");
+                        });
+
+                        if (titleExists) {
+                            this.showErrors({
+                                '#title': 'Title already exists for this user'
+                            });
+                        }
+                    }, 300));
+
+                    validation.onSuccess(function(event) {
+                        if (!titleExists) {
+                            event.target.submit();
+                        }
+                    });
+
+                    $("input:text:first").focus;
+                });
+            <?php } else { ?>
 $(function() {
     title = $("#title");
     errTitle = $("#errTitle");
@@ -91,6 +160,7 @@ $(function() {
     }
    
 });
+<?php } ?>
             const tricountId = <?= $tricount->id ?>;
             let subscribers = <?=$subscribers_json ?>;
             let subscribersList;

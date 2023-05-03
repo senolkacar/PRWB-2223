@@ -31,7 +31,7 @@
                 $(function() {
                     const validation = new JustValidate('#addtricount', {
                         validateBeforeSubmitting: true,
-                        lockForm: false,
+                        lockForm: true,
                         focusInvalidField: false,
                         errorFieldCssClass: 'is-invalid',
                         successFieldCssClass: 'is-valid',
@@ -75,20 +75,9 @@
                         }
                     }, 300));
 
-                    validation.onSuccess(async function(event) {
-                        if (titleExists) {
-                            this.showErrors({
-                                '#title': 'Title already exists for this user'
-                            });
-                        } else {
-                            // Disable the submit button to prevent multiple submissions
-                            $('#submit-btn').prop('disabled', true);
-
-                            // Submit the form
-                            await event.target.submit();
-
-                            // Re-enable the submit button
-                            $('#submit-btn').prop('disabled', false);
+                    validation.onSuccess(function(event) {
+                        if (!titleExists) {
+                            event.target.submit();
                         }
                     });
 
@@ -122,7 +111,8 @@
                             let res = await $.post("tricount/tricount_exists_service/", {
                                 'creator': userID,
                                 'title': $("#title").val(),
-                                'mode': 'add'
+                                'mode': 'add',
+                                'tricount': 0
                             }).then(function(data) {
                                 return data;
                             });
@@ -182,7 +172,7 @@
             <div class="d-flex justify-content-between mb-3">
                 <a href="tricount/index" class="btn btn-outline-danger"> Cancel </a>
                 <div class="text-secondary fw-bold mt-2">Tricount &#32; <i class="bi bi-caret-right-fill"></i> &#32; Add </div>
-                <div> <button type="submit" class="btn btn-primary" form="addtricount">Save</button> </div>
+                <div> <button type="submit" id="save-button" class="btn btn-primary" form="addtricount">Save</button> </div>
             </div>
         </div>
     </header>
