@@ -31,7 +31,7 @@
                     focusInvalidField: false,
                     errorFieldCssClass: 'is-invalid',
                     successFieldCssClass: 'is-valid',
-                    successLabelCssClass: 'valid-feedback',
+                    successLabelCssClass: '',
                     errorLabelCssClass: 'invalid-feedback',
                 });
                 validation
@@ -136,13 +136,7 @@
 
                     }, 300))
                     .onSuccess(function(event) {
-                        if (emailExists) {
-                            this.showErrors({
-                                '#mail': 'Mail already exists for this user please sign in or use another mail'
-                            });
-                        } else {
-                            event.target.submit();
-                        }
+                        event.target.submit();
                     });
                 $("input:text:first").focus;
             });

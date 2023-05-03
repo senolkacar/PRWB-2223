@@ -87,13 +87,7 @@
 
                     }, 300))
                     .onSuccess(function(event) {   
-                        if (!emailExists) {
-                    this.showErrors({
-                        '#mail': 'Mail does not exist for this user please sign up'
-                    });
-                }else{
-                    event.target.submit();
-                }
+                        event.target.submit();
 });
                 $("input:text:first").focus;
             });

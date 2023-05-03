@@ -22,15 +22,19 @@ class ControllerTricount extends MyController {
     } 
 
     public function tricount_exists_service(): void{
+        $user=$this->get_user_or_redirect();
         $res = "false";
-        $id = $_POST["creator"];
-        $title = $_POST["title"];
+
         
-        if(isset(($id)) && isset($title)){
+        if(isset(($_POST["creator"])) && isset($_POST["title"])){
+            $id = $_POST["creator"];
+            $title = $_POST["title"];
             if(Tricount::title_creator_existe(User::get_user_by_id($id),$title)){
                 $res = "true";
         }
         echo $res; 
+    }else{
+        $this->redirect("tricount","index");
     }
     }
 
