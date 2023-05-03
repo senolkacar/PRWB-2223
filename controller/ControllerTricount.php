@@ -22,16 +22,35 @@ class ControllerTricount extends MyController {
     } 
 
     public function tricount_exists_service(): void{
-        $user=$this->get_user_or_redirect();
+        $this->get_user_or_redirect();
         $res = "false";
 
         
-        if(isset(($_POST["creator"])) && isset($_POST["title"])){
+        if(isset(($_POST["creator"])) && isset($_POST["title"]) && isset($_POST["mode"]) && isset($_POST["tricount"])){
+            $mode = $_POST["mode"];
+            if(($mode != "edit" && $mode != "add") || !is_numeric($_POST["creator"]) || !is_numeric($_POST["tricount"])){
+                $this->redirect("tricount","index");
+            }
             $id = $_POST["creator"];
+            $user = User::get_user_by_id($id);
             $title = $_POST["title"];
-            if(Tricount::title_creator_existe(User::get_user_by_id($id),$title)){
-                $res = "true";
-        }
+            $errors=[];
+            $errors = $this->validate_title($title);
+            
+            
+            if(count($errors)==0&&$user!=null){
+                if($mode == "add"){
+                    if(Tricount::title_creator_existe($user,$title)){
+                        $res = "true";
+                    }
+                }else if($mode == "edit"){
+                    $tricount = Tricount::get_tricount_by_title_creator($user,$title);
+                    if($tricount!=false && $tricount->id != $_POST["tricount"]){
+                        $res = "true";
+                    }
+                }
+            }
+    
         echo $res; 
     }else{
         $this->redirect("tricount","index");

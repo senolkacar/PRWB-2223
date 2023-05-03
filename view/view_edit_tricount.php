@@ -39,7 +39,9 @@ $(function() {
         async function check_tricount_exists() {
             let res = await $.post("tricount/tricount_exists_service/", {
                 'creator': userID,
-                'title': $("#title").val()
+                'title': $("#title").val(),
+                'mode':'edit',
+                'tricount': <?= $tricount->id ?>
             }).then(function(data) {
                 return data;
             });

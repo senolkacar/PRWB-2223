@@ -61,7 +61,9 @@
                     validation.onValidate(debounce(async function(event) {
                         titleExists = await $.post("tricount/tricount_exists_service/", {
                             'creator': userID,
-                            'title': $("#title").val()
+                            'title': $("#title").val(),
+                            'mode': 'add',
+                            'tricount': 0
                         }).then(function(data) {
                             return (data.trim() === "true");
                         });
@@ -119,7 +121,8 @@
                         async function check_tricount_exists() {
                             let res = await $.post("tricount/tricount_exists_service/", {
                                 'creator': userID,
-                                'title': $("#title").val()
+                                'title': $("#title").val(),
+                                'mode': 'add'
                             }).then(function(data) {
                                 return data;
                             });
