@@ -19,6 +19,31 @@ class ControllerUser extends MyController {
         (new View("settings"))->show(["user"=>$user]);
     }
 
+
+    public function name_available_service() : void {
+        $res = "true";
+        $user_connected = $this->get_user_or_false();//false ?
+       
+        if(isset($_GET["param1"]) && $_GET["param1"] !== ""){
+            $user = User::get_user_by_name($_GET["param1"]);
+            if($user && $user->id != $user_connected->id)
+                $res = "false";
+        }
+        echo $res;
+    }
+
+    public function email_available_service() : void {
+        $res = "true";
+        $user_connected = $this->get_user_or_false();
+       
+        if(isset($_GET["param1"]) && $_GET["param1"] !== ""){
+            $user = User::get_user_by_mail($_GET["param1"]);
+            if($user && $user->id != $user_connected->id)
+                $res = "false";
+        }
+        echo $res;
+    }
+
     public function edit_profile():void{
         //currently it doesnt check if we change the mail to another user's mail
         $user=$this->get_user_or_redirect();
@@ -30,6 +55,8 @@ class ControllerUser extends MyController {
         $errors_iban=[];
         $errors = [];
         $success = "";
+        $justvalidate = $this->isJustValidateOn();
+
         if(isset($_POST["mail"])&&isset($_POST["full_name"])){
             $mail = $_POST["mail"];
             $full_name=$_POST["full_name"];
@@ -63,6 +90,7 @@ class ControllerUser extends MyController {
                                     "errors_name"=>$errors_name,
                                     "errors_iban"=>$errors_iban,
                                     "errors"=>$errors,
+                                    "justvalidate"=>$justvalidate,
                                     "success"=>$success]);
     }
 

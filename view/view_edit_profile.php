@@ -31,7 +31,7 @@
                     });*/
 
                     $('#save-button').on('click', function() {
-                        formChanged = false;
+                        formChanged = false;                        
                     });
 
                      $('#back-button').on('click', function(e) {                    
@@ -56,6 +56,83 @@
      
      
                  });
+
+
+                <?php if ($justvalidate) : ?>
+                    let emailExists;
+	                let nameExists;
+
+                    function debounce(fn, time) {
+                        var timer;
+                        return function() {
+                            clearTimeout(timer);
+                            timer = setTimeout(() => {
+                                fn.apply(this, arguments);
+                            }, time);
+                        }
+                    }
+
+            $(function() {
+                const validation = new JustValidate('#edit_profile_form', {                    
+                    validateBeforeSubmitting: true,
+                        lockForm: true,
+                        focusInvalidField: false,
+                        successLabelCssClass: ['success'],
+                        errorLabelCssClass: ['errors']
+                    });
+
+                validation
+                    .addField('#mail',
+                        [{
+                                rule: 'required',
+                                errorMessage: 'Mail is required'
+                            },
+                            {
+                                rule: 'email',
+                                errorMessage: 'Mail is not valid'
+                            },
+                        ], {
+                            successMessage: "Looks good!",
+                        })
+                    .addField('#full_name', [{
+                            rule: 'required',
+                            errorMessage: 'Full name is required'
+                        },
+                        {
+                            rule: 'minLength',
+                            value: 3,
+                            errorMessage: 'Full name must be at least 3 characters'
+                        },
+                    ], {
+                        successMessage: "Looks good!",
+                    })
+                    .addField('#iban', [{
+                        rule: 'customRegexp',
+                        value: /^$|^([a-zA-Z]{2}[0-9]{2}(?:[\s-]?[0-9]{4}){3})$/,
+                        errorMessage: 'IBAN is not valid'
+                    }, ], {
+                        successMessage: 'Looks good!'
+                    })
+                   .onValidate(debounce(async function(event) {
+			            nameExists = await $.getJSON("user/name_available_service/" + $("#full_name").val());
+                        if (!nameExists)
+                            this.showErrors({ '#full_name': 'Name already exists' });
+
+                        emailExists = await $.getJSON("user/email_available_service/" + $("#mail").val());
+                        if (!emailExists)
+                            this.showErrors({ '#mail': 'Email already exists' });
+
+                    }, 300))
+                    .onSuccess(function(event) {
+                        //if(nameExists && emailExists)
+                        event.target.submit();
+                        });
+
+                    $("input:text:first").focus;
+
+            });
+
+        <?php endif; ?>   
      
                 
              
@@ -73,7 +150,7 @@
 
 
         <div class="container-sm">
-            <form method='post' action='user/edit_profile' enctype='multipart/form-data'>
+            <form method='post' id="edit_profile_form" action='user/edit_profile' enctype='multipart/form-data'>
                 <div class="h2">Edit your profile</div>
                 <div class="mb-3 mt-3">
                     <label for='mail'> Mail : </label>
