@@ -131,54 +131,35 @@
                 console.log("formChanged " +formChanged ); //ok for edit operation
                 formChanged = true;
             });
+     
 
-            $('#back-button-edit').on('click', function(e) {      //$(document).on('click', '.btn.btn-outline-danger', function(e)
-                    console.log("back " );            
-                        if (formChanged) {
-                            e.preventDefault();
-                            Swal.fire({
-                                title: 'Unsaved changes !',
-                                text: 'Are you sure you want to leave this form ? Changes you made will not be saved.',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonText: 'Leave Page',
-                                cancelButtonText: 'Cancel',
-                                confirmButtonColor: '#d33',
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = $(this).attr('href');
-
-                                }
-                            });
-                        }
-            });
-
-            $('#back-button-add').on('click', function(e) {      //double
-                console.log("back " );            
-                    if (formChanged) {
-                        e.preventDefault();
-                        Swal.fire({
-                            title: 'Unsaved changes !',
-                            text: 'Are you sure you want to leave this form ? Changes you made will not be saved.',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Leave Page',
-                            cancelButtonText: 'Cancel',
-                            confirmButtonColor: '#d33',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = $(this).attr('href');
-
-                            }
-                        });
-                    }
-            });
+            $('#back-button-edit').on('click', handleBackButtonClick);
+            $('#back-button-add').on('click', handleBackButtonClick);
 
 
 
         });
 
        
+        function handleBackButtonClick(event) {
+            console.log("back " );            
+            if (formChanged) {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Unsaved changes !',
+                    text: 'Are you sure you want to leave this form ? Changes you made will not be saved.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Leave Page',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#d33',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = $(this).attr('href');
+                    }
+                });
+            }
+        }
      
        
         async function deleteOperation() {
