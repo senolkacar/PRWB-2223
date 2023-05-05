@@ -33,8 +33,6 @@
 
             weight = getTotalWeight();
 
-
-
             var ratios = getRatio();
 
             var $amounts = $('input[name="amount[]"]'); //generate an array of amount
@@ -124,19 +122,16 @@
                         }
                     });
                 });
-            <?php } ?>
-            
+            <?php } ?>            
 
             $('input').on('input', function() {
-                console.log("formChanged " +formChanged ); //ok for edit operation
+               // console.log("formChanged " +formChanged ); 
                 formChanged = true;
             });
      
 
             $('#back-button-edit').on('click', handleBackButtonClick);
             $('#back-button-add').on('click', handleBackButtonClick);
-
-
 
         });
 
@@ -215,6 +210,7 @@
             return ratios;
         }
     </script>
+
     <noscript>
         <style>
         .floating-amount-js {
@@ -222,6 +218,7 @@
         }
         </style>
     </noscript>
+
 </head>
 
 <body>
@@ -294,9 +291,8 @@
                 <?php foreach ($subscriptions as $subscription) : ?>
                     <div class='input-group input-group-lg'>
                         <div class="input-group-text mb-3">
-                            <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?= $subscription->id ?>" <?php if (in_array($subscription->id, $checkboxes)) {
-                                                                                                                                                    echo 'checked';
-                                                                                                                                                } ?>>
+                            <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?= $subscription->id ?>"
+                                <?php if (in_array($subscription->id, $checkboxes)) { echo 'checked'; } ?>>
                         </div>
                         <div class="input-group-text mb-3 w-50">
                             <span class="text"><?= $subscription->full_name; ?></span>
