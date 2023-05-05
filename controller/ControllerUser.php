@@ -94,8 +94,21 @@ class ControllerUser extends MyController {
                                     "success"=>$success]);
     }
 
+    public function old_password_valid_service():void{
+        $res = "true";
+        $user=$this->get_user_or_redirect();
+        if(isset($_POST["old_password"])){
+            $old_password = $_POST["old_password"];
+            if(!$this->check_password ($old_password,$user->hashed_password)){
+                $res = "false";
+            }
+        }
+        echo $res;
+    }
+
     public function edit_password():void{
         $user=$this->get_user_or_redirect();
+        $justvalidate = $this->isJustValidateOn();
         $old_password ="";
         $new_password ="";
         $new_password_confirm ="";
@@ -134,6 +147,7 @@ class ControllerUser extends MyController {
                                     "old_password"=>$old_password,
                                     "new_password"=>$new_password,
                                     "new_password_confirm"=>$new_password_confirm,
+                                    "justvalidate"=>$justvalidate,
                                     "errors"=>$errors,"success"=>$success]);
     }
 
