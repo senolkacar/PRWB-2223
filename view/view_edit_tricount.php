@@ -207,9 +207,7 @@ $(function() {
                 });
 
                /* $('#save-button').on('click', function() {
-                    var isDisabled = $("#save-button").prop("disabled");
-                    console.log("isDisabled" + isDisabled);
-                   
+                    var isDisabled = $("#save-button").prop("disabled");                   
                     if (!isDisabled){
                         $("#settings-form").submit();
                         <?php if (count($errors) == 0): ?>
@@ -217,12 +215,8 @@ $(function() {
                             console.log(" formChanged " +   <?php echo count($errors); ?> );
                         <?php endif; ?>   
                     } else {
-                        formChanged = true;
-                        
+                        formChanged = true;                        
                     }
-                    
-                    console.log(" formChanged " + formChanged);
-
                 });
                 */
 

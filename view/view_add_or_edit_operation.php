@@ -105,7 +105,8 @@
 
             });
 
-         $('#delete-operation-button').on('click', function() {                     
+            <?php if ($operation_name == "edit") { ?>
+                $('#delete-operation-button').on('click', function() {                     
                     event.preventDefault();                  
                     Swal.fire({
                         title: 'Are you sure?',
@@ -123,13 +124,36 @@
                         }
                     });
                 });
+            <?php } ?>
+            
 
-         $('input').on('input', function() {
-            console.log("formChanged " +formChanged ); //ok for edit operation
-            formChanged = true;
-        });
+            $('input').on('input', function() {
+                console.log("formChanged " +formChanged ); //ok for edit operation
+                formChanged = true;
+            });
 
-        $('.btn.btn-outline-danger').on('click', function(e) {      //$(document).on('click', '.btn.btn-outline-danger', function(e)
+            $('#back-button-edit').on('click', function(e) {      //$(document).on('click', '.btn.btn-outline-danger', function(e)
+                    console.log("back " );            
+                        if (formChanged) {
+                            e.preventDefault();
+                            Swal.fire({
+                                title: 'Unsaved changes !',
+                                text: 'Are you sure you want to leave this form ? Changes you made will not be saved.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Leave Page',
+                                cancelButtonText: 'Cancel',
+                                confirmButtonColor: '#d33',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = $(this).attr('href');
+
+                                }
+                            });
+                        }
+            });
+
+            $('#back-button-add').on('click', function(e) {      //double
                 console.log("back " );            
                     if (formChanged) {
                         e.preventDefault();
@@ -148,12 +172,17 @@
                             }
                         });
                     }
-                });
+            });
+
 
 
         });
 
+       
+     
+       
         async function deleteOperation() {
+            <?php if ($operation_name == "edit") { ?>
             try {                               
                     await $.post("operation/delete_operation_service/" + <?= $operation->id ?>, null);
                     window.location.href = "tricount/show_tricount/<?=$operation->tricount->id ?>";
@@ -161,6 +190,7 @@
                 } catch(e) {
                                
                     }    
+            <?php } ?>
         }
 
         function getTotalAmount() {
@@ -218,9 +248,9 @@
         <div class="container p-3 mb-3 text-dark" style="background-color:#E3F2FD">
             <div class="d-flex justify-content-between">
                 <?php if ($operation_name == "add") { ?>
-                    <a class="btn btn-outline-danger" id='back-button' href="tricount/show_tricount/<?= $tricount->id; ?>">Back</a>
+                    <a class="btn btn-outline-danger" id='back-button-add' href="tricount/show_tricount/<?= $tricount->id; ?>">Back</a>
                 <?php } else { ?>
-                    <a class="btn btn-outline-danger" id='back-button' href="operation/show_operation/<?= $operation->id; ?>">Back</a>
+                    <a class="btn btn-outline-danger" id='back-button-edit' href="operation/show_operation/<?= $operation->id; ?>">Back</a>
                 <?php }; ?>
                 <div class="text-secondary fw-bold mt-2"><?= $tricount->title ?> &#32;<i class="bi bi-caret-right-fill"></i> &#32; Expenses </div>
                 <button type="submit" class="btn btn-primary" form="form1">Save</button>
