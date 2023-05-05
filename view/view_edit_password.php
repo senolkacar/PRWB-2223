@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
         <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
         <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
+        <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
         <script>
             <?php if($justvalidate):?>
                 let oldPasswordValid = false;
@@ -124,6 +125,31 @@
                 $("input:text:first").focus;
             });
             <?php endif;?>
+            let formChanged = false;
+            $(function() {
+            $('input').on('input', function() {
+                formChanged = true;
+            });
+            $('#back-button').on('click', function(e) {                    
+                    if (formChanged) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Unsaved changes !',
+                            text: 'Are you sure you want to leave this form ? Changes you made will not be saved.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Leave Page',
+                            cancelButtonText: 'Cancel',
+                            confirmButtonColor: '#d33',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = $(this).attr('href');
+                            }
+                        });
+                    }
+                });
+            
+            });
         </script>
     </head>
     <body>
@@ -131,7 +157,7 @@
 
         <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
             <div class="d-flex justify-content-between mb-3">  
-                <a class="btn btn-outline-danger" href="user/settings">Back</a>
+                <a class="btn btn-outline-danger" id="back-button" href="user/settings">Back</a>
                 <div class="text-secondary fw-bold mt-2" >Change Password</div>
                 <div class="h2"> </div>
             </div>

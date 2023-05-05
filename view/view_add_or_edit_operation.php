@@ -125,7 +125,7 @@
             <?php } ?>            
 
             $('input').on('input', function() {
-               // console.log("formChanged " +formChanged ); 
+               console.log("formChanged " +formChanged ); 
                 formChanged = true;
             });
      
@@ -136,8 +136,7 @@
         });
 
        
-        function handleBackButtonClick(event) {
-            console.log("back " );            
+        function handleBackButtonClick(event) {          
             if (formChanged) {
                 event.preventDefault();
                 Swal.fire({
