@@ -31,7 +31,9 @@
                     });*/
 
                     $('#save-button').on('click', function() {
-                        formChanged = false;                        
+                        <?php if (count($errors) == 0 && strlen($success) != 0 ): ?>
+                        formChanged = false;  
+                        <?php endif; ?>                      
                     });
 
                      $('#back-button').on('click', function(e) {                    
