@@ -206,18 +206,25 @@ $(function() {
                     formChanged = true;
                 });
 
-                $('#save-button').on('click', function() {
+               /* $('#save-button').on('click', function() {
                     var isDisabled = $("#save-button").prop("disabled");
-                    //console.log("isDisabled" + isDisabled);
-                    <?php if (count($errors) == 0): ?>
-                    formChanged = false;
-                    //console.log(" formChanged " +   <?php echo count($errors); ?> );
-                    <?php endif; ?>   
-                    if (isDisabled)
-                    formChanged = true;
-                    //console.log(" formChanged " + formChanged);
+                    console.log("isDisabled" + isDisabled);
+                   
+                    if (!isDisabled){
+                        $("#settings-form").submit();
+                        <?php if (count($errors) == 0): ?>
+                            formChanged = false;
+                            console.log(" formChanged " +   <?php echo count($errors); ?> );
+                        <?php endif; ?>   
+                    } else {
+                        formChanged = true;
+                        
+                    }
+                    
+                    console.log(" formChanged " + formChanged);
 
                 });
+                */
 
                 $('#back-button').on('click', function(e) {                    
                     if (formChanged) {
