@@ -25,7 +25,7 @@ Class MyController extends Controller{
         return $errors;
     }
 
-    private static function validate_email_format(string $mail):array{
+    public static function validate_email_format(string $mail):array{
         $errors=[];
         if(!strlen(trim($mail))>0){
             $errors[] = "Email is required";
@@ -102,7 +102,7 @@ Class MyController extends Controller{
     }
 
 
-    private function validate_full_name_format(string $full_name): array{   
+    public function validate_full_name_format(string $full_name): array{   
         $errors=[];
         if(strlen(trim($full_name))<3){
             $errors[] = "Full name must be at least 3 characters long";

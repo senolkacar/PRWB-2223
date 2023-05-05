@@ -13,6 +13,7 @@
     <script>
         <?php if ($justvalidate) : ?>
             let emailExists = false;
+            let fNameExists = false;
 
             function debounce(fn, time) {
                 var timer;
@@ -31,7 +32,7 @@
                     focusInvalidField: false,
                     errorFieldCssClass: 'is-invalid',
                     successFieldCssClass: 'is-valid',
-                    successLabelCssClass: '',
+                    successLabelCssClass: 'valid-feedback',
                     errorLabelCssClass: 'invalid-feedback',
                 });
                 validation
@@ -120,7 +121,6 @@
                     ], {
                         successMessage: "Looks good!",
                     }).onValidate(debounce(async function(event) {
-                        if ($("#mail").hasClass("form-control is-valid")) {
                             emailExists = await $.post("main/email_exists_service/", {
                                 'mail': $("#mail").val()
                             }).then(function(data) {
@@ -132,11 +132,23 @@
                                     '#mail': 'Mail already exists for this user please sign in or use another mail'
                                 });
                             }
-                        }
+                            fnameExists = await $.post("main/fname_exists_service/", {
+                                'full_name': $("#full_name").val()
+                            }).then(function(data) {
+                                return (data.trim() === "true");
+                            });
+
+                            if (fnameExists) {
+                                this.showErrors({
+                                    '#full_name': 'Full name already exists for this user please sign in or use another full name'
+                                });
+                            }
 
                     }, 300))
                     .onSuccess(function(event) {
-                        event.target.submit();
+                        if(!emailExists && !fnameExists){
+                            $("#signupform").submit();
+                        }
                     });
                 $("input:text:first").focus;
             });

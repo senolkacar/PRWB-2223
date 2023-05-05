@@ -79,8 +79,10 @@
                     validateBeforeSubmitting: true,
                         lockForm: true,
                         focusInvalidField: false,
-                        successLabelCssClass: ['success'],
-                        errorLabelCssClass: ['errors']
+                        errorFieldCssClass: 'is-invalid',
+                        successFieldCssClass: 'is-valid',
+                        successLabelCssClass: 'text-success',
+                        errorLabelCssClass: 'text-danger',
                     });
 
                 validation
