@@ -59,8 +59,8 @@
 
 
                 <?php if ($justvalidate) : ?>
-                    let emailExists;
-	                let nameExists;
+                    let emailAvailable;
+	                let nameAvailable;
 
                     function debounce(fn, time) {
                         var timer;
@@ -114,17 +114,21 @@
                         successMessage: 'Looks good!'
                     })
                    .onValidate(debounce(async function(event) {
-			            nameExists = await $.getJSON("user/name_available_service/" + $("#full_name").val());
-                        if (!nameExists)
+			            // nameAvailable = await $.getJSON("user/name_available_service/" + encodeURIComponent($("#full_name").val()));
+                        //To ensure that the special characters in the full_name parameter are properly encoded, I use the HTTP POST method instead of GET
+
+                        nameAvailable = await $.post("user/name_available_service", { 'full_name': $("#full_name").val()}, null, 'json');
+                        //console.log(nameAvailable);
+                        if (!nameAvailable)
                             this.showErrors({ '#full_name': 'Name already exists' });
 
-                        emailExists = await $.getJSON("user/email_available_service/" + $("#mail").val());
-                        if (!emailExists)
+                        emailAvailable = await $.post("user/email_available_service/",{'mail':$("#mail").val()}, null, 'json');
+                        if (!emailAvailable)
                             this.showErrors({ '#mail': 'Email already exists' });
 
                     }, 300))
                     .onSuccess(function(event) {
-                        //if(nameExists && emailExists)
+                        if(nameAvailable && emailAvailable)
                         event.target.submit();
                         });
 

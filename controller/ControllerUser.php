@@ -24,8 +24,8 @@ class ControllerUser extends MyController {
         $res = "true";
         $user_connected = $this->get_user_or_false();//false ?
        
-        if(isset($_GET["param1"]) && $_GET["param1"] !== ""){
-            $user = User::get_user_by_name($_GET["param1"]);
+        if(isset($_POST["full_name"]) && $_POST["full_name"] !== ""){
+            $user = User::get_user_by_name($_POST["full_name"]);
             if($user && $user->id != $user_connected->id)
                 $res = "false";
         }
@@ -36,8 +36,8 @@ class ControllerUser extends MyController {
         $res = "true";
         $user_connected = $this->get_user_or_false();
        
-        if(isset($_GET["param1"]) && $_GET["param1"] !== ""){
-            $user = User::get_user_by_mail($_GET["param1"]);
+        if(isset($_POST["mail"]) && $_POST["mail"] !== ""){
+            $user = User::get_user_by_mail($_POST["mail"]);
             if($user && $user->id != $user_connected->id)
                 $res = "false";
         }
