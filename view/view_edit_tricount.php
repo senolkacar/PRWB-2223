@@ -13,8 +13,8 @@
         <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
         <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
         <script>
-             let title, description, errTitle, errDescription;
-             let userID = <?= $user->id ?>;
+            let title, description, errTitle, errDescription;
+            let userID = <?= $user->id ?>;
             <?php if ($justvalidate) { ?>
                 let titleExists = false;
 
@@ -84,83 +84,84 @@
                     $("input:text:first").focus;
                 });
             <?php } else { ?>
-$(function() {
-    title = $("#title");
-    errTitle = $("#errTitle");
-    errDescription = $("#errDescription");
-    $("#title").blur(function() {
-        errTitle.val("");
-        if (!(/(\s*\w\s*){3}/).test($("#title").val())) {
-            errTitle.text("Title must be at least 3 characters");
-            updateView();
-        } else {
-            check_tricount_exists().then(function(data) {
-                if (data.trim() === "true") {
-                    errTitle.text("Title already exists for this user");
-                    updateView();
-                } else {
-                    errTitle.text("");
-                    updateView();
-                }
-            });
-        }
+                $(function() {
+                    title = $("#title");
+                    errTitle = $("#errTitle");
+                    errDescription = $("#errDescription");
+                    $("#title").blur(function() {
+                        errTitle.val("");
+                        if (!(/(\s*\w\s*){3}/).test($("#title").val())) {
+                            errTitle.text("Title must be at least 3 characters");
+                            updateView();
+                        } else {
+                            check_tricount_exists().then(function(data) {
+                                if (data.trim() === "true") {
+                                    errTitle.text("Title already exists for this user");
+                                    updateView();
+                                } else {
+                                    errTitle.text("");
+                                    updateView();
+                                }
+                            });
+                        }
 
-        async function check_tricount_exists() {
-            let res = await $.post("tricount/tricount_exists_service/", {
-                'creator': userID,
-                'title': $("#title").val(),
-                'mode':'edit',
-                'tricount': <?= $tricount->id ?>
-            }).then(function(data) {
-                return data;
-            });
-            updateView();
-            return res;
-        }
-    });
+                        async function check_tricount_exists() {
+                            let res = await $.post("tricount/tricount_exists_service/", {
+                                'creator': userID,
+                                'title': $("#title").val(),
+                                'mode':'edit',
+                                'tricount': <?= $tricount->id ?>
+                            }).then(function(data) {
+                                return data;
+                            });
+                            updateView();
+                            return res;
+                        }
+                    });
 
-    function updateView() {
-        if (errTitle.text() == "") {
-            $("#errTitle").html("");
-            $("#successTitle").show();
-            $("#title").attr("class", "form-control is-valid");
-        } else {
-            $("#successTitle").hide();
-            $("#errTitle").html(errTitle.text());
-            $("#title").attr("class", "form-control is-invalid");
+                    function updateView() {
+                        if (errTitle.text() == "") {
+                            $("#errTitle").html("");
+                            $("#successTitle").show();
+                            $("#title").attr("class", "form-control is-valid");
+                        } else {
+                            $("#successTitle").hide();
+                            $("#errTitle").html(errTitle.text());
+                            $("#title").attr("class", "form-control is-invalid");
 
-        }
-        setDisableButton();
-    }
+                        }
+                        setDisableButton();
+                    }
 
-    $("#description").blur(function() {
-        errDescription.val("");
-        if ($("#description").val().length > 0 && !(/(\s*\w\s*){3}/).test($("#description").val())) {
-            errDescription.val("If description is not empty, it must contain at least 3 characters");
-        }
+                    $("#description").blur(function() {
+                        errDescription.val("");
+                        if ($("#description").val().length > 0 && !(/(\s*\w\s*){3}/).test($("#description").val())) {
+                            errDescription.val("If description is not empty, it must contain at least 3 characters");
+                        }
 
-        if (errDescription.val() == "") {
-            $("#errDescription").html("");
-            $("#successDescription").show();
-            $("#description").attr("class", "form-control is-valid");
-        } else {
-            $("#successDescription").hide();
-            $("#errDescription").html(errDescription.val());
-            $("#description").attr("class", "form-control is-invalid");
-        }  
-        setDisableButton();
-});
+                        if (errDescription.val() == "") {
+                            $("#errDescription").html("");
+                            $("#successDescription").show();
+                            $("#description").attr("class", "form-control is-valid");
+                        } else {
+                            $("#successDescription").hide();
+                            $("#errDescription").html(errDescription.val());
+                            $("#description").attr("class", "form-control is-invalid");
+                        }  
+                        setDisableButton();
+                    });
 
-    function setDisableButton() {
-        if ($("#description").hasClass("form-control is-invalid") || $("#title").hasClass("form-control is-invalid")) {
-            $("#save-button").prop("disabled", true);
-        } else {
-            $("#save-button").prop("disabled", false);
-        }
-    }
-   
-});
-<?php } ?>
+                    function setDisableButton() {
+                        if ($("#description").hasClass("form-control is-invalid") || $("#title").hasClass("form-control is-invalid")) {
+                            $("#save-button").prop("disabled", true);
+                        } else {
+                            $("#save-button").prop("disabled", false);
+                        }
+                    }
+            
+                });
+            <?php } ?>
+
             const tricountId = <?= $tricount->id ?>;
             let subscribers = <?=$subscribers_json ?>;
             let subscribersList;
@@ -234,7 +235,6 @@ $(function() {
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href = $(this).attr('href');
-
                             }
                         });
                     }
@@ -429,7 +429,6 @@ $(function() {
                 </div>
                 </div>
                
-
                 <?php if (count($errors_title) != 0): ?>
                     <div class='errors'>
                         <ul>
@@ -439,7 +438,6 @@ $(function() {
                         </ul>
                     </div>
                 <?php endif; ?>
-
 
                <div class="mb-3 mt-3">
                     <label for='description'> Descripton (optional) :  </label>
@@ -460,8 +458,6 @@ $(function() {
                     </div>
                 <?php endif; ?>
             </form>
-
-
            
                 <h2>Subscriptions</h2>                    
                 <ul class="list-group" id="participant-list">
@@ -479,8 +475,7 @@ $(function() {
                             <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
-                </ul> 
-                              
+                </ul>                           
                 
             <br>
 
@@ -504,10 +499,8 @@ $(function() {
             <br>
             <div class="container-sm">            
             <div class="text-danger"><?= $error; ?> </div>    
-            </div>  
-            
-            <br>
-            
+            </div>              
+            <br>            
 
         </div>
         <br><br>                    
@@ -516,8 +509,6 @@ $(function() {
             <a href='tricount/delete/<?=$tricount->id; ?>' id="delete-tricount" class="btn btn-danger w-100"> Delete this tricount </a>
             </div>
         </footer >
-
-
        
     </body>
 </html>

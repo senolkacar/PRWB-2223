@@ -22,10 +22,9 @@ class ControllerTricount extends MyController {
     } 
 
     public function tricount_exists_service(): void{
-        $this->get_user_or_redirect();
+        $this->get_user_or_redirect();//get_user_or_false();
         $res = "false";
-
-        
+     
         if(isset(($_POST["creator"])) && isset($_POST["title"]) && isset($_POST["mode"]) && isset($_POST["tricount"])){
             $mode = $_POST["mode"];
             if(($mode != "edit" && $mode != "add") || !is_numeric($_POST["creator"]) || !is_numeric($_POST["tricount"])){
