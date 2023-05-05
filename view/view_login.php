@@ -27,14 +27,14 @@
             $(function() {
                 const validation = new JustValidate('#loginform', {
                     validateBeforeSubmitting: true,
-                    lockForm: false,
+                    lockForm: true,
                     focusInvalidField: false,
                     errorFieldCssClass: 'is-invalid',
                     successFieldCssClass: 'is-valid',
                     successLabelCssClass: 'valid-feedback',
                     errorLabelCssClass: 'invalid-feedback',
                 });
-            
+
                 validation
                     .addField('#mail',
                         [{
@@ -70,9 +70,8 @@
                     ], {
                         successMessage: "Looks good!",
                     })
-                    .onValidate(debounce(async function(event){
-                        if($("#mail").hasClass("form-control is-valid")){
-                            emailExists = await $.post("main/email_exists_service/", {
+                    .onValidate(debounce(async function(event) {
+                        emailExists = await $.post("main/email_exists_service/", {
                             'mail': $("#mail").val()
                         }).then(function(data) {
                             return (data.trim() === "true");
@@ -83,12 +82,14 @@
                                 '#mail': 'Mail does not exist for this user please sign up'
                             });
                         }
-                        }
+
 
                     }, 300))
-                    .onSuccess(function(event) {   
-                        event.target.submit();
-});
+                    .onSuccess(function(event) {
+                        if (emailExists) {
+                            $("#loginform").submit();
+                        }
+                    });
                 $("input:text:first").focus;
             });
 
@@ -109,35 +110,35 @@
             <form id="loginform" action="main/login" method="post">
                 <h2 class="text-center mt-3 pb-3 border-bottom">Sign In</h2>
                 <div class="mt-3">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
-                    <input type="email" class="form-control <?php echo count($errors) != 0 ? 'is-invalid' : '' ?>" placeholder="Email" name="mail" id="mail" value="<?= $mail ?>">
-                </div>
-                <div class="mt-3">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                    <input type="password" class="form-control <?php echo count($errors) != 0 ? 'is-invalid' : '' ?>" placeholder="Password" name="password" id="password" value="<?= $password ?>">
-                </div>
-                </div>
-                <div class="form-group mt-3 mb-3">
-                    <button type="submit" class="btn btn-primary btn-block w-100">Log in</button>
-                </div>
-
-                <div class="container-sm">
-                    <?php if (count($errors) != 0) : ?>
-                        <div class='errors'>
-                            <ul>
-                                <?php foreach ($errors as $error) : ?>
-                                    <li class="text-danger"><?= $error; ?></li>
-                                <?php endforeach; ?>
-                            </ul>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
+                        <input type="email" class="form-control <?php echo count($errors) != 0 ? 'is-invalid' : '' ?>" placeholder="Email" name="mail" id="mail" value="<?= $mail ?>">
+                    </div>
+                    <div class="mt-3">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" class="form-control <?php echo count($errors) != 0 ? 'is-invalid' : '' ?>" placeholder="Password" name="password" id="password" value="<?= $password ?>">
                         </div>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                    <div class="form-group mt-3 mb-3">
+                        <button type="submit" class="btn btn-primary btn-block w-100">Log in</button>
+                    </div>
 
-                <div class="text-center mb-3">
-                    <a href="main/signup" class="float-center text-decoration-none">New here ? Click here to join the party <i class="fa-solid fa-heart"></i> !</a>
-                </div>
+                    <div class="container-sm">
+                        <?php if (count($errors) != 0) : ?>
+                            <div class='errors'>
+                                <ul>
+                                    <?php foreach ($errors as $error) : ?>
+                                        <li class="text-danger"><?= $error; ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="text-center mb-3">
+                        <a href="main/signup" class="float-center text-decoration-none">New here ? Click here to join the party <i class="fa-solid fa-heart"></i> !</a>
+                    </div>
             </form>
         </div>
     </div>
