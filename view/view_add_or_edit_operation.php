@@ -11,10 +11,84 @@
     <script src="lib/jquery-3.6.4.min.js"></script>
     <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
     <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
+    <script src="lib/just-validate-plugin-date-1.2.0.production.min.js" type="text/javascript"></script>
     <script>
         let totalAmount, totalWeight;
-        let formChanged = false; 
-        
+        let formChanged = false;
+
+        <?php if ($justvalidate) : ?>
+            $(function() {
+                const validation = new JustValidate('#form1', {
+                    validateBeforeSubmitting: true,
+                    lockForm: true,
+                    focusInvalidField: false,
+                    errorFieldCssClass: 'is-invalid',
+                    successFieldCssClass: 'is-valid',
+                    successLabelCssClass: 'valid-feedback',
+                    errorLabelCssClass: 'invalid-feedback',
+                });
+                validation
+                    .addField('#title', [{
+                            rule: 'required',
+                            errorMessage: 'Title is required'
+                        },
+                        {
+                            rule: 'minLength',
+                            value: 3,
+                            errorMessage: 'Title must be at least 3 characters'
+                        },
+                    ], {
+                        successMessage: "Looks good!",
+                    })
+                    .addField('#amount-total', [{
+                            rule: 'required',
+                            errorMessage: 'Total amount is required'
+                        },
+                        {
+                            rule: 'minNumber',
+                            value: 0.01,
+                            errorMessage: 'Amount must be greater than or equal to 1 cent'
+                        },
+                    ], {
+                        successMessage: "Looks good!",
+                    })
+                    .addField('#date', [{
+                            rule: 'required',
+                            errorMessage: 'Date is required'
+                        },
+                        {
+                            plugin: JustValidatePluginDate((fields) => {
+                                return {
+                                    isBefore: new Date(),
+                                };
+                            }),
+                            errorMessage: 'Date cannot be in the future',
+                        },
+                    ], {
+                        successMessage: "Looks good!",
+                    })
+                    .addField('input[name="checkboxes[]"]', [{
+                        rule: 'required',
+                        errorMessage: 'At least one participant must be selected'
+                    }, ])
+                    .addField('input[name="weights[]"]', [{
+                            rule: 'required',
+                            errorMessage: 'Weight cannot be empty'
+                        },
+                        {
+                            rule: 'minNumber',
+                            value: 1,
+                            errorMessage: 'Weight must be greater than or equal to 1'
+                        },
+                    ])
+                    .onSuccess(function() {
+                        formChanged = false;
+                        $('#form1').submit();
+                    });
+
+            });
+        <?php endif; ?>
+
         $(function() {
 
             $('form').submit(function() {
@@ -44,11 +118,11 @@
             });
 
             $('#amount-total').on('change', function() {
-                if( parseFloat($('#amount-total').val()) < 0)
+                if (parseFloat($('#amount-total').val()) < 0)
                     $('#amount-total').val(0);
 
                 totalAmount = getTotalAmount();
-                
+
                 weight = getTotalWeight();
                 var ratios = getRatio();
 
@@ -104,12 +178,11 @@
             });
 
             <?php if ($operation_name == "edit") { ?>
-                $('#delete-operation-button').on('click', function() {                     
-                    event.preventDefault();                  
+                $('#delete-operation-button').on('click', function() {
+                    event.preventDefault();
                     Swal.fire({
                         title: 'Are you sure?',
-                        html: 
-                            'Do you really want to delete this operation ?' +
+                        html: 'Do you really want to delete this operation ?' +
                             '<br>' +
                             'This process cannot be undone.',
                         icon: 'warning',
@@ -118,25 +191,25 @@
                         cancelButtonText: 'Cancel',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            deleteOperation();                          
+                            deleteOperation();
                         }
                     });
                 });
-            <?php } ?>            
+            <?php } ?>
 
             $('input').on('input', function() {
-               console.log("formChanged " +formChanged ); 
+                console.log("formChanged " + formChanged);
                 formChanged = true;
             });
-     
+
 
             $('#back-button-edit').on('click', handleBackButtonClick);
             $('#back-button-add').on('click', handleBackButtonClick);
 
         });
 
-       
-        function handleBackButtonClick(event) {          
+
+        function handleBackButtonClick(event) {
             if (formChanged) {
                 event.preventDefault();
                 Swal.fire({
@@ -154,22 +227,22 @@
                 });
             }
         }
-     
-       
+
+
         async function deleteOperation() {
             <?php if ($operation_name == "edit") { ?>
-            try {                               
+                try {
                     await $.post("operation/delete_operation_service/" + <?= $operation->id ?>, null);
-                    window.location.href = "tricount/show_tricount/<?=$operation->tricount->id ?>";
+                    window.location.href = "tricount/show_tricount/<?= $operation->tricount->id ?>";
 
-                } catch(e) {
-                               
-                    }    
+                } catch (e) {
+
+                }
             <?php } ?>
         }
 
         function getTotalAmount() {
-            if ($('#amount-total').val() !== "" ) {
+            if ($('#amount-total').val() !== "") {
                 totalAmount = parseFloat($('#amount-total').val());
             } else totalAmount = 0;
 
@@ -212,9 +285,9 @@
 
     <noscript>
         <style>
-        .floating-amount-js {
-      display: none;
-        }
+            .floating-amount-js {
+                display: none;
+            }
         </style>
     </noscript>
 
@@ -269,7 +342,9 @@
                     </div>
                 <?php endif; ?>
                 <label for="date">Date</label>
+                <div>
                 <input type="date" class="form-control mt-2 mb-2" id="date" name="date" required value="<?= $date ?>">
+                </div>
                 <?php if (count($errors_date) != 0) : ?>
                     <div class='errors'>
                         <ul>
@@ -288,11 +363,14 @@
                 <p class="mt-2">For whom ?(select at least one)</p>
 
                 <?php foreach ($subscriptions as $subscription) : ?>
+                    
                     <div class='input-group input-group-lg'>
                         <div class="input-group-text mb-3">
-                            <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?= $subscription->id ?>"
-                                <?php if (in_array($subscription->id, $checkboxes)) { echo 'checked'; } ?>>
+                            <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?= $subscription->id ?>" <?php if (in_array($subscription->id, $checkboxes)) {
+                                                                                                                                        echo 'checked';
+                                                                                                                                    } ?>>
                         </div>
+                    
                         <div class="input-group-text mb-3 w-50">
                             <span class="text"><?= $subscription->full_name; ?></span>
                         </div>
@@ -307,8 +385,8 @@
                             <label for="subscription-amount<?= $subscription->id ?>">Amount</label>
                         </div>
                         <div class="form-floating">
-                            <input type="number" id="weights<?=$subscription->id?>" class="form-control mb-3" name="weights[]" min="0" value="<?= $weight ?>">
-                            <label for="weights<?=$subscription->id?>">Weight</label>
+                            <input type="number" id="weights<?= $subscription->id ?>" class="form-control mb-3" name="weights[]" min="0" value="<?= $weight ?>">
+                            <label for="weights<?= $subscription->id ?>">Weight</label>
                         </div>
                         <input type="hidden" name="ids[]" value="<?= $subscription->id ?>">
                     </div>
@@ -335,7 +413,7 @@
         </div>
         <?php if ($operation_name == "edit") { ?>
             <footer class="footer mt-auto w-100">
-                <a class="btn btn-danger w-100" id="delete-operation-button"  href="operation/delete_operation/<?= $operation->id; ?>">Delete</a>
+                <a class="btn btn-danger w-100" id="delete-operation-button" href="operation/delete_operation/<?= $operation->id; ?>">Delete</a>
             </footer>
         <?php }; ?>
     </div>

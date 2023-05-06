@@ -64,6 +64,7 @@ class ControllerOperation extends MyController
     public function add_or_edit_operation(String $operation_value): void
     {
         $user = $this->get_user_or_redirect();
+        $justvalidate = $this->isJustValidateOn();
         $errors_title = [];
         $errors_amount = [];
         $errors_checkbox = [];
@@ -205,7 +206,8 @@ class ControllerOperation extends MyController
             "date"=> $date,
             "checkboxes"=> $checkboxes,
             "weights"=> $weights,
-            "ids"=> $ids
+            "ids"=> $ids,
+            "justvalidate" => $justvalidate
         ]);
     }
 
