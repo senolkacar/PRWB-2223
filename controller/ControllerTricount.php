@@ -184,7 +184,7 @@ class ControllerTricount extends MyController {
 
     }
 
-    private function save_edit_tricount(int $id, string $title, string $description): bool {//to delete
+    private function save_edit_tricount(int $id, string $title, string $description): bool {
         $user = $this->get_user_or_redirect();
         $tricount = Tricount::get_tricount_by_id($id);
 
@@ -223,6 +223,8 @@ class ControllerTricount extends MyController {
         echo $subscribers_json;
     }  
 
+
+
     public function get_user_not_tricount_subscrier_service() : void {
         $user = $this->get_user_or_redirect();
         $tricount = $this->get_tricount($user);
@@ -234,16 +236,24 @@ class ControllerTricount extends MyController {
         if(isset($_GET["param1"]) && is_numeric($_GET["param1"]) ) { 
             $id= (int)$_GET["param1"];                             
             $tricount = Tricount::get_tricount_by_id($id);
-            return $tricount;
-        }
+            if($tricount==null || (!$user->is_involved($id)&&!$user->is_creator($id))){
+                $this->redirect("tricount");
+            } else
+                return $tricount;
+        }else
+            $this->redirect("tricount");
     }
 
     public function add_subscription_service(): void {
+        $user = $this->get_user_or_redirect();
+        $tricount = $this->get_tricount($user);
         $subscriber = $this->new_subscription();
         echo $subscriber ? "true" : "false";
     }
 
      public function delete_subscription_service(): void {
+        $user = $this->get_user_or_redirect();
+        $tricount = $this->get_tricount($user);
         $subscriber = $this->remove_subscription();
         echo $subscriber ? "true" : "false";
 
