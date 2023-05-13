@@ -65,7 +65,9 @@ class ControllerTricount extends MyController {
         $errors_description = [];
         $errors=[];
         $justvalidate = $this->isJustValidateOn();
-        if(isset($_POST["title"])&&isset($_POST["description"])){  
+        if(isset($_GET["param1"])) {
+            $this->redirect("tricount","index");  
+        } else if(isset($_POST["title"])&&isset($_POST["description"])){  
             $title = $_POST["title"];
             $description = $_POST["description"];
             $tricount = new Tricount($title,$user,$description);
@@ -223,8 +225,6 @@ class ControllerTricount extends MyController {
         echo $subscribers_json;
     }  
 
-
-
     public function get_user_not_tricount_subscrier_service() : void {
         $user = $this->get_user_or_redirect();
         $tricount = $this->get_tricount($user);
@@ -260,6 +260,8 @@ class ControllerTricount extends MyController {
     }
 
     public function delete_tricount_service():void {
+        $user = $this->get_user_or_redirect();
+        $tricount = $this->get_tricount($user);
         $tricount = $this->delete_tricount();
         echo $tricount ? "true" : "false";
 
@@ -414,8 +416,6 @@ public function show_balance():void{
             $this->redirect("tricount");
 
         (new View("delete_tricount"))->show(["tricount"=>$tricount, "errors"=>$errors]);
-
-
         
     }
 
