@@ -3,14 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <title>Tricount</title>
-        <base href="<?= $web_root ?>"/>
+        <base href="<?= $web_root ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-        <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
+        <script src="lib/jquery-3.6.4.min.js" ></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-        <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
-        <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
+        <script src="lib/just-validate-4.2.0.production.min.js" ></script>
+        <script src="lib/sweetalert2@11.js"></script>
         
         <script>    
   
@@ -21,14 +21,6 @@
                      $('input').on('input', function() {
                          formChanged = true;
                      });     
-
-                     /*$('#save-button').on('click', function() {
-                        var errors = <?php echo json_encode($erros); ?>;// var err = <?= json_encode($erros) ?>;
-                        if(errors.length == 0) {                            
-                            formChanged = false;
-                        }
-                        
-                    });*/
 
                     $('#save-button').on('click', function() {
                         <?php if (count($errors) == 0 && strlen($success) != 0 ): ?>
@@ -162,7 +154,7 @@
                 <div class="h2">Edit your profile</div>
                 <div class="mb-3 mt-3">
                     <label for='mail'> Mail : </label>
-                    <input class="form-control" name='mail' id='mail' value="<?= $mail ?>"></input>
+                    <input class="form-control" name='mail' id='mail' value="<?= $mail ?>">
                 </div>
 
                     <?php if (count($errors_mail) != 0): ?>
@@ -177,7 +169,7 @@
 
                 <div class="mb-3 mt-3">
                     <label for='full_name'> Full name : </label>
-                    <input class="form-control" name='full_name' id='full_name' value="<?= $full_name ?>"></input>
+                    <input class="form-control" name='full_name' id='full_name' value="<?= $full_name ?>">
                 </div>
 
                     <?php if (count($errors_name) != 0): ?>
@@ -193,7 +185,7 @@
 
                 <div class="mb-3 mt-3">
                     <label for='iban'> Iban : </label>
-                    <input class="form-control" name='iban' id='iban' value="<?= $iban?>"></input>
+                    <input class="form-control" name='iban' id='iban' value="<?= $iban?>">
                 </div>
 
                     <?php if (count($errors_iban) != 0): ?>
