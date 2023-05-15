@@ -22,9 +22,7 @@ class ControllerUser extends MyController {
 
     public function name_available_service() : void {
         $res = "true";
-        $user_connected = $this->get_user_or_false();//false ? redirect ?
-        if(!$user_connected)
-        $res="false";
+        $user_connected = $this->get_user_or_false();// if the method is called by the client:redirect
         if(isset($_POST["full_name"]) && $_POST["full_name"] !== ""){
             $user = User::get_user_by_name($_POST["full_name"]);
             if($user && $user->id != $user_connected->id)

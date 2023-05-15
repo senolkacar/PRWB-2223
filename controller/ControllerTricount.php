@@ -65,9 +65,7 @@ class ControllerTricount extends MyController {
         $errors_description = [];
         $errors=[];
         $justvalidate = $this->isJustValidateOn();
-        if(isset($_GET["param1"])) {
-            $this->redirect("tricount","index");  
-        } else if(isset($_POST["title"])&&isset($_POST["description"])){  
+        if(isset($_POST["title"])&&isset($_POST["description"])){  
             $title = $_POST["title"];
             $description = $_POST["description"];
             $tricount = new Tricount($title,$user,$description);
@@ -219,7 +217,7 @@ class ControllerTricount extends MyController {
     }
 
     public function get_tricount_subscrier_service() : void {
-        $user = $this->get_user_or_redirect();
+        $user = $this->get_user_or_redirect();//it's better to user get_user_or_false() if the method is called by the server
         $tricount = $this->get_tricount($user);
         $subscribers_json = $tricount ->get_tricount_subscribers_as_json($user);
         echo $subscribers_json;
