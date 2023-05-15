@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title><?= $page_title ?></title>
-    <base href="<?= $web_root ?>" />
+    <base href="<?= $web_root ?>" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <script src="lib/jquery-3.6.4.min.js"></script>
-    <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
-    <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
-    <script src="lib/just-validate-plugin-date-1.2.0.production.min.js" type="text/javascript"></script>
+    <script src="lib/just-validate-4.2.0.production.min.js" ></script>
+    <script src="lib/sweetalert2@11.js" ></script>
+    <script src="lib/just-validate-plugin-date-1.2.0.production.min.js" ></script>
     <script>
         let totalAmount, totalWeight;
         let formChanged = false;
