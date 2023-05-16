@@ -233,6 +233,7 @@
             <?php if ($operation_name == "edit") { ?>
                 try {
                     await $.post("operation/delete_operation_service/" + <?= $operation->id ?>, null);
+                    await handleDeleteOperationSuccess();
                     window.location.href = "tricount/show_tricount/<?= $operation->tricount->id ?>";
 
                 } catch (e) {
@@ -240,6 +241,17 @@
                 }
             <?php } ?>
         }
+
+        async function handleDeleteOperationSuccess() {
+                await Swal.fire({
+                    title: 'Deleted!',
+                    text: 'This expense has been deleted.',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6',
+                });
+            }
 
         function getTotalAmount() {
             if ($('#amount-total').val() !== "") {
@@ -298,11 +310,11 @@
         <div class="container p-3 mb-3 text-dark" style="background-color:#E3F2FD">
             <div class="d-flex justify-content-between">
                 <?php if ($operation_name == "add") { ?>
-                    <a class="btn btn-outline-danger" id='back-button-add' href="tricount/show_tricount/<?= $tricount->id; ?>">Back</a>
+                    <a class="btn btn-outline-danger" id='back-button-add' href="tricount/show_tricount/<?= $tricount->id; ?>">Cancle</a>
                 <?php } else { ?>
-                    <a class="btn btn-outline-danger" id='back-button-edit' href="operation/show_operation/<?= $operation->id; ?>">Back</a>
+                    <a class="btn btn-outline-danger" id='back-button-edit' href="operation/show_operation/<?= $operation->id; ?>">Cancle</a>
                 <?php }; ?>
-                <div class="text-secondary fw-bold mt-2"><?= $tricount->title ?> &#32;<i class="bi bi-caret-right-fill"></i> &#32; Expenses </div>
+                <div class="text-secondary fw-bold mt-2"><?= $tricount->title ?> &#32;<i class="bi bi-caret-right-fill"></i> &#32; <?php echo $operation_name == "add" ? ' New ' : ' Edit ' ?> Expenses </div>
                 <button type="submit" class="btn btn-primary" form="form1">Save</button>
             </div>
         </div>
