@@ -290,18 +290,31 @@ class ControllerOperation extends MyController
 
 
     public function delete_operation_service():void {
-        $operation = $this->remove_operation();
-        echo $operation ? "ture" : "false";
+        $user = $this->get_user_or_redirect();        
+        $operation = $this->remove_operation($user);
+        echo $operation ? "true" : "false";
 
     }
 
-    private function remove_operation():Operation | false{
+    private function remove_operation(User $user):Operation|false{
         if(isset($_GET["param1"]) && is_numeric($_GET["param1"])){
             $id = $_GET["param1"];
             $operation = Operation::get_operation_by_id($id);
-            $operation->delete_operation();
-            return $operation;
+            if($operation){// && ($user->is_involved_in_operation($id)||$user->is_initiator_check($id))
+                $tricount = $operation->tricount;
+                if(!in_array($user,$tricount->get_users_including_creator())){
+                    $this->redirect("tricount");
+                   } else {
+                    $operation->delete_operation();
+                    return $operation;
+                   }              
+                
+            } else{
+                $this->redirect("tricount");//return false ?
+            }
+            
         }
+        //$this->redirect("tricount");//return false ?
         return false;
 
     }

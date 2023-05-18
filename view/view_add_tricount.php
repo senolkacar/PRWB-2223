@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="lib/jquery-3.6.4.min.js" ></script>
     <script src="lib/just-validate-4.2.0.production.min.js" ></script>
+    <script src="lib/sweetalert2@11.js"></script>
 
     <script>
         let userID = <?= $user->id ?>;
@@ -166,6 +167,38 @@
 
                 });
         <?php } ?>
+
+        let formChanged = false; 
+        $(function(){
+            $('textarea').on('change', function() {
+                    formChanged = true;
+                });
+
+            $('input').on('change', function() {
+                    formChanged = true;
+                });
+
+            $('#cancle_btn').on('click', function(e) {                    
+                    if (formChanged) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Unsaved changes !',
+                            text: 'Are you sure you want to leave this form ? Changes you made will not be saved.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Leave Page',
+                            cancelButtonText: 'Cancel',
+                            confirmButtonColor: '#d33',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = $(this).attr('href');
+                            }
+                        });
+                    }
+                });
+
+        });
+
     </script>
 </head>
 
@@ -173,7 +206,7 @@
     <header>
         <div class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
             <div class="d-flex justify-content-between mb-3">
-                <a href="tricount/index" class="btn btn-outline-danger"> Cancel </a>
+                <a href="tricount/index" id="cancle_btn" class="btn btn-outline-danger"> Cancel </a>
                 <div class="text-secondary fw-bold mt-2">Tricount &#32; <i class="bi bi-caret-right-fill"></i> &#32; Add </div>
                 <div> <button type="submit" id="save-button" class="btn btn-primary" form="addtricount">Save</button> </div>
             </div>

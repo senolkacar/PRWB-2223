@@ -300,6 +300,7 @@
                    // console.log("delete id " + id );
                     const res=await $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": id}, null, 'json');       
                     //console.log(res === true);//without ", null, 'json'" res="true" but not boolean
+                    await handleDeleteSubscriberSuccess();
                     getSubscribers();
                     sortSubscribers()
                     displaySubscribers();
@@ -310,6 +311,17 @@
                 } catch(e) {
                     subscribersList.html(" Error encountered while deleting the subscriber!");
                 }
+            }
+
+            async function handleDeleteSubscriberSuccess() {
+                await Swal.fire({
+                    title: 'Deleted!',
+                    text: 'This subscriber has been deleted.',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6',
+                });
             }
 
             async function addSubscriber(id){ 

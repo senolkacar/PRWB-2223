@@ -8,8 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
-    <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
+    <script src="lib/just-validate-4.2.0.production.min.js" ></script>
+    <script src="lib/jquery-3.6.4.min.js" ></script>
+    <script src="lib/sweetalert2@11.js"></script>
     <script>
         <?php if ($justvalidate) : ?>
             let emailExists = false;
@@ -154,6 +155,34 @@
             });
 
         <?php endif; ?>
+
+        let formChanged = false; 
+        $(function(){
+            $('input').on('change', function() {
+                    formChanged = true;
+            });
+
+            $('#cancle_btn').on('click', function(e) {                    
+                    if (formChanged) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Unsaved changes !',
+                            text: 'Are you sure you want to leave this form ? Changes you made will not be saved.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Leave Page',
+                            cancelButtonText: 'Cancel',
+                            confirmButtonColor: '#d33',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = $(this).attr('href');
+                            }
+                        });
+                    }
+                });
+
+        });
+
     </script>
 </head>
 
@@ -245,7 +274,7 @@
                 <?php endif; ?>
                 <input type="submit" class="btn btn-primary w-100 mt-3" value="Sign Up">
             </form>
-            <a href="main/index" class="btn btn-outline-danger w-100 mt-2 mb-3">Cancel</a>
+            <a href="main/index" id='cancle_btn' class="btn btn-outline-danger w-100 mt-2 mb-3">Cancel</a>
         </div>
     </div>
 </body>
