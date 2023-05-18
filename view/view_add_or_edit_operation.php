@@ -323,9 +323,9 @@
         <div class="container p-3 mb-3 text-dark" style="background-color:#E3F2FD">
             <div class="d-flex justify-content-between">
                 <?php if ($operation_name == "add") { ?>
-                    <a class="btn btn-outline-danger" id='back-button-add' href="tricount/show_tricount/<?= $tricount->id; ?>">Cancle</a>
+                    <a class="btn btn-outline-danger" id='back-button-add' href="tricount/show_tricount/<?= $tricount->id; ?>">Cancel</a>
                 <?php } else { ?>
-                    <a class="btn btn-outline-danger" id='back-button-edit' href="operation/show_operation/<?= $operation->id; ?>">Cancle</a>
+                    <a class="btn btn-outline-danger" id='back-button-edit' href="operation/show_operation/<?= $operation->id; ?>">Cancel</a>
                 <?php }; ?>
                 <div class="text-secondary fw-bold mt-2"><?= $tricount->title ?> &#32;<i class="bi bi-caret-right-fill"></i> &#32; <?php echo $operation_name == "add" ? ' New ' : ' Edit ' ?> Expenses </div>
                 <button type="submit" class="btn btn-primary" form="form1">Save</button>
@@ -389,7 +389,7 @@
                     <p class="mt-2">For whom ?(select at least one)</p>
                     <?php foreach ($subscriptions as $subscription) : ?>
 
-                        <div class='input-group input-group-lg'>
+                        <div class='input-group input-group-lg is-invalid'>
                             <div class="input-group-text mb-3">
                                 <input type="checkbox" id="checkbox<?= $subscription->id ?>" class="form-check-input" name="checkboxes[]" value="<?= $subscription->id ?>" <?php if (in_array($subscription->id, $checkboxes)) {
                                                                                                                                                                                 echo 'checked';
