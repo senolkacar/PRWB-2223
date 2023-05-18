@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title><?= $page_title ?></title>
-    <base href="<?= $web_root ?>" >
+    <base href="<?= $web_root ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <script src="lib/jquery-3.6.4.min.js"></script>
-    <script src="lib/just-validate-4.2.0.production.min.js" ></script>
-    <script src="lib/sweetalert2@11.js" ></script>
-    <script src="lib/just-validate-plugin-date-1.2.0.production.min.js" ></script>
+    <script src="lib/just-validate-4.2.0.production.min.js"></script>
+    <script src="lib/sweetalert2@11.js"></script>
+    <script src="lib/just-validate-plugin-date-1.2.0.production.min.js"></script>
     <script>
         let totalAmount, totalWeight;
         let formChanged = false;
@@ -27,6 +27,7 @@
                     successLabelCssClass: 'valid-feedback',
                     errorLabelCssClass: 'invalid-feedback',
                 });
+
                 validation
                     .addField('#title', [{
                             rule: 'required',
@@ -67,26 +68,34 @@
                     ], {
                         successMessage: "Looks good!",
                     })
-                    .addField('input[name="checkboxes[]"]', [{
-                        rule: 'required',
-                        errorMessage: 'At least one participant must be selected'
-                    }, ])
-                    .addField('input[name="weights[]"]', [{
-                            rule: 'required',
-                            errorMessage: 'Weight cannot be empty'
-                        },
-                        {
-                            rule: 'minNumber',
-                            value: 1,
-                            errorMessage: 'Weight must be greater than or equal to 1'
-                        },
-                    ])
+                    .addRequiredGroup('#errors-container',
+                        'Select atleast one participant'
+                        )
                     .onSuccess(function() {
                         formChanged = false;
                         $('#form1').submit();
                     });
 
+                $('input[name="weights[]"]').on('input change', function() {
+                    setTimeout(function() {
+                        validation.revalidateGroup('#errors-container').then(isValid => {
+                            if(isValid){
+                                <?php foreach ($subscriptions as $subscription) : ?>
+                                    $('#checkbox<?= $subscription->id ?>').removeClass('is-invalid');
+                                    $('#checkbox<?= $subscription->id ?>').removeAttr('style');
+                                    $('#subscription-amount<?= $subscription->id ?>').removeClass('is-invalid');
+                                    $('#subscription-amount<?= $subscription->id ?>').removeAttr('style');
+                                    $('#weights<?= $subscription->id ?>').removeClass('is-invalid');
+                                    $('#weights<?= $subscription->id ?>').removeAttr('style');
+                                <?php endforeach; ?>
+                            }
+                        })
+                    }, 100);
+                });
+
             });
+
+
         <?php endif; ?>
 
         $(function() {
@@ -140,6 +149,10 @@
                 for (var i = 0; i < checkboxes.length; i++) {
                     if (!$(checkboxes[i]).prop('checked')) {
                         $(weights[i]).val(0);
+                    } else {
+                        if ($(weights[i]).val() == 0) {
+                            $(weights[i]).val(1);
+                        }
                     }
                 }
                 totalAmount = getTotalAmount();
@@ -343,7 +356,7 @@
                 <?php endif; ?>
                 <label for="date">Date</label>
                 <div>
-                <input type="date" class="form-control mt-2 mb-2" id="date" name="date" required value="<?= $date ?>">
+                    <input type="date" class="form-control mt-2 mb-2" id="date" name="date" required value="<?= $date ?>">
                 </div>
                 <?php if (count($errors_date) != 0) : ?>
                     <div class='errors'>
@@ -360,62 +373,62 @@
                         <option value="<?= $subscription->id; ?>" <?php echo $payer != null && $subscription->id == $payer->id ? "selected" : "" ?>><?= $subscription->full_name; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <p class="mt-2">For whom ?(select at least one)</p>
+                <div id="errors-container">
+                    <p class="mt-2">For whom ?(select at least one)</p>
+                    <?php foreach ($subscriptions as $subscription) : ?>
 
-                <?php foreach ($subscriptions as $subscription) : ?>
-                    
-                    <div class='input-group input-group-lg'>
-                        <div class="input-group-text mb-3">
-                            <input type="checkbox" class="form-check-input" name="checkboxes[]" value="<?= $subscription->id ?>" <?php if (in_array($subscription->id, $checkboxes)) {
-                                                                                                                                        echo 'checked';
-                                                                                                                                    } ?>>
+                        <div class='input-group input-group-lg'>
+                            <div class="input-group-text mb-3">
+                                <input type="checkbox" id="checkbox<?= $subscription->id ?>" class="form-check-input" name="checkboxes[]" value="<?= $subscription->id ?>" <?php if (in_array($subscription->id, $checkboxes)) {
+                                                                                                                                                                                echo 'checked';
+                                                                                                                                                                            } ?>>
+                            </div>
+                            <div class="input-group-text mb-3 w-50">
+                                <span class="text"><?= $subscription->full_name; ?></span>
+                            </div>
+                            <?php $weight = 0; ?>
+                            <?php for ($i = 0; $i < count($weights); $i++) : ?>
+                                <?php if ($ids[$i] == $subscription->id) : ?>
+                                    <?php $weight = $weights[$i]; ?>
+                                <?php endif; ?>
+                            <?php endfor; ?>
+                            <div class="form-floating floating-amount-js" id="floating-amount-<?= $subscription->id ?>">
+                                <input type="number" id="subscription-amount<?= $subscription->id ?>" step="0.01" class="form-control mb-3" name="amount[]" value="0" readonly hidden>
+                                <label for="subscription-amount<?= $subscription->id ?>">Amount</label>
+                            </div>
+                            <div class="form-floating">
+                                <input type="number" id="weights<?= $subscription->id ?>" class="form-control mb-3" name="weights[]" min="0" value="<?= $weight ?>">
+                                <label for="weights<?= $subscription->id ?>">Weight</label>
+                            </div>
+                            <input type="hidden" name="ids[]" value="<?= $subscription->id ?>">
                         </div>
-                    
-                        <div class="input-group-text mb-3 w-50">
-                            <span class="text"><?= $subscription->full_name; ?></span>
+                    <?php endforeach; ?>
+                    <?php if (count($errors_checkbox) != 0) : ?>
+                        <div class='errors'>
+                            <ul>
+                                <?php foreach ($errors_checkbox as $error) : ?>
+                                    <li class="text-danger"><?= $error ?></li>
+                                <?php endforeach; ?>
+                            </ul>
                         </div>
-                        <?php $weight = 0; ?>
-                        <?php for ($i = 0; $i < count($weights); $i++) : ?>
-                            <?php if ($ids[$i] == $subscription->id) : ?>
-                                <?php $weight = $weights[$i]; ?>
-                            <?php endif; ?>
-                        <?php endfor; ?>
-                        <div class="form-floating floating-amount-js" id="floating-amount-<?= $subscription->id ?>">
-                            <input type="number" id="subscription-amount<?= $subscription->id ?>" step="0.01" class="form-control mb-3" name="amount[]" value="0" readonly hidden>
-                            <label for="subscription-amount<?= $subscription->id ?>">Amount</label>
+                    <?php endif; ?>
+                    <?php if (count($errors_weights) != 0) : ?>
+                        <div class='errors'>
+                            <ul>
+                                <?php foreach ($errors_weights as $error) : ?>
+                                    <li class="text-danger"><?= $error ?></li>
+                                <?php endforeach; ?>
+                            </ul>
                         </div>
-                        <div class="form-floating">
-                            <input type="number" id="weights<?= $subscription->id ?>" class="form-control mb-3" name="weights[]" min="0" value="<?= $weight ?>">
-                            <label for="weights<?= $subscription->id ?>">Weight</label>
-                        </div>
-                        <input type="hidden" name="ids[]" value="<?= $subscription->id ?>">
-                    </div>
-                <?php endforeach; ?>
-                <?php if (count($errors_checkbox) != 0) : ?>
-                    <div class='errors'>
-                        <ul>
-                            <?php foreach ($errors_checkbox as $error) : ?>
-                                <li class="text-danger"><?= $error ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
-                <?php if (count($errors_weights) != 0) : ?>
-                    <div class='errors'>
-                        <ul>
-                            <?php foreach ($errors_weights as $error) : ?>
-                                <li class="text-danger"><?= $error ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
+                    <?php endif; ?>
             </form>
+            </div>
         </div>
-        <?php if ($operation_name == "edit") { ?>
-            <footer class="footer mt-auto w-100">
-                <a class="btn btn-danger w-100" id="delete-operation-button" href="operation/delete_operation/<?= $operation->id; ?>">Delete</a>
-            </footer>
-        <?php }; ?>
+    <?php if ($operation_name == "edit") { ?>
+        <footer class="footer mt-3 w-100">
+            <a class="btn btn-danger w-100" id="delete-operation-button" href="operation/delete_operation/<?= $operation->id; ?>">Delete</a>
+        </footer>
+    <?php }; ?>
     </div>
 </body>
 
