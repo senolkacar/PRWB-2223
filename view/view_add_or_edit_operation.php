@@ -127,8 +127,8 @@
             });
 
             $('#amount-total').on('change', function() {
-                if (parseFloat($('#amount-total').val()) < 0)
-                    $('#amount-total').val(0);
+                //if (parseFloat($('#amount-total').val()) < 0)
+                //    $('#amount-total').val(0);
 
                 totalAmount = getTotalAmount();
 
@@ -211,7 +211,7 @@
             <?php } ?>
 
             $('input').on('input', function() {
-                console.log("formChanged " + formChanged);
+                //console.log("formChanged " + formChanged);
                 formChanged = true;
             });
 
@@ -245,9 +245,12 @@
         async function deleteOperation() {
             <?php if ($operation_name == "edit") { ?>
                 try {
-                    await $.post("operation/delete_operation_service/" + <?= $operation->id ?>, null);
-                    await handleDeleteOperationSuccess();
-                    window.location.href = "tricount/show_tricount/<?= $operation->tricount->id ?>";
+                    const res=await $.post("operation/delete_operation_service/" + <?= $operation->id ?>, null, null, 'json'); 
+                    if(res) {
+                        await handleDeleteOperationSuccess();
+                        window.location.href = "tricount/show_tricount/<?= $operation->tricount->id ?>";
+                    }
+                    
 
                 } catch (e) {
 
