@@ -272,7 +272,7 @@ class ControllerOperation extends MyController
                 $this->redirect("tricount");
             }
             $tricount = $operation->tricount;
-            if(in_array($user,$tricount->get_users_including_creator())){ //$user->is_involved_in_operation($id)||$user->is_initiator_check($id)
+            if(in_array($user,$tricount->get_users_including_creator())){ 
                 if(isset($_POST["operationid"])){
                     $operation = Operation::get_operation_by_id($id);
                     $operation->delete_operation();
@@ -301,22 +301,21 @@ class ControllerOperation extends MyController
         if(isset($_GET["param1"]) && is_numeric($_GET["param1"])){
             $id = $_GET["param1"];
             $operation = Operation::get_operation_by_id($id);
-            if($operation){// && ($user->is_involved_in_operation($id)||$user->is_initiator_check($id))
+            if($operation){
                 $tricount = $operation->tricount;
                 if(!in_array($user,$tricount->get_users_including_creator())){
-                    $this->redirect("tricount");
+                    return false;//$this->redirect("tricount");
                    } else {
                     $operation->delete_operation();
                     return $operation;
                    }              
                 
             } else{
-                $this->redirect("tricount");//return false ?
-            }
-            
+                return false;//$this->redirect("tricount");//return false ?
+            }            
         }
-        //$this->redirect("tricount");//return false ?
-        return false;
+        
+        return false;//$this->redirect("tricount");
 
     }
 
