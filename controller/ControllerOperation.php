@@ -271,7 +271,8 @@ class ControllerOperation extends MyController
             if (!$operation){
                 $this->redirect("tricount");
             }
-            if($user->is_involved_in_operation($id)||$user->is_initiator_check($id)){ 
+            $tricount = $operation->tricount;
+            if(in_array($user,$tricount->get_users_including_creator())){ //$user->is_involved_in_operation($id)||$user->is_initiator_check($id)
                 if(isset($_POST["operationid"])){
                     $operation = Operation::get_operation_by_id($id);
                     $operation->delete_operation();
