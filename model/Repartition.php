@@ -62,6 +62,10 @@ class Repartition extends Model {
     
     }
 
+    public function amount_by_user_and_operation(): float {
+        return Repartition::get_amount_by_user_and_operation($this->user,$this->operation);
+    }
+
     public static function get_balance_by_tricount(Tricount $tricount): array {
         $users = $tricount->get_users_including_creator();
         $operations = Operation::get_operations_by_tricount($tricount);

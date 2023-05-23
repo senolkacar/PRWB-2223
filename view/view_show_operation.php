@@ -28,7 +28,7 @@
             </div>
            
 
-            <?php if(Repartition::include_user($user,$operation)): ?>
+            <?php if($user->is_involved_in_operation($operation->id)): ?>
                 <?php echo " For ". $operation->get_nb_participants()." participants, including <b> me </b>" ?>
             <?php else: ?>
                 <?php echo " For ". $operation->get_nb_participants()." participants" ?>
@@ -54,7 +54,7 @@
                             <?php else: ?>
                             <div class="text">
                             <?php endif;?>
-                        <?php echo Repartition::get_amount_by_user_and_operation($repartition->user, $repartition->operation)." €"; ?> 
+                        <?php echo $repartition->amount_by_user_and_operation($repartition->user, $repartition->operation)." €"; ?> 
                         </div>
                     </div>
                     </li>
