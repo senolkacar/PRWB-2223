@@ -76,19 +76,15 @@
                         }).then(function(data) {
                             return (data.trim() === "true");
                         });
-
-                        if (!emailExists) {
+                        if($('#mail').hasClass('is-valid')&&!emailExists){
                             this.showErrors({
                                 '#mail': 'Mail does not exist for this user please sign up'
                             });
                         }
 
-
                     }, 300))
-                    .onSuccess(function(event) {
-                        if (emailExists) {
-                            $("#loginform").submit();
-                        }
+                    .onSuccess(function(event) { 
+                        $("#loginform").submit();
                     });
                 $("input:text:first").focus;
             });
