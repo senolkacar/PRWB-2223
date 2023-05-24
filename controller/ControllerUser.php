@@ -19,6 +19,30 @@ class ControllerUser extends MyController {
         (new View("settings"))->show(["user"=>$user]);
     }
 
+
+    public function name_available_service() : void {
+        $res = "true";
+        $user_connected = $this->get_user_or_false();// if the method is called by the client:redirect
+        if(isset($_POST["full_name"]) && $_POST["full_name"] !== ""){
+            $user = User::get_user_by_name($_POST["full_name"]);
+            if($user && $user->id != $user_connected->id)
+                $res = "false";
+        }
+        echo $res;
+    }
+
+    public function email_available_service() : void {
+        $res = "true";
+        //$user_connected = $this->get_user_or_false();
+       $user_connected = $this->get_user_or_redirect();
+        if(isset($_POST["mail"]) && $_POST["mail"] !== ""){
+            $user = User::get_user_by_mail($_POST["mail"]);
+            if($user && $user->id != $user_connected->id)
+                $res = "false";
+        }
+        echo $res;
+    }
+
     public function edit_profile():void{
         //currently it doesnt check if we change the mail to another user's mail
         $user=$this->get_user_or_redirect();
@@ -30,6 +54,8 @@ class ControllerUser extends MyController {
         $errors_iban=[];
         $errors = [];
         $success = "";
+        $justvalidate = $this->isJustValidateOn();
+
         if(isset($_POST["mail"])&&isset($_POST["full_name"])){
             $mail = $_POST["mail"];
             $full_name=$_POST["full_name"];
@@ -37,7 +63,7 @@ class ControllerUser extends MyController {
             $errors_mail = $this->validate_email($mail);
             $errors_name = $this->validate_full_name($full_name);
 
-            if(isset($_POST["iban"]) && strlen(trim($_POST["iban"]))>0){
+            if(isset($_POST["iban"])){
                 $iban = $_POST["iban"];
                 $errors_iban = $this->validate_iban($_POST["iban"]);          
             }
@@ -63,11 +89,25 @@ class ControllerUser extends MyController {
                                     "errors_name"=>$errors_name,
                                     "errors_iban"=>$errors_iban,
                                     "errors"=>$errors,
+                                    "justvalidate"=>$justvalidate,
                                     "success"=>$success]);
+    }
+
+    public function old_password_valid_service():void{
+        $res = "true";
+        $user=$this->get_user_or_redirect();
+        if(isset($_POST["old_password"])){
+            $old_password = $_POST["old_password"];
+            if(!$this->check_password ($old_password,$user->hashed_password)){
+                $res = "false";
+            }
+        }
+        echo $res;
     }
 
     public function edit_password():void{
         $user=$this->get_user_or_redirect();
+        $justvalidate = $this->isJustValidateOn();
         $old_password ="";
         $new_password ="";
         $new_password_confirm ="";
@@ -106,6 +146,7 @@ class ControllerUser extends MyController {
                                     "old_password"=>$old_password,
                                     "new_password"=>$new_password,
                                     "new_password_confirm"=>$new_password_confirm,
+                                    "justvalidate"=>$justvalidate,
                                     "errors"=>$errors,"success"=>$success]);
     }
 

@@ -25,7 +25,7 @@ Class MyController extends Controller{
         return $errors;
     }
 
-    private static function validate_email_format(string $mail):array{
+    public static function validate_email_format(string $mail):array{
         $errors=[];
         if(!strlen(trim($mail))>0){
             $errors[] = "Email is required";
@@ -102,7 +102,7 @@ Class MyController extends Controller{
     }
 
 
-    private function validate_full_name_format(string $full_name): array{   
+    public function validate_full_name_format(string $full_name): array{   
         $errors=[];
         if(strlen(trim($full_name))<3){
             $errors[] = "Full name must be at least 3 characters long";
@@ -157,8 +157,14 @@ Class MyController extends Controller{
     public function validate_weights(?array $weights): array{
         $errors=[];
         $total_weight = 0;
+        
         foreach($weights as $weight){
-            $total_weight += $weight;
+            if(is_numeric(trim($weight))){
+                $total_weight += floatval($weight);
+            }
+            if($weight==null || $weight==""){
+                $errors[] = "Weight is mandatory";
+            }
             if(!is_numeric(trim($weight))){
                 $errors[] = "Invalid value for weight";
             }
@@ -191,7 +197,14 @@ Class MyController extends Controller{
         return $errors;
     }
 
+    public function isJustValidateOn(): bool{
+        if(Configuration::get("just_validate")){
+            return true;
+        }else{
+            return false;
+        }
 
+    }
 
 }
 

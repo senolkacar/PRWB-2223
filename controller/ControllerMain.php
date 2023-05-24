@@ -6,14 +6,57 @@ require_once 'controller/MyController.php';
 
 class ControllerMain extends MyController{
 
+    public function email_exists_service(): void{
+       if(isset($_POST["mail"])){
+           $errors = [];
+            $errors= $this->validate_email_format($_POST["mail"]);
+           if(count($errors)==0){
+               $mail = $_POST["mail"];
+               $user = User::get_user_by_mail($mail);
+               if($user){
+                  echo "true";
+               }else{
+                  echo "false";
+               }
+        }else{
+            $this->redirect("main","index");
+    }
+
+    }else{
+        $this->redirect("main","index");
+    }
+}
+
+    public function fname_exists_service(): void{
+        if(isset($_POST["full_name"])){
+            $errors = [];
+            $errors= $this->validate_full_name_format($_POST["full_name"]);
+            if(count($errors)==0){
+                $full_name = $_POST["full_name"];
+                $user = User::get_user_by_name($full_name);
+                if($user){
+                   echo "true";
+                }else{
+                   echo "false";
+                }
+            }else{
+                $this->redirect("main","index");
+            }
+            
+     }else{
+            $this->redirect("main","index");
+        }
+    }
+
     public function index(): void{
         if($this->user_logged()){
             $this->redirect("tricount","index");
         }else{
+            $justvalidate = $this->isJustValidateOn();
             $mail ='';
             $password = '';
             $errors = [];
-            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors));
+            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors,"justvalidate"=>$justvalidate));
         }
 
     }
@@ -22,6 +65,7 @@ class ControllerMain extends MyController{
         $mail ='';
         $password = '';
         $errors = [];
+        $justvalidate = $this->isJustValidateOn();
         $user =$this->get_user_or_false();
         if($user){
             $this->redirect("tricount");
@@ -34,7 +78,7 @@ class ControllerMain extends MyController{
                     $this->log_user(User::get_user_by_mail($mail));
                 }
             }
-            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors));
+            (new View("login"))->show(array("mail"=>$mail,"password"=>$password,"errors"=>$errors,"justvalidate"=>$justvalidate));
 
         }
         
@@ -43,6 +87,7 @@ class ControllerMain extends MyController{
     public function signup(){
         $mail ='';
         $full_name = '';
+        $justvalidate = $this->isJustValidateOn();
         $iban = null;
         $password = '';
         $password_confirm = '';
@@ -85,6 +130,7 @@ class ControllerMain extends MyController{
                 "iban"=>$iban,
                 "password"=>$password,
                 "password_confirm"=>$password_confirm,
+                "justvalidate"=>$justvalidate,
                 "errors"=>$errors,
                 "errors_email"=>$errors_email,
                 "errors_full_name"=>$errors_full_name,

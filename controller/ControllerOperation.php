@@ -64,6 +64,7 @@ class ControllerOperation extends MyController
     public function add_or_edit_operation(String $operation_value): void
     {
         $user = $this->get_user_or_redirect();
+        $justvalidate = $this->isJustValidateOn();
         $errors_title = [];
         $errors_amount = [];
         $errors_checkbox = [];
@@ -205,7 +206,8 @@ class ControllerOperation extends MyController
             "date"=> $date,
             "checkboxes"=> $checkboxes,
             "weights"=> $weights,
-            "ids"=> $ids
+            "ids"=> $ids,
+            "justvalidate" => $justvalidate
         ]);
     }
 
@@ -269,7 +271,8 @@ class ControllerOperation extends MyController
             if (!$operation){
                 $this->redirect("tricount");
             }
-            if($user->is_involved_in_operation($id)||$user->is_initiator_check($id)){ 
+            $tricount = $operation->tricount;
+            if(in_array($user,$tricount->get_users_including_creator())){ 
                 if(isset($_POST["operationid"])){
                     $operation = Operation::get_operation_by_id($id);
                     $operation->delete_operation();
@@ -287,7 +290,34 @@ class ControllerOperation extends MyController
     }
 
 
+    public function delete_operation_service():void {
+        $user = $this->get_user_or_redirect();        
+        $operation = $this->remove_operation($user);
+        echo $operation ? "true" : "false";
 
+    }
+
+    private function remove_operation(User $user):Operation|false{
+        if(isset($_GET["param1"]) && is_numeric($_GET["param1"])){
+            $id = $_GET["param1"];
+            $operation = Operation::get_operation_by_id($id);
+            if($operation){
+                $tricount = $operation->tricount;
+                if(!in_array($user,$tricount->get_users_including_creator())){
+                    return false;//$this->redirect("tricount");
+                   } else {
+                    $operation->delete_operation();
+                    return $operation;
+                   }              
+                
+            } else{
+                return false;//$this->redirect("tricount");//return false ?
+            }            
+        }
+        
+        return false;//$this->redirect("tricount");
+
+    }
 
 
 

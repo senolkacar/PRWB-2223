@@ -10,14 +10,165 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
         <link rel="stylesheet" href="css/edit_tricount_style.css" type="text/css">
         <script src="lib/jquery-3.6.4.min.js" type="text/javascript"></script>
-        <script>    
-                 
+        <script src="lib/sweetalert2@11.js" type="text/javascript"></script>
+        <script src="lib/just-validate-4.2.0.production.min.js" type="text/javascript"></script>
+        <script>
+            let title, description, errTitle, errDescription;
+            let userID = <?= $user->id ?>;
+            <?php if ($justvalidate) { ?>
+                let titleExists = false;
+
+                function debounce(fn, time) {
+                    var timer;
+                    return function() {
+                        clearTimeout(timer);
+                        timer = setTimeout(() => {
+                            fn.apply(this, arguments);
+                        }, time);
+                    }
+                }
+
+                $(function() {
+                    const validation = new JustValidate('#settings-form', {
+                        validateBeforeSubmitting: true,
+                        lockForm: false,
+                        focusInvalidField: false,
+                        errorFieldCssClass: 'is-invalid',
+                        successFieldCssClass: 'is-valid',
+                        successLabelCssClass: "text-success",
+                        errorLabelCssClass: "text-danger",
+                    });
+                    validation
+                        .addField('#title', [{
+                                rule: 'required',
+                                errorMessage: 'Title is required'
+                            },
+                            {
+                                rule: 'minLength',
+                                value: 3,
+                                errorMessage: 'Title must be at least 3 characters'
+                            },
+                        ], {
+                            successMessage: "Looks good!",
+                        })
+                        .addField('#description', [{
+                            rule: 'minLength',
+                            value: 3,
+                            errorMessage: 'If description is not empty, it must contain at least 3 characters'
+                        }, ], {
+                            successMessage: "Looks good!"
+                        })
+                    validation.onValidate(debounce(async function(event) {
+                        titleExists = await $.post("tricount/tricount_exists_service/", {
+                            'creator': userID,
+                            'title': $("#title").val(),
+                            'mode': 'edit',
+                            'tricount': <?= $tricount->id ?>
+                        }).then(function(data) {
+                            return (data.trim() === "true");
+                        });
+
+                        if (titleExists) {
+                            this.showErrors({
+                                '#title': 'Title already exists for this user'
+                            });
+                        }
+                    }, 300));
+
+                    validation.onSuccess(function(event) {
+                        if (!titleExists) {
+                            event.target.submit();
+                        }
+                    });
+
+                    $("input:text:first").focus;
+                });
+            <?php } else { ?>
+                $(function() {
+                    title = $("#title");
+                    errTitle = $("#errTitle");
+                    errDescription = $("#errDescription");
+                    $("#title").blur(function() {
+                        errTitle.val("");
+                        if (!(/(\s*\w\s*){3}/).test($("#title").val())) {
+                            errTitle.text("Title must be at least 3 characters");
+                            updateView();
+                        } else {
+                            check_tricount_exists().then(function(data) {
+                                if (data.trim() === "true") {
+                                    errTitle.text("Title already exists for this user");
+                                    updateView();
+                                } else {
+                                    errTitle.text("");
+                                    updateView();
+                                }
+                            });
+                        }
+
+                        async function check_tricount_exists() {
+                            let res = await $.post("tricount/tricount_exists_service/", {
+                                'creator': userID,
+                                'title': $("#title").val(),
+                                'mode':'edit',
+                                'tricount': <?= $tricount->id ?>
+                            }).then(function(data) {
+                                return data;
+                            });
+                            updateView();
+                            return res;
+                        }
+                    });
+
+                    function updateView() {
+                        if (errTitle.text() == "") {
+                            $("#errTitle").html("");
+                            $("#successTitle").show();
+                            $("#title").attr("class", "form-control is-valid");
+                        } else {
+                            $("#successTitle").hide();
+                            $("#errTitle").html(errTitle.text());
+                            $("#title").attr("class", "form-control is-invalid");
+
+                        }
+                        setDisableButton();
+                    }
+
+                    $("#description").blur(function() {
+                        errDescription.val("");
+                        if ($("#description").val().length > 0 && !(/(\s*\w\s*){3}/).test($("#description").val())) {
+                            errDescription.val("If description is not empty, it must contain at least 3 characters");
+                        }
+
+                        if (errDescription.val() == "") {
+                            $("#errDescription").html("");
+                            $("#successDescription").show();
+                            $("#description").attr("class", "form-control is-valid");
+                        } else {
+                            $("#successDescription").hide();
+                            $("#errDescription").html(errDescription.val());
+                            $("#description").attr("class", "form-control is-invalid");
+                        }  
+                        setDisableButton();
+                    });
+
+                    function setDisableButton() {
+                        if ($("#description").hasClass("form-control is-invalid") || $("#title").hasClass("form-control is-invalid")) {
+                            $("#save-button").prop("disabled", true);
+                        } else {
+                            $("#save-button").prop("disabled", false);
+                        }
+                    }
+            
+                });
+            <?php } ?>
+
             const tricountId = <?= $tricount->id ?>;
             let subscribers = <?=$subscribers_json ?>;
             let subscribersList;
             let sortColumn = 'full_name';
             let otherUsersList;
-            let otherUsers = <?=$other_users_json ?>
+            let otherUsers = <?=$other_users_json ?>;
+            let formChanged = false; 
             
             $(function(){
                 
@@ -27,9 +178,93 @@
 
                 otherUsersList = $('#other_users_list');
                 otherUsersList.html("loading ...");
-                getOtherUsers();                                 
+                getOtherUsers();   
+                
+                $('#delete-tricount').on('click', function() {                     
+                    event.preventDefault();
+                    //var form = this;
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        html: 
+                            'Do you really want to delete tricount <b> "<?=$tricount->title?>" </b> and all of its dependencies ?' +
+                            '<br>' +
+                            'This process cannot be undone.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        //reverseButtons: true//swap position of buttons
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            deleteTricount();                   
+                        }
+                    });
+                });
+
+                $('textarea').on('change', function() {// or 'input'
+                    formChanged = true;
+                });
+
+               /* $('#save-button').on('click', function() {
+                    var isDisabled = $("#save-button").prop("disabled");                   
+                    if (!isDisabled){
+                        $("#settings-form").submit();
+                        <?php if (count($errors) == 0): ?>
+                            formChanged = false;
+                            console.log(" formChanged " +   <?php echo count($errors); ?> );
+                        <?php endif; ?>   
+                    } else {
+                        formChanged = true;                        
+                    }
+                });
+                */
+
+                $('#back-button').on('click', function(e) {                    
+                    if (formChanged) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Unsaved changes !',
+                            text: 'Are you sure you want to leave this form ? Changes you made will not be saved.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Leave Page',
+                            cancelButtonText: 'Cancel',
+                            confirmButtonColor: '#d33',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = $(this).attr('href');
+                            }
+                        });
+                    }
+                });
+
 
             });
+
+            async function deleteTricount() {
+                try {
+                    await $.post("tricount/delete_tricount_service/" + tricountId, null);
+                   
+                    await handleDeleteSuccess();
+                } catch (e) {
+                    // Handle error if needed
+                }
+            }
+
+            async function handleDeleteSuccess() {
+                await Swal.fire({
+                    title: 'Deleted!',
+                    text: 'This tricount has been deleted.',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6',
+                });
+                window.location.href = "tricount/index";
+            }
+
 
             async function getSubscribers(){
 
@@ -63,7 +298,9 @@
                 
                 try {
                    // console.log("delete id " + id );
-                    await $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": id});       
+                    const res=await $.post("tricount/delete_subscription_service/" + tricountId, {"delete_member": id}, null, 'json');       
+                    //console.log(res === true);//without ", null, 'json'" res="true" but not boolean
+                    await handleDeleteSubscriberSuccess();
                     getSubscribers();
                     sortSubscribers()
                     displaySubscribers();
@@ -74,6 +311,17 @@
                 } catch(e) {
                     subscribersList.html(" Error encountered while deleting the subscriber!");
                 }
+            }
+
+            async function handleDeleteSubscriberSuccess() {
+                await Swal.fire({
+                    title: 'Deleted!',
+                    text: 'This subscriber has been deleted.',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6',
+                });
             }
 
             async function addSubscriber(id){ 
@@ -109,13 +357,29 @@
                 });
             }
 
+            function showDeleteSbscriberConfirmation(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Do you really want to delete this subscriber?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                    //reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteSubscriber(id);
+                    }
+                });
+            }
+
             function displaySubscribers() {
                 let html ="";
                 for (let s of subscribers) {
                     html += '<li class="list-group-item d-flex justify-content-between align-items-center">';
 		            html += s.full_name;
                     html +=  (s.is_creator ? "(creator)" : "");
-                    html +=  (!(s.has_operation ||s.is_creator||s.is_initiator) ? "<a href='javascript:deleteSubscriber(" + s.id + ")'><i class='bi bi-trash'></i></a>" : "") ; 
+                    html +=  (!(s.has_operation ||s.is_creator||s.is_initiator) ? "<a href='javascript:showDeleteSbscriberConfirmation(" + s.id + ")'><i class='bi bi-trash'></i></a>" : "") ; 
                     html += "</li>";
                 }
                 subscribersList.html(html);
@@ -158,21 +422,25 @@
         <header>
             <div  class="container p-3 mb-3 text-dark" style="background-color: #E3F2FD;">
                 <div class="d-flex justify-content-between mb-3">   
-                    <a href="tricount/index" class="btn btn-outline-danger"> Back </a>
+                    <a href="tricount/index" id="back-button" class="btn btn-outline-danger"> Back </a>
                     <div class="text-secondary fw-bold mt-2"><?=$tricount->title?> &#32; <i class="bi bi-caret-right-fill"></i> &#32; Edit </div>
-                    <div ><button type='submit' class="btn btn-primary" form ="form1"> Save</button></div>
+                    <div ><button type='submit' id="save-button" class="btn btn-primary" form ="settings-form"> Save</button></div>
                 </div>
             </div>
         </header>
 
         <div class="container-sm">
-            <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="form1">
+            <form method='post' action='tricount/edit_tricount/<?=$tricount->id; ?>' enctype='multipart/form-data' id ="settings-form">
                <h2>Settings</h2>
                <div class="mb-3 mt-3 has-validation">
                     <label for='title'> Title : </label>
                     <textarea class="form-control <?php echo count($errors_title)!=0 ? 'is-invalid' : ''?>" name='title'  id='title' rows='1' ><?= $title; ?></textarea> 
-               </div>
-
+                    <div id="jsTitleError" style="<?php $justvalidate ? "display: none;" : "" ?>">
+                    <span class="text-danger" id="errTitle"> </span>
+                    <span class="text-success" id="successTitle" style="display: none;">Looks good!</span>
+                </div>
+                </div>
+               
                 <?php if (count($errors_title) != 0): ?>
                     <div class='errors'>
                         <ul>
@@ -183,11 +451,14 @@
                     </div>
                 <?php endif; ?>
 
-
                <div class="mb-3 mt-3">
                     <label for='description'> Descripton (optional) :  </label>
                     <textarea class="form-control <?php echo count($errors_description)!=0 ? 'is-invalid' : ''?>" name='description' id='description'  rows='2' ><?= $description; ?></textarea> 
-               </div>
+                    <div id="jsDescriptionError" style="<?php $justvalidate ? "display: none;" : "" ?>">
+                    <span class="text-danger" id="errDescription"> </span>
+                    <span class="text-success" id="successDescription" style="display: none;">Looks good!</span>
+                </div>
+                </div>
 
                <?php if (count($errors_description) != 0): ?>
                     <div class='errors'>
@@ -199,8 +470,6 @@
                     </div>
                 <?php endif; ?>
             </form>
-
-
            
                 <h2>Subscriptions</h2>                    
                 <ul class="list-group" id="participant-list">
@@ -218,8 +487,7 @@
                             <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
-                </ul> 
-                              
+                </ul>                           
                 
             <br>
 
@@ -243,24 +511,16 @@
             <br>
             <div class="container-sm">            
             <div class="text-danger"><?= $error; ?> </div>    
-            </div>  
-            
-            <br>
-            
+            </div>              
+            <br>            
 
         </div>
         <br><br>                    
         <footer class="footer mt-auto">   
             <div class="container-sm">                
-                <form class='link' action='tricount/delete/<?=$tricount->id; ?>' method='get' >
-                <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-danger">Delete this tricount</button>
-                    </div>
-                </form>
+            <a href='tricount/delete/<?=$tricount->id; ?>' id="delete-tricount" class="btn btn-danger w-100"> Delete this tricount </a>
             </div>
         </footer >
-
-
        
     </body>
 </html>
