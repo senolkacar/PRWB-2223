@@ -11,9 +11,6 @@
   * fff123@epfc.eu,password "Password1,", utilisateur
 
 ### Liste des bugs connus
-
-  * bug 1 view_balance:Si les montants sont très grandes ça peut causer des lègères incorfotabilité au niveau visuel de progressbar
-  * bug 2 edit_tricount: Si le user modifie le "title" ou "description" du tricount (sans appuyer sur "save") et puis modifie la partie "subscriptions", "add_subscription" et "delete_subscription" redirect ver "edit_tricount/id_tricount" et la view affiche le "title" et "description" de la base de donné mais pas ce que le user voulait modifier.
   
 
 ### Liste des fonctionnalités supplémentaires
