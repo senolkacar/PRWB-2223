@@ -1,5 +1,8 @@
 # Projet PRWB 2223 - Gestion de comptes entre amis
 
+This project is realised with PHP, it has also partial Javascript code for validation and other stuff. There is also implementation of JustValidate and SweetAlert javascript libraries.
+This project is developed with MVC architecture. 
+
 ## Notes de version itération 1 
 
 ### Liste des utilisateurs et mots de passes
